@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="preload"
+      href="./node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Vue 3 explicado en una sola página: de lo básico a lo avanzado, con código que puedes tocar y ejemplos de la vida real."
+    />
+    <title>Vue 3 de cero: guía en una sola página</title>
+    <script>
+      // Se aplica antes de pintar para evitar el parpadeo claro/oscuro
+      ;(() => {
+        let saved = null
+        try {
+          saved = localStorage.getItem('vue3-guia-theme')
+        } catch {
+          // Si el almacenamiento está bloqueado, se usa la preferencia del sistema.
+        }
+        const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+        document.documentElement.classList.toggle('dark', dark)
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

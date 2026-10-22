@@ -1,0 +1,77 @@
+<script setup lang="ts">
+defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
+</script>
+
+<template>
+  <section
+    :id="id"
+    :class="[$style.root, id === 'y-ahora-que' && $style.compact]"
+    data-content-section
+  >
+    <p v-if="eyebrow" :class="$style.eyebrow">{{ eyebrow }}</p>
+    <h2 :class="$style.heading">{{ title }}</h2>
+    <p v-if="summary" :class="$style.summary">{{ summary }}</p>
+    <slot />
+  </section>
+</template>
+
+<style module>
+.root {
+  padding-top: var(--space-3xl);
+  content-visibility: auto;
+  contain-intrinsic-size: auto var(--doc-level-intrinsic-size);
+}
+
+.root + .root {
+  margin-top: var(--space-3xl);
+  border-top: 1px solid var(--c-divider);
+}
+
+.compact {
+  contain-intrinsic-size: auto var(--doc-end-intrinsic-size);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-xxs);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--c-brand-text);
+}
+
+.heading {
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-headline-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-headline-lg);
+}
+
+.summary {
+  margin: 0;
+  font-size: var(--font-size-lead-sm);
+  color: var(--c-text-2);
+}
+
+.root > ol {
+  padding-left: var(--space-lg);
+}
+
+.root li + li {
+  margin-top: var(--space-xs);
+}
+
+@media (max-width: 960px) {
+  .root {
+    padding-top: var(--space-2xl);
+    contain-intrinsic-size: auto var(--doc-level-intrinsic-size-mobile);
+  }
+
+  .compact {
+    contain-intrinsic-size: auto var(--doc-end-intrinsic-size-mobile);
+  }
+
+  .heading {
+    font-size: var(--font-size-headline-lg-sm);
+  }
+}
+</style>

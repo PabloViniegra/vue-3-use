@@ -1,0 +1,98 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-padding-top: calc(var(--nav-height) + var(--space-lg));
+}
+
+@media (max-width: 960px) {
+  /* Deja sitio para la barra del índice, que también es sticky */
+  html {
+    scroll-padding-top: calc(var(--nav-height) + var(--local-nav-height) + var(--space-lg));
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--c-text-1);
+  background: var(--c-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color var(--duration-base),
+    color var(--duration-base);
+}
+
+::selection {
+  background: var(--c-brand-soft);
+  color: var(--c-text-1);
+}
+
+a {
+  color: var(--c-brand-text);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: var(--focus-ring) solid var(--c-focus);
+  outline-offset: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--c-text-code);
+  background: var(--c-bg-mute);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Shiki emite los dos temas como variables; aquí se elige cuál se ve */
+.shiki,
+.shiki span {
+  color: var(--shiki-light);
+}
+
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
+}
