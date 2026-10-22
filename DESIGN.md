@@ -1,14 +1,13 @@
 ---
 version: alpha
 name: Vue 3 de cero
-description: Guía de Vue 3 en una sola página con la identidad visual de vuejs.org (paleta de @vue/theme, layout tipo VitePress), en claro y oscuro, estilada con CSS Modules.
+description: Guía de Vue 3 en una sola página con la paleta de vuejs.org (@vue/theme) y una voz visual propia (titulares en Bricolage Grotesque, el código como lenguaje de la interfaz y notas al margen), en claro y oscuro, estilada con CSS Modules.
 colors:
   brand: "#42b883"
   brand-light: "#42d392"
   brand-text: "#287953"
   brand-soft: "rgba(66, 184, 131, 0.12)"
   on-brand: "#1a1a1a"
-  accent-blue: "#647eff"
   bg: "#ffffff"
   bg-soft: "#f9f9f9"
   bg-mute: "#f1f1f1"
@@ -43,46 +42,46 @@ colors:
   focus-dark: "#42b883"
 typography:
   display:
-    fontFamily: Inter
-    fontSize: 76px
-    fontWeight: 900
-    lineHeight: 1.1
-    letterSpacing: -1.5px
+    fontFamily: Bricolage Grotesque
+    fontSize: 64px
+    fontWeight: 800
+    lineHeight: 1.02
+    letterSpacing: -0.035em
   display-md:
-    fontFamily: Inter
+    fontFamily: Bricolage Grotesque
     fontSize: 48px
-    fontWeight: 900
-    lineHeight: 1.1
-    letterSpacing: -1px
+    fontWeight: 800
+    lineHeight: 1.02
+    letterSpacing: -0.035em
   display-sm:
-    fontFamily: Inter
-    fontSize: 36px
-    fontWeight: 900
-    lineHeight: 1.1
-    letterSpacing: -1px
+    fontFamily: Bricolage Grotesque
+    fontSize: 38px
+    fontWeight: 800
+    lineHeight: 1.02
+    letterSpacing: -0.035em
   headline-lg:
-    fontFamily: Inter
-    fontSize: 36px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: -0.02em
+    fontFamily: Bricolage Grotesque
+    fontSize: 40px
+    fontWeight: 800
+    lineHeight: 1.1
+    letterSpacing: -0.025em
   headline-md:
-    fontFamily: Inter
-    fontSize: 22px
-    fontWeight: 600
-    lineHeight: 1.4
-    letterSpacing: -0.01em
+    fontFamily: Bricolage Grotesque
+    fontSize: 24px
+    fontWeight: 700
+    lineHeight: 1.3
+    letterSpacing: -0.015em
   title:
     fontFamily: Inter
     fontSize: 20px
     fontWeight: 600
-    lineHeight: 1.4
+    lineHeight: 1.3
   headline-lg-sm:
-    fontFamily: Inter
-    fontSize: 28px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: -0.02em
+    fontFamily: Bricolage Grotesque
+    fontSize: 30px
+    fontWeight: 800
+    lineHeight: 1.1
+    letterSpacing: -0.025em
   lead:
     fontFamily: Inter
     fontSize: 22px
@@ -114,8 +113,8 @@ typography:
     fontWeight: 500
     lineHeight: 1.5
   code:
-    fontFamily: ui-monospace, Menlo, Monaco, Consolas, monospace
-    fontSize: 14px
+    fontFamily: JetBrains Mono
+    fontSize: 13.5px
     fontWeight: 400
     lineHeight: 1.7
 rounded:
@@ -137,10 +136,15 @@ spacing:
   nav-height: 55px
   sidebar-width: 272px
   content-max: 784px
+  content-max-wide: 980px
   layout-max: 1056px
+  layout-max-wide: 1252px
   local-nav-height: 45px
-  hero-max: 960px
+  hero-max: 1152px
   measure: 580px
+  bleed: 24px
+  box-max: 628px
+  note-width: 240px
   demo-area-height: 160px
   card-min: 220px
   doc-level-intrinsic-size: 8700px
@@ -197,27 +201,26 @@ components:
     textColor: "{colors.text-code}"
     rounded: "{rounded.sm}"
   callout-real:
-    backgroundColor: "{colors.brand-soft}"
     textColor: "{colors.text-1}"
     typography: "{typography.body-sm}"
-    rounded: "{rounded.lg}"
-    padding: 16px
+    borderColor: "{colors.brand}"
+    padding: 12px
   callout-warning:
     backgroundColor: "{colors.warning-soft}"
     textColor: "{colors.text-1}"
     typography: "{typography.body-sm}"
     rounded: "{rounded.lg}"
-    padding: 16px
+    padding: 24px
   callout-info:
     backgroundColor: "{colors.bg-soft}"
     textColor: "{colors.text-1}"
     typography: "{typography.body-sm}"
     rounded: "{rounded.lg}"
-    padding: 16px
+    padding: 24px
   demo-box:
     backgroundColor: "{colors.bg}"
     rounded: "{rounded.lg}"
-    padding: 20px
+    padding: 24px
   demo-box-label:
     backgroundColor: "{colors.bg-soft}"
     textColor: "{colors.text-2}"
@@ -243,13 +246,14 @@ components:
 ## Overview
 
 Una guía técnica pero ligera de Vue 3. El tono es informal y algo desenfadado; la interfaz,
-en cambio, es sobria: se apoya en la identidad oficial de vuejs.org para que la persona sienta
-que está en "territorio Vue" y no en una plantilla genérica.
+en cambio, es sobria. Toma de vuejs.org lo que hace sentir "territorio Vue" (el verde, la
+estructura de documentación) y pone el resto con voz propia para no ser un clon de VitePress.
 
-- **Identidad prestada, no inventada.** Paleta de `@vue/theme`, tipografía Inter, layout de
-  VitePress (nav fija, sidebar, columna de contenido). Nada de estéticas ajenas al ecosistema.
+- **Paleta de Vue, voz propia.** Colores de `@vue/theme`; titulares en Bricolage Grotesque y
+  el código (JetBrains Mono) como lenguaje de la interfaz: eyebrows `// …`, números de nivel y
+  el panel del hero hablan como un editor.
 - **El contenido manda.** Texto, código y demos son la interfaz. La decoración se limita al
-  degradado del título y al verde de marca.
+  verde de marca y al halo del hero.
 - **Claro y oscuro de primera clase.** Cada token de color tiene su pareja `-dark`; ninguna
   pieza se diseña solo para un modo.
 - **Accesible por defecto.** AA como mínimo, foco visible, teclado completo y respeto a
@@ -272,14 +276,13 @@ clase `dark`. Si un token no tiene variante `-dark`, vale para los dos modos.
   estos fondos y con `divider`, no con sombras.
 - **`control-border`**: borde de campos y controles. `#888888` en claro supera 3:1 sobre
   `bg-mute`; `#7a7a7a` en oscuro supera 3:1 sobre `bg-mute`.
-- **`brand-control-border`**: contorno del botón verde; en claro `#4c4c4c` contrasta 3.4:1
-  con `brand`. En oscuro se funde con `bg`: la superficie verde ya contrasta 7:1 con ella.
+- **`brand-control-border`**: contorno del botón verde y del valor elegido en el panel del hero;
+  en claro `#4c4c4c` contrasta 3.4:1 con `brand`. En oscuro se funde con `bg`: la superficie verde ya contrasta 7:1 con ella.
 - **`warning*`**: solo para callouts de advertencia.
 - **`focus`**: color del anillo de `:focus-visible`. `#287953` en claro (≥ 4.7:1 sobre las
   superficies claras) y `#42b883` en oscuro (≥ 6.2:1).
-- **Degradado de acento**: `linear-gradient(315deg, brand-text 25%, accent-blue)`, recortado
-  al texto. Solo en una palabra del título del hero. Con `brand-text` ningún punto baja de
-  3.5:1 sobre `bg` en claro; en oscuro equivale a `brand-light`.
+- **Palabra de acento del hero**: `brand-text` sobre `brand-soft`, como un valor resaltado
+  en el editor. Supera 4.5:1 en los dos modos. No hay texto con degradado.
 - **Resaltado de sintaxis**: Shiki con `github-light` / `github-dark`. Los colores de token
   que no llegan a AA sobre `code-bg` se sustituyen en `src/lib/highlight.ts` y no se tocan
   desde CSS.
@@ -289,15 +292,23 @@ texto grande). No se aprueba a ojo.
 
 ## Typography
 
-Inter variable (`@fontsource-variable/inter`, eje `wght`; se usan 400/500/600/700/900) para
-todo; monoespaciada del sistema para el código. El woff2 `latin` se precarga en `index.html`.
+Tres familias, cada una con un papel fijo (`--font-display`, `--font-sans`, `--font-mono`):
 
-- `display` solo existe una vez: el h1 del hero. Baja a 48px por debajo de 960px y a 36px por
+- **Bricolage Grotesque** (`@fontsource-variable/bricolage-grotesque`, ejes `wght` 200–800 y
+  `opsz`): solo encabezados (h1, h2, h3) y títulos de nivel de la sidebar. El eje óptico se
+  ajusta solo al tamaño.
+- **Inter** (`@fontsource-variable/inter`): prosa, navegación, botones y campos.
+- **JetBrains Mono** (`@fontsource-variable/jetbrains-mono`): código y la "voz de editor":
+  eyebrows de nivel y de nota (`// …`, con el `//` oculto al lector de pantalla), números de
+  nivel, etiqueta de demo y de lenguaje y el panel del hero.
+
+Los woff2 `latin` de Inter y Bricolage se precargan en `index.html`.
+
+- `display` solo existe una vez: el h1 del hero. Baja a 48px por debajo de 960px y a 38px por
   debajo de 480px.
-- `headline-lg` = h2 de cada nivel (28px en móvil). `headline-md` = h3 de cada tema.
+- `headline-lg` = h2 de cada nivel (30px en móvil). `headline-md` = h3 de cada tema.
 - `lead` para el subtítulo del hero (18px en móvil); `body` para la prosa.
-- `label` para la navegación, la sidebar y los botones; `caption` para metadatos (eyebrows,
-  etiqueta de demo, lenguaje del bloque de código).
+- `label` para la navegación, la sidebar y los botones; `caption` para metadatos.
 - El código inline va a `0.85em` del texto que lo rodea.
 
 Jerarquía semántica estricta: un solo `h1`, `h2` por nivel y `h3` por tema. El tamaño visual
@@ -305,12 +316,20 @@ nunca decide qué etiqueta de encabezado se usa.
 
 ## Layout
 
-- **Estructura**: nav fija (`nav-height`) → (en móvil, barra "Índice") → hero centrado (`hero-max`) →
-  sidebar fija + columna de contenido (`content-max`). Por encima de `layout-max` (sidebar +
-  contenido) el bloque se centra y el fondo de la sidebar se alarga hasta el borde izquierdo.
+- **Estructura**: nav fija (`nav-height`) → (en móvil, barra "Índice") → hero partido
+  (`hero-max`) → sidebar fija + columna de contenido (`content-max`). Por encima de
+  `layout-max` (sidebar + contenido) el bloque se centra y el fondo de la sidebar se alarga
+  hasta el borde izquierdo.
+- **Una sola columna de lectura**: la prosa mide `measure`. Las cajas (código, demos y
+  callouts `warning`/`info`) miden `box-max` y sobresalen `bleed` por cada lado, con ese mismo
+  padding: el texto de dentro queda alineado con la prosa. En móvil esa misma regla las lleva
+  a sangre completa (sin radio ni bordes laterales).
+- **Notas al margen**: desde 1280px el contenido pasa a `content-max-wide` (y el bloque a
+  `layout-max-wide`) y cada tema es una rejilla `measure` + `note-width`. La analogía "En la
+  vida real" va en la columna derecha, `sticky` bajo la nav. Por debajo, al final del tema.
 - **Escala de espaciado**: solo los valores de `spacing`. Entre temas, `2xl`; entre niveles,
   `3xl` con un divisor; dentro de un bloque, `md` o `lg`.
-- **Breakpoints**: 960px (la sidebar pasa a panel deslizante y aparece la barra "Índice"),
+- **Breakpoints**: 1280px (notas al margen), 960px (el hero se apila: texto, panel y botón; la sidebar pasa a panel deslizante y aparece la barra "Índice"),
   768px (se ocultan los enlaces de la nav), 640px (los bloques de código van a sangre completa)
   y 480px (botones del hero a ancho completo).
 - **Scroll**: `scroll-padding-top` siempre tiene en cuenta la nav fija y, en móvil, la barra
@@ -336,12 +355,13 @@ Capas (`z-index`): nav 30, panel de la sidebar 25, scrim 24, barra del índice 2
 - `sm` (4px): código inline.
 - `md` (6px): botón de copiar.
 - `lg` (8px): bloques de código, callouts, demos y campos.
-- `xl` (12px): tarjetas de nivel y chips.
+- `xl` (12px): tarjetas de nivel, chips y panel del hero.
 - `full`: botones e interruptor (forma de píldora).
 
-Los callouts llevan un borde de 1px en el color de su tipo (sin franja lateral, que es el
-tópico de callout más reconocible). Párrafos, listas y callouts no pasan de `measure` (580px)
-para que las líneas no superen unos 80 caracteres.
+`warning` e `info` son cajas con borde de 1px en el color de su tipo (sin franja lateral, que
+es el tópico de callout más reconocible). `real` no es una caja: es una nota con un filete
+superior de 1px en `brand`. Párrafos y listas no pasan de `measure` (580px) para que las
+líneas no superen unos 80 caracteres.
 
 ## Components
 
@@ -356,16 +376,19 @@ no con clases que pasa el padre.
 - **CodeBlock**: código resaltado, etiqueta de lenguaje y botón "Copiar" con los estados
   Copiado y No se pudo copiar. Muestra el texto plano mientras Shiki carga o si falla.
 - **CallOut** (`real` | `warning` | `info`): "En la vida real" es la variante por defecto y la
-  firma de la guía. Una analogía por tema como máximo. Es un `div role="note"` con el título
-  como nombre accesible, no un `<aside>`, para no llenar la página de landmarks.
-- **DemoBox**: marco de las demos en vivo, con cabecera "Pruébalo · …". Las demos son
+  firma de la guía: nota al margen con título mono `// En la vida real`. Una analogía por
+  tema como máximo y siempre en el slot `note` de `DocTopic`. Es un `div role="note"` con el
+  título como nombre accesible, no un `<aside>`, para no llenar la página de landmarks.
+- **DemoBox**: marco de las demos en vivo, con cabecera mono "Pruébalo · …". Las demos son
   funcionales y cubren su estado vacío o inicial.
 - **DocTopic**: `section` con `id` + `h3` + ancla `#` que aparece al pasar el ratón o al
-  enfocarla.
-- **DocLevel**: `section` con `id` + `h2` de nivel, eyebrow y resumen opcionales.
+  enfocarla. Slot por defecto para el contenido y slot `note` para la analogía.
+- **DocLevel**: `section` con `id` + `h2` de nivel, eyebrow mono (`// Nivel 1 de 4`) y resumen
+  opcionales.
 - **LinkGrid** (`BaseLinkGrid`): rejilla de enlaces externos con descripción (el ecosistema).
 - **Nav / Sidebar / Hero**: piezas de layout únicas. La sidebar marca la sección activa con
-  `brand-text`, peso semibold y `aria-current="location"`. Arriba lleva un filtro de temas
+  `brand-text`, peso semibold y `aria-current="location"`; cada nivel lleva su número mono
+  (`01`…) y el del nivel en el que estás se pone en `brand-text`. Arriba lleva un filtro de temas
   (`SidebarFilter`) que ignora tildes y mayúsculas, busca en el título y en las `keywords` de
   cada tema (`toc.ts`), anuncia el número de resultados y tiene estado vacío con "Vaciar
   filtro"; `/` lo enfoca (y en móvil abre antes el índice) y Esc lo vacía. En móvil, la
@@ -374,13 +397,23 @@ no con clases que pasa el padre.
   el hero: hasta la primera sección no hay ninguna activa). La sidebar desplaza su propio scroll
   para mantener visible el tema activo. "Y ahora, ¿qué?" también cuenta como sección activa. El footer lleva "Volver arriba". Con el índice
   abierto en móvil, el resto de la página queda `inert` y Esc devuelve el foco a "Índice".
-- **Hero reactivo**: el hero hace lo que enseña la guía. `HeroLevelPicker` muestra
-  `const nivel = ref('cero' | 'algo' | 'bastante')` como un grupo de radios con aspecto de
-  código. El valor cambia la palabra con degradado del `h1` (con transición ≤ 250 ms), el
-  subtítulo (`aria-live="polite"`) y el texto y el destino del botón principal, que lleva al
-  primer tema del nivel correspondiente de `toc.ts`.
+- **Hero reactivo**: el hero hace lo que enseña la guía. Es partido: a la izquierda `h1`,
+  subtítulo y botón; a la derecha `HeroLevelPicker`, un panel de editor (`TheHero.vue`) con
+  `const nivel = ref('cero' | 'algo' | 'bastante')` como grupo de radios y, debajo, los
+  `computed` que dependen de él (`titulo.value`, `destino.value`) con su valor en vivo. El
+  valor cambia la palabra de acento del `h1` (transición ≤ 250 ms), el subtítulo
+  (`aria-live="polite"`) y el texto y el destino del botón, que lleva al primer tema del nivel
+  en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra.
+  Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
 - **Switch de tema**: `role="switch"` con `aria-checked`. El modo elegido se guarda en
-  `localStorage` y, si no hay ninguno, se sigue `prefers-color-scheme`.
+  `localStorage` y, si no hay ninguno, se sigue `prefers-color-scheme`. Al accionarlo, el nuevo
+  tema se revela con un círculo desde el centro del interruptor, sin blur ni desplazamientos,
+  usando View Transitions, `--duration-base` (250 ms) y `--ease-out`. Con movimiento reducido
+  o sin soporte de la API, el cambio es inmediato; la carga inicial nunca se anima.
+  `--theme-reveal-x`, `--theme-reveal-y` y `--theme-reveal-radius` son geometría calculada en
+  píxeles desde el control y el viewport, no tokens de diseño. Los pseudoelementos de esta
+  transición de documento se definen en `base.css`; se suspenden las transiciones locales
+  durante la captura para mostrar los colores finales, sin fundidos superpuestos.
 
 ## Do's and Don'ts
 
@@ -405,7 +438,7 @@ no con clases que pasa el padre.
 | Capa | Dónde | Qué contiene |
 | --- | --- | --- |
 | Tokens | `src/styles/tokens.css` | Custom properties de este archivo (`--c-*`, `--font-*`, `--line-height-*`, `--space-*`, `--radius-*`, medidas de componente, `--shadow-*`, `--duration-*` y `--z-*`) en `:root` y su versión `-dark` en `:root.dark`. |
-| Base | `src/styles/base.css` | Reset mínimo, `body`, `a`, `:focus-visible`, `code` inline, `.visually-hidden` y los colores de `.shiki`. |
+| Base | `src/styles/base.css` | Reset mínimo, `body`, `a`, `:focus-visible`, `code` inline, `.visually-hidden`, los colores de `.shiki` y la transición de tema del documento. |
 | Componente | `<style module>` en cada `.vue` | Todo lo demás. |
 
 `main.ts` importa las fuentes, luego `tokens.css` y después `base.css`. Ningún otro archivo
@@ -468,16 +501,16 @@ src/
 ├── components/
 │   ├── ui/              # primitivas sin dominio: BaseButton, BaseField, BaseLinkGrid,
 │   │                    # CodeBlock, CallOut, DemoBox, DocTopic, DocLevel
-│   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroLevelPicker),
-│                        # TheSidebar (+ SidebarFilter), TheFooter
+│   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroLevelPicker,
+│                        # HeroBackdrop), TheSidebar (+ SidebarFilter, SidebarEmpty), TheFooter
 ├── features/
 │   └── guide/
 │       ├── GuideContent.vue  # niveles + "Y ahora, ¿qué?"
 │       ├── levels/      # BasicLevel, IntermediateLevel, AdvancedLevel (= AdvancedInternals + AdvancedTooling),
 │       │                # EcosystemLevel (= EcosystemRouting + EcosystemData)
 │       ├── demos/       # una demo por archivo, autocontenida
-│       └── content/     # toc.ts, snippets.ts y ecosystem.ts: datos puros, sin Vue
-├── composables/         # useTheme, useActiveSection, useDisclosure, useKeyShortcut, useMediaQuery, useNearViewport: estado y efectos reutilizables
+│       └── content/     # toc.ts, snippets.ts, ecosystem.ts y hero.ts: datos puros, sin Vue
+├── composables/         # useTheme, useActiveSection, useDisclosure, useKeyShortcut, useMediaQuery, useNearViewport, useKeepActiveInView: estado y efectos
 └── lib/                 # funciones puras o envoltorios de librerías (highlight.ts)
 ```
 

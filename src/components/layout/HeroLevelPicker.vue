@@ -1,51 +1,86 @@
 <script setup lang="ts">
-defineProps<{ options: readonly string[] }>()
+defineProps<{ options: readonly string[]; title: string; target: string }>()
 
 const level = defineModel<string>({ required: true })
 </script>
 
 <template>
-  <fieldset :class="$style.root">
-    <legend class="visually-hidden">¿Cuánto Vue sabes?</legend>
-    <p :class="$style.line">
-      <span :class="$style.keyword">const</span> nivel = <span :class="$style.fn">ref</span>(<template
-        v-for="(option, i) in options"
-        :key="option"
-        ><span v-if="i > 0" :class="$style.union" aria-hidden="true"> | </span
-        ><label :class="$style.option"
-          ><input
-            v-model="level"
-            type="radio"
-            name="hero-level"
-            :value="option"
-            class="visually-hidden"
-            :class="$style.input" /><span :class="$style.chip">'{{ option }}'</span></label
-        ></template
-      >)
-    </p>
-    <p :class="$style.comment">// Cambia el valor: el título, el texto y el botón son computed.</p>
-  </fieldset>
+  <div :class="$style.root">
+    <p :class="$style.file">TheHero.vue</p>
+    <fieldset :class="$style.code">
+      <legend class="visually-hidden">¿Cuánto Vue sabes?</legend>
+      <p :class="$style.comment" aria-hidden="true">// ¿Cuánto Vue sabes? Cambia el valor</p>
+      <p><span :class="$style.keyword">const</span> nivel = <span :class="$style.fn">ref</span>(</p>
+      <p :class="$style.indent">
+        <template v-for="(option, i) in options" :key="option"
+          ><span v-if="i > 0" :class="$style.union" aria-hidden="true"> | </span
+          ><label :class="$style.option"
+            ><input
+              v-model="level"
+              type="radio"
+              name="hero-level"
+              :value="option"
+              class="visually-hidden"
+              :class="$style.input" /><span :class="$style.chip"
+                ><span aria-hidden="true">'</span>{{ option }}<span aria-hidden="true">'</span></span
+              ></label
+          ></template
+        >
+      </p>
+      <p>)</p>
+    </fieldset>
+    <div :class="$style.code">
+      <p :class="$style.comment">// El resto es computed y se recalcula solo</p>
+      <p>
+        titulo.value
+        <span :key="title" :class="$style.value">'{{ title }}'</span>
+      </p>
+      <p>
+        destino.value
+        <span :key="target" :class="$style.value">'{{ target }}'</span>
+      </p>
+    </div>
+  </div>
 </template>
 
 <style module>
 .root {
-  display: inline-block;
-  max-width: 100%;
-  margin: 0 0 var(--space-xl);
-  padding: var(--space-md) var(--space-lg);
   border: 1px solid var(--c-divider);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--c-code-bg);
   font-family: var(--font-mono);
   font-size: var(--font-size-code);
   line-height: var(--line-height-code);
   color: var(--c-text-code);
   text-align: left;
+  overflow: hidden;
 }
 
-.line,
-.comment {
+.file {
   margin: 0;
+  padding: var(--space-xs) var(--space-lg);
+  border-bottom: 1px solid var(--c-divider);
+  background: var(--c-bg-soft);
+  font-size: var(--font-size-caption);
+  color: var(--c-text-2);
+}
+
+.code {
+  margin: 0;
+  padding: var(--space-md) var(--space-lg);
+  border: 0;
+}
+
+.code + .code {
+  padding-top: 0;
+}
+
+.code p {
+  margin: 0;
+}
+
+.indent {
+  padding-left: var(--space-lg);
 }
 
 .keyword {
@@ -53,8 +88,13 @@ const level = defineModel<string>({ required: true })
   font-weight: var(--font-weight-semibold);
 }
 
-.fn {
+.fn,
+.value {
   color: var(--c-brand-text);
+}
+
+.comment {
+  color: var(--c-text-2);
 }
 
 .union {
@@ -81,9 +121,10 @@ const level = defineModel<string>({ required: true })
   border-color: var(--c-brand-text);
 }
 
+/* En claro el verde contra el panel no llega a 3:1: el contorno oscuro marca el estado */
 .input:checked + .chip {
   background: var(--c-brand);
-  border-color: var(--c-brand);
+  border-color: var(--c-brand-control-border);
   color: var(--c-on-brand);
   font-weight: var(--font-weight-semibold);
 }
@@ -93,21 +134,36 @@ const level = defineModel<string>({ required: true })
   outline-offset: var(--focus-ring);
 }
 
-.comment {
-  margin-top: var(--space-xxs);
-  color: var(--c-text-2);
-  font-size: var(--font-size-caption);
+/* El :key vuelve a montar el valor al cambiar, y el destello marca qué se ha recalculado */
+.value {
+  border-radius: var(--radius-sm);
+  animation: recomputed var(--duration-base) var(--ease-out);
+}
+
+@keyframes recomputed {
+  from {
+    background: var(--c-brand-soft);
+  }
+}
+
+@media (max-width: 480px) {
+  .file,
+  .code {
+    padding-inline: var(--space-md);
+  }
+
+  .indent {
+    padding-left: var(--space-md);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .chip {
     transition: none;
   }
-}
 
-@media (max-width: 480px) {
-  .root {
-    margin-bottom: var(--space-md);
+  .value {
+    animation: none;
   }
 }
 </style>

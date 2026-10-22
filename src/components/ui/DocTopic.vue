@@ -4,11 +4,16 @@ defineProps<{ id: string; title: string }>()
 
 <template>
   <section :id="id" :class="$style.root">
-    <h3 :class="$style.heading">
-      {{ title }}
-      <a :class="$style.anchor" :href="`#${id}`" :aria-label="`Enlace a ${title}`">#</a>
-    </h3>
-    <slot />
+    <div :class="$style.main">
+      <h3 :class="$style.heading">
+        {{ title }}
+        <a :class="$style.anchor" :href="`#${id}`" :aria-label="`Enlace a ${title}`">#</a>
+      </h3>
+      <slot />
+    </div>
+    <div v-if="$slots.note" :class="$style.note">
+      <slot name="note" />
+    </div>
   </section>
 </template>
 
@@ -20,8 +25,9 @@ defineProps<{ id: string; title: string }>()
 
 .heading {
   margin: 0 0 var(--space-md);
+  font-family: var(--font-display);
   font-size: var(--font-size-headline-md);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-title);
   letter-spacing: var(--letter-spacing-headline-md);
 }
@@ -38,15 +44,30 @@ defineProps<{ id: string; title: string }>()
 }
 
 /* El contenido llega por slot y es HTML normal del tema */
-.root > p,
-.root > ul,
-.root > ol {
+.main > p,
+.main > ul,
+.main > ol {
   max-width: var(--measure);
   margin: var(--space-md) 0;
 }
 
-.root li + li {
+.main li + li {
   margin-top: var(--space-xs);
+}
+
+/* Con sitio, la nota sale al margen y acompaña al tema mientras se lee */
+@media (min-width: 1280px) {
+  .root {
+    display: grid;
+    grid-template-columns: var(--measure) var(--note-width);
+    column-gap: var(--space-2xl);
+  }
+
+  .note {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-lg));
+    align-self: start;
+  }
 }
 
 @media (hover: none) {

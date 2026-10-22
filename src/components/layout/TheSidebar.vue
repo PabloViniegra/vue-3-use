@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { useKeepActiveInView } from '../../composables/useKeepActiveInView'
+import SidebarEmpty from './SidebarEmpty.vue'
 import SidebarFilter from './SidebarFilter.vue'
 import SidebarPanelHeader from './SidebarPanelHeader.vue'
 
@@ -48,26 +50,19 @@ function clearFilter() {
   focusFilter()
 }
 
-// La sidebar tiene su propio scroll: si el tema activo queda fuera, la acercamos a él.
-// Se mueve solo su scrollTop; scrollIntoView arrastraría también la página
 const root = useTemplateRef('root')
 
-watch(
-  () => props.activeId,
-  async () => {
-    await nextTick()
-    const nav = root.value
-    const link = nav?.querySelector<HTMLElement>('[aria-current]')
+useKeepActiveInView(root, () => props.activeId)
 
-    if (!nav || !link) return
-    const bounds = nav.getBoundingClientRect()
-    const rect = link.getBoundingClientRect()
-    const margin = rect.height
-
-    if (rect.top < bounds.top + margin) nav.scrollTop -= bounds.top + margin - rect.top
-    else if (rect.bottom > bounds.bottom - margin) nav.scrollTop += rect.bottom - bounds.bottom + margin
-  },
+// El nivel en el que estás: su número se marca para que se note el avance
+const currentGroupId = computed(
+  () =>
+    props.groups.find((g) => g.id === props.activeId || g.topics?.some((t) => t.id === props.activeId))
+      ?.id,
 )
+
+const groupNumber = (id: string) =>
+  String(props.groups.findIndex((g) => g.id === id) + 1).padStart(2, '0')
 
 defineExpose({ focusFilter })
 </script>
@@ -80,10 +75,7 @@ defineExpose({ focusFilter })
     <p class="visually-hidden" aria-live="polite">
       {{ query ? `${matchCount} ${matchCount === 1 ? 'tema' : 'temas'}` : '' }}
     </p>
-    <div v-if="!visibleGroups.length" :class="$style.empty">
-      <p>Ningún tema habla de «{{ query }}».</p>
-      <button type="button" :class="$style.clear" @click="clearFilter">Vaciar filtro</button>
-    </div>
+    <SidebarEmpty v-if="!visibleGroups.length" :query="query" @clear="clearFilter" />
     <div v-for="group in visibleGroups" :key="group.id" :class="$style.group">
       <a
         :class="[$style.groupTitle, activeId === group.id && $style.active]"
@@ -91,7 +83,12 @@ defineExpose({ focusFilter })
         :aria-current="activeId === group.id ? 'location' : undefined"
         @click="emit('close')"
       >
-        {{ group.title }}
+        <span
+          v-if="group.topics"
+          :class="[$style.number, currentGroupId === group.id && $style.current]"
+          aria-hidden="true"
+          >{{ groupNumber(group.id) }}</span
+        >{{ group.title }}
       </a>
       <ul v-if="group.topics" :class="$style.list">
         <li v-for="topic in group.topics" :key="topic.id">
@@ -130,9 +127,25 @@ defineExpose({ focusFilter })
 }
 
 .groupTitle {
-  font-size: var(--font-size-label);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
   color: var(--c-text-1);
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--c-text-2);
+  transition: color var(--duration-fast);
+}
+
+.number.current {
+  color: var(--c-brand-text);
 }
 
 .list {
@@ -163,31 +176,6 @@ defineExpose({ focusFilter })
   color: var(--c-brand-text);
 }
 
-.empty {
-  font-size: var(--font-size-label);
-  line-height: var(--line-height-label);
-  color: var(--c-text-2);
-  overflow-wrap: anywhere;
-}
-
-.empty p {
-  margin: 0 0 var(--space-xs);
-}
-
-.clear {
-  padding: var(--space-xxs) 0;
-  border: 0;
-  background: none;
-  font: inherit;
-  font-weight: var(--font-weight-medium);
-  color: var(--c-brand-text);
-  cursor: pointer;
-}
-
-.clear:hover {
-  text-decoration: underline;
-}
-
 .scrim {
   display: none;
 }
@@ -196,8 +184,15 @@ defineExpose({ focusFilter })
 @media (min-width: 961px) {
   .root {
     --gutter: max(0px, (100vw - var(--layout-max)) / 2);
+
     width: calc(var(--sidebar-width) + var(--gutter));
     padding-left: calc(var(--space-xl) + var(--gutter));
+  }
+}
+
+@media (min-width: 1280px) {
+  .root {
+    --gutter: max(0px, (100vw - var(--layout-max-wide)) / 2);
   }
 }
 
@@ -240,7 +235,8 @@ defineExpose({ focusFilter })
 
 @media (prefers-reduced-motion: reduce) {
   .root,
-  .link {
+  .link,
+  .number {
     transition: none;
   }
 }

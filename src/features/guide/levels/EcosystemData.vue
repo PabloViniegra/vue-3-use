@@ -44,13 +44,15 @@ import StoreDemo from '../demos/StoreDemo.vue'
         que viene de una API lo lleva mejor TanStack Query, que es el siguiente tema.
       </p>
     </CallOut>
-    <CallOut>
-      <p>
-        Pinia es la nevera de un piso compartido. Cualquiera puede abrirla, ver lo que hay y
-        meter o sacar cosas, y todos ven el mismo contenido. Lo que solo es tuyo, mejor en tu
-        habitación (el estado local del componente).
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Pinia es la nevera de un piso compartido. Cualquiera puede abrirla, ver lo que hay y
+          meter o sacar cosas, y todos ven el mismo contenido. Lo que solo es tuyo, mejor en tu
+          habitación (el estado local del componente).
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="tanstack-query" title="TanStack Query">
@@ -108,13 +110,15 @@ import StoreDemo from '../demos/StoreDemo.vue'
         servidor</em>, que no es tuyo y puede cambiar sin que te enteres.
       </p>
     </CallOut>
-    <CallOut>
-      <p>
-        TanStack Query es ese compañero que apunta las respuestas. Si preguntas lo mismo dos
-        veces, te contesta de memoria; si su apunte es de hace rato, te dice lo que sabía y,
-        mientras, llama para confirmar. Y si alguien avisa de que algo ha cambiado (una
-        mutación), tacha el apunte y vuelve a preguntar.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          TanStack Query es ese compañero que apunta las respuestas. Si preguntas lo mismo dos
+          veces, te contesta de memoria; si su apunte es de hace rato, te dice lo que sabía y,
+          mientras, llama para confirmar. Y si alguien avisa de que algo ha cambiado (una
+          mutación), tacha el apunte y vuelve a preguntar.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 </template>

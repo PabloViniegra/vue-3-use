@@ -12,8 +12,10 @@ defineProps<{ label: string }>()
 </template>
 
 <style module>
+/* Mismo ancho y sangrado que los bloques de código */
 .root {
-  margin: var(--space-lg) 0;
+  max-width: var(--box-max);
+  margin: var(--space-lg) calc(var(--bleed) * -1);
   border: 1px solid var(--c-divider);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -24,7 +26,8 @@ defineProps<{ label: string }>()
   align-items: center;
   gap: var(--space-xs);
   margin: 0;
-  padding: var(--space-xs) var(--space-md);
+  padding: var(--space-xs) var(--bleed);
+  font-family: var(--font-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   color: var(--c-text-2);
@@ -40,6 +43,13 @@ defineProps<{ label: string }>()
 }
 
 .body {
-  padding: var(--demo-padding);
+  padding: var(--space-lg) var(--bleed);
+}
+
+@media (max-width: 640px) {
+  .root {
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 </style>

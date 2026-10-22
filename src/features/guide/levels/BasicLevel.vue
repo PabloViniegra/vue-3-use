@@ -24,14 +24,16 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
       global y renderizado en servidor. Empiezas pequeño y vas añadiendo piezas cuando las
       necesitas.
     </p>
-    <CallOut>
-      <p>
-        Piensa en una hoja de cálculo. Escribes en una celda <code>=A1*2</code> y te olvidas:
-        cada vez que cambias A1, la fórmula se recalcula sola. Vue hace eso mismo, pero con
-        tu HTML. Esa idea se llama <strong>reactividad</strong> y es el corazón de todo lo
-        que viene después.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Piensa en una hoja de cálculo. Escribes en una celda <code>=A1*2</code> y te olvidas:
+          cada vez que cambias A1, la fórmula se recalcula sola. Vue hace eso mismo, pero con
+          tu HTML. Esa idea se llama <strong>reactividad</strong> y es el corazón de todo lo
+          que viene después.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="empezar" title="Tu primer proyecto">
@@ -51,13 +53,15 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
       <code>scoped</code> hace que ese CSS solo afecte a este componente. Ese
       <code>h1</code> verde no se va a colar en el resto de la app.
     </p>
-    <CallOut>
-      <p>
-        Un <code>.vue</code> es una ficha de receta: los ingredientes (la lógica), cómo se
-        monta el plato (la plantilla) y cómo se emplata (los estilos) en la misma hoja. Para
-        cambiar la tortilla no tienes que buscar en tres cuadernos distintos.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Un <code>.vue</code> es una ficha de receta: los ingredientes (la lógica), cómo se
+          monta el plato (la plantilla) y cómo se emplata (los estilos) en la misma hoja. Para
+          cambiar la tortilla no tienes que buscar en tres cuadernos distintos.
+        </p>
+      </CallOut>
+    </template>
     <CallOut type="info" title="Composition API vs Options API">
       <p>
         Esta guía usa <code>&lt;script setup&gt;</code>, la <strong>Composition API</strong>,
@@ -81,13 +85,15 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
       especial que Vue interpreta. Los atajos <code>:</code> y <code>@</code> son tan
       habituales que casi nadie escribe <code>v-bind</code> ni <code>v-on</code> completos.
     </p>
-    <CallOut>
-      <p>
-        La pizarra del menú del día con un hueco para el plato. Tú solo dices qué plato toca
-        hoy; quien atiende la barra borra el hueco y escribe el nuevo. La plantilla es la
-        pizarra, las llaves son el hueco y Vue es quien la actualiza.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          La pizarra del menú del día con un hueco para el plato. Tú solo dices qué plato toca
+          hoy; quien atiende la barra borra el hueco y escribe el nuevo. La plantilla es la
+          pizarra, las llaves son el hueco y Vue es quien la actualiza.
+        </p>
+      </CallOut>
+    </template>
     <CallOut type="warning">
       <p>
         Las llaves no sirven para meter HTML. Si una variable contiene
@@ -118,14 +124,16 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     <DemoBox label="ref y reactive">
       <CounterDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        Un <code>ref</code> es una caja con etiqueta: para ver o cambiar lo de dentro abres la
-        caja, y eso es el <code>.value</code>. Un <code>reactive</code> es una mochila: metes la
-        mano directamente en cada bolsillo, pero si sacas las cosas y te las llevas sueltas,
-        Vue deja de enterarse de lo que les pasa.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Un <code>ref</code> es una caja con etiqueta: para ver o cambiar lo de dentro abres la
+          caja, y eso es el <code>.value</code>. Un <code>reactive</code> es una mochila: metes la
+          mano directamente en cada bolsillo, pero si sacas las cosas y te las llevas sueltas,
+          Vue deja de enterarse de lo que les pasa.
+        </p>
+      </CallOut>
+    </template>
     <CallOut type="info" title="¿Cuál uso?">
       <p>
         La documentación oficial recomienda <code>ref</code> por defecto. Funciona con todo,
@@ -145,12 +153,14 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     <DemoBox label="computed">
       <CartDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        Es el ticket de la cafetería. Nadie suma a mano cada vez que te pido el total: el
-        datáfono ya lo tiene, y solo lo rehace cuando pides otro café.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Es el ticket de la cafetería. Nadie suma a mano cada vez que te pido el total: el
+          datáfono ya lo tiene, y solo lo rehace cuando pides otro café.
+        </p>
+      </CallOut>
+    </template>
     <p>
       ¿Y por qué no una función normal? Una función en la plantilla se ejecuta en cada
       render, haya cambiado algo o no. El <code>computed</code> se ahorra el trabajo. Regla
@@ -169,14 +179,16 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     <DemoBox label="v-if contra v-show">
       <VisibilityDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        <code>v-show</code> es bajar la persiana: la ventana sigue ahí y subirla es
-        instantáneo. <code>v-if</code> es tapiar la ventana y volver a abrir el hueco cuando
-        la quieres. Para algo que se alterna a menudo (un menú, una pestaña), persiana. Para
-        algo que casi nunca se ve (un panel de admin), tapia.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          <code>v-show</code> es bajar la persiana: la ventana sigue ahí y subirla es
+          instantáneo. <code>v-if</code> es tapiar la ventana y volver a abrir el hueco cuando
+          la quieres. Para algo que se alterna a menudo (un menú, una pestaña), persiana. Para
+          algo que casi nunca se ve (un panel de admin), tapia.
+        </p>
+      </CallOut>
+    </template>
     <p>
       <code>v-for</code> repite un elemento por cada item. El <code>:key</code> no es
       decoración: le dice a Vue qué elemento es cuál cuando la lista cambia de orden o se
@@ -201,13 +213,15 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     <DemoBox label="v-model y v-for">
       <ShoppingListDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        La lista de la compra compartida en el móvil. Si apuntas leche, aparece en el móvil de
-        quien vive contigo; si la tacha, desaparece del tuyo. <code>v-model</code> mantiene
-        igual de sincronizados el campo y la variable, en los dos sentidos.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          La lista de la compra compartida en el móvil. Si apuntas leche, aparece en el móvil de
+          quien vive contigo; si la tacha, desaparece del tuyo. <code>v-model</code> mantiene
+          igual de sincronizados el campo y la variable, en los dos sentidos.
+        </p>
+      </CallOut>
+    </template>
     <p>Los <strong>modificadores</strong> te ahorran código repetitivo:</p>
     <ul>
       <li><code>@submit.prevent</code>: evita que el formulario recargue la página.</li>

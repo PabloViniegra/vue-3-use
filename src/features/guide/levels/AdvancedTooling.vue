@@ -23,13 +23,15 @@ import ClickOutsideDemo from '../demos/ClickOutsideDemo.vue'
     <DemoBox label="Una directiva para clics fuera">
       <ClickOutsideDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        Una directiva es una pegatina con instrucciones que pegas en un elemento: «enfócame al
-        aparecer», «ciérrame si pinchan fuera». El elemento sigue siendo el mismo; la pegatina
-        solo le añade un comportamiento, y la puedes pegar en cualquier otro.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Una directiva es una pegatina con instrucciones que pegas en un elemento: «enfócame al
+          aparecer», «ciérrame si pinchan fuera». El elemento sigue siendo el mismo; la pegatina
+          solo le añade un comportamiento, y la puedes pegar en cualquier otro.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="rendimiento" title="Rendimiento">
@@ -62,13 +64,15 @@ import ClickOutsideDemo from '../demos/ClickOutsideDemo.vue'
         <code>import()</code>.
       </li>
     </ul>
-    <CallOut>
-      <p>
-        Virtualizar una lista es el escaparate de una tienda: no saca el almacén entero a la
-        calle, solo lo que cabe en el cristal, y va cambiando el género según pasas por
-        delante.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Virtualizar una lista es el escaparate de una tienda: no saca el almacén entero a la
+          calle, solo lo que cabe en el cristal, y va cambiando el género según pasas por
+          delante.
+        </p>
+      </CallOut>
+    </template>
     <CallOut type="info">
       <p>
         Mide antes de optimizar. La pestaña de rendimiento de Vue DevTools te dice qué
@@ -99,11 +103,13 @@ import ClickOutsideDemo from '../demos/ClickOutsideDemo.vue'
       extensión oficial de
       Vue para tu editor.
     </p>
-    <CallOut>
-      <p>
-        TypeScript es el corrector del móvil, pero para tu código: te subraya el error
-        mientras escribes, no cuando el mensaje ya está enviado (o el código, en producción).
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          TypeScript es el corrector del móvil, pero para tu código: te subraya el error
+          mientras escribes, no cuando el mensaje ya está enviado (o el código, en producción).
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 </template>

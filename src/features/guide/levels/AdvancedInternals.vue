@@ -19,13 +19,15 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <code>ref()</code> hace lo mismo con un getter y un setter en <code>.value</code>.
     </p>
     <CodeBlock :code="s.proxyIdea" lang="js" />
-    <CallOut>
-      <p>
-        Una newsletter. Leer una propiedad dentro de un <code>computed</code> o una plantilla
-        es suscribirte. Cuando cambia, solo reciben el correo los suscriptores, no toda la
-        app. Por eso Vue sabe exactamente qué componentes repintar sin que tú se lo digas.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Una newsletter. Leer una propiedad dentro de un <code>computed</code> o una plantilla
+          es suscribirte. Cuando cambia, solo reciben el correo los suscriptores, no toda la
+          app. Por eso Vue sabe exactamente qué componentes repintar sin que tú se lo digas.
+        </p>
+      </CallOut>
+    </template>
     <p>Saber esto explica las trampas típicas:</p>
     <CodeBlock :code="s.deepReactivity" lang="js" />
     <ul>
@@ -58,12 +60,14 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <code>ref</code> que ya hace las dos cosas.
     </p>
     <CodeBlock :code="s.defineModelSnippet" />
-    <CallOut>
-      <p>
-        Los mandos de una tele compartida: el tuyo y el de tu compañera de piso controlan el
-        mismo volumen. Da igual quién lo toque, los dos ven el mismo número.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Los mandos de una tele compartida: el tuyo y el de tu compañera de piso controlan el
+          mismo volumen. Da igual quién lo toque, los dos ven el mismo número.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="template-refs" title="Template refs">
@@ -82,13 +86,15 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       pero con <code>&lt;script setup&gt;</code> solo verás lo que el hijo exponga con
       <code>defineExpose()</code>. Componentes cerrados por defecto, como debe ser.
     </p>
-    <CallOut>
-      <p>
-        Normalmente le dices a Vue qué quieres y él se las apaña con el DOM. Una template ref
-        es pedirle el teléfono directo de un elemento para hablar con él sin intermediarios:
-        enfocarlo, medirlo. Para cambiarle el texto no lo llames; eso sigue siendo cosa de Vue.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Normalmente le dices a Vue qué quieres y él se las apaña con el DOM. Una template ref
+          es pedirle el teléfono directo de un elemento para hablar con él sin intermediarios:
+          enfocarlo, medirlo. Para cambiarle el texto no lo llames; eso sigue siendo cosa de Vue.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="built-ins" title="Transition, Teleport y KeepAlive">
@@ -113,14 +119,16 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
         alternas, así no pierden su estado al ocultarse.
       </li>
     </ul>
-    <CallOut>
-      <p>
-        <code>Teleport</code> es pedir algo por internet desde casa y que te lo entreguen en
-        la oficina: lo gestionas desde tu componente, pero aparece donde no le estorba nadie.
-        <code>KeepAlive</code> es dejar la pestaña del navegador abierta en lugar de cerrarla
-        y volver a buscar la página.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          <code>Teleport</code> es pedir algo por internet desde casa y que te lo entreguen en
+          la oficina: lo gestionas desde tu componente, pero aparece donde no le estorba nadie.
+          <code>KeepAlive</code> es dejar la pestaña del navegador abierta en lugar de cerrarla
+          y volver a buscar la página.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="async" title="Componentes asíncronos">
@@ -133,13 +141,15 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
     <DemoBox label="defineAsyncComponent">
       <AsyncDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        Un restaurante no cocina toda la carta al abrir: prepara cada plato cuando alguien lo
-        pide. Mientras sale, te dejan pan en la mesa (el <code>loadingComponent</code>), y si
-        se acabó el pescado, el camarero te lo dice (el <code>errorComponent</code>).
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Un restaurante no cocina toda la carta al abrir: prepara cada plato cuando alguien lo
+          pide. Mientras sale, te dejan pan en la mesa (el <code>loadingComponent</code>), y si
+          se acabó el pescado, el camarero te lo dice (el <code>errorComponent</code>).
+        </p>
+      </CallOut>
+    </template>
     <p>
       <code>&lt;Suspense&gt;</code> coordina la espera: muestra un fallback mientras sus
       hijos asíncronos (o con <code>await</code> en el <code>setup</code>) se resuelven.

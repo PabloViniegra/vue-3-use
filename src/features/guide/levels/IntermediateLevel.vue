@@ -21,13 +21,15 @@ import PointerDemo from '../demos/PointerDemo.vue'
       El hijo no toca <code>likes</code>. Solo avisa de que alguien ha pulsado, y el padre,
       que es el dueño del dato, decide qué hacer. Eso es el <em>flujo unidireccional</em>.
     </p>
-    <CallOut>
-      <p>
-        Un restaurante. El cliente (padre) le pasa la comanda al camarero (props). El camarero
-        no decide cambiarte el filete por pescado; si se ha acabado, vuelve y te lo dice
-        (evento) y tú eliges.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Un restaurante. El cliente (padre) le pasa la comanda al camarero (props). El camarero
+          no decide cambiarte el filete por pescado; si se ha acabado, vuelve y te lo dice
+          (evento) y tú eliges.
+        </p>
+      </CallOut>
+    </template>
     <CallOut type="warning">
       <p>
         Nunca modifiques una prop dentro del hijo. Vue te avisará en consola y, aunque a veces
@@ -43,13 +45,15 @@ import PointerDemo from '../demos/PointerDemo.vue'
       construyes componentes “contenedor”: tarjetas, modales, layouts, tablas.
     </p>
     <CodeBlock :code="s.slots" />
-    <CallOut>
-      <p>
-        Un marco de fotos. El marco decide el borde, el cristal y el tamaño; la foto la pones
-        tú. Y si no pones ninguna, trae la de la familia sonriente que viene de fábrica (el
-        contenido por defecto del slot).
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Un marco de fotos. El marco decide el borde, el cristal y el tamaño; la foto la pones
+          tú. Y si no pones ninguna, trae la de la familia sonriente que viene de fábrica (el
+          contenido por defecto del slot).
+        </p>
+      </CallOut>
+    </template>
     <p>
       Los <strong>scoped slots</strong> dan la vuelta a la idea: el hijo tiene los datos y le
       pasa cada elemento al padre para que este decida cómo pintarlo. Es la base de cualquier
@@ -83,13 +87,15 @@ import PointerDemo from '../demos/PointerDemo.vue'
     <DemoBox label="watch con limpieza">
       <DraftDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        El autoguardado de un buen editor. No guarda en cada tecla: espera a que pares un
-        momento. Cada tecla nueva cancela el guardado pendiente, que es justo lo que hace la
-        limpieza del watcher de la demo.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          El autoguardado de un buen editor. No guarda en cada tecla: espera a que pares un
+          momento. Cada tecla nueva cancela el guardado pendiente, que es justo lo que hace la
+          limpieza del watcher de la demo.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="ciclo-de-vida" title="Ciclo de vida">
@@ -98,14 +104,16 @@ import PointerDemo from '../demos/PointerDemo.vue'
       desaparece. Vue te deja engancharte a cada momento.
     </p>
     <CodeBlock :code="s.lifecycle" lang="js" />
-    <CallOut>
-      <p>
-        Alquilar un piso. El <code>setup</code> es firmar el contrato: ya existes, pero aún no
-        tienes las llaves. <code>onMounted</code> es entrar y colgar los cuadros.
-        <code>onUnmounted</code> es devolver las llaves con el piso limpio, porque si dejas un
-        <code>setInterval</code> corriendo, la fianza (y la memoria) no vuelve.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Alquilar un piso. El <code>setup</code> es firmar el contrato: ya existes, pero aún no
+          tienes las llaves. <code>onMounted</code> es entrar y colgar los cuadros.
+          <code>onUnmounted</code> es devolver las llaves con el piso limpio, porque si dejas un
+          <code>setInterval</code> corriendo, la fianza (y la memoria) no vuelve.
+        </p>
+      </CallOut>
+    </template>
     <p>
       Los que más vas a usar son <code>onMounted</code> y <code>onUnmounted</code>. También
       existen <code>onBeforeMount</code>, <code>onUpdated</code>,
@@ -125,13 +133,15 @@ import PointerDemo from '../demos/PointerDemo.vue'
     <DemoBox label="un composable de puntero">
       <PointerDemo />
     </DemoBox>
-    <CallOut>
-      <p>
-        Una receta. Escribes una vez cómo se hace el gazpacho y cada persona que la sigue
-        prepara el suyo con sus propios tomates. Dos componentes que llaman a
-        <code>useRaton()</code> tienen cada uno su <code>x</code> y su <code>y</code>.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Una receta. Escribes una vez cómo se hace el gazpacho y cada persona que la sigue
+          prepara el suyo con sus propios tomates. Dos componentes que llaman a
+          <code>useRaton()</code> tienen cada uno su <code>x</code> y su <code>y</code>.
+        </p>
+      </CallOut>
+    </template>
     <p>
       Antes de escribir el tuyo, mira <a href="https://vueuse.org" target="_blank" rel="noopener">VueUse</a>:
       tiene cientos de composables ya hechos para el ratón, el almacenamiento local, el
@@ -148,13 +158,15 @@ import PointerDemo from '../demos/PointerDemo.vue'
       <code>inject</code> lo recoge donde haga falta.
     </p>
     <CodeBlock :code="s.provideInject" lang="js" />
-    <CallOut>
-      <p>
-        En una boda, pasar un recado mesa por mesa hasta la del fondo es prop drilling. Ponerlo
-        en un cartel en la entrada para que lo lea quien lo necesite es
-        <code>provide</code>.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          En una boda, pasar un recado mesa por mesa hasta la del fondo es prop drilling. Ponerlo
+          en un cartel en la entrada para que lo lea quien lo necesite es
+          <code>provide</code>.
+        </p>
+      </CallOut>
+    </template>
     <p>
       Úsalo para cosas de “contexto”: tema, idioma, el usuario actual, la configuración de una
       librería. Si muchos componentes sin relación necesitan leer y modificar el mismo

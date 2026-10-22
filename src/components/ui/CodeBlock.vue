@@ -63,9 +63,11 @@ const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
 </template>
 
 <style module>
+/* Sobresale por los lados lo mismo que su padding: el código queda alineado con la prosa */
 .root {
   position: relative;
-  margin: var(--space-md) 0;
+  max-width: var(--box-max);
+  margin: var(--space-md) calc(var(--bleed) * -1);
   background: var(--c-code-bg);
   border-radius: var(--radius-lg);
 }
@@ -73,7 +75,7 @@ const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
 /* Shiki genera el <pre> vía v-html, así que no lleva nuestras clases */
 .root :global(pre) {
   margin: 0;
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--bleed);
   overflow-x: auto;
   border-radius: var(--radius-lg);
 }
@@ -92,6 +94,7 @@ const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
   position: absolute;
   top: var(--space-xs);
   right: var(--space-sm);
+  font-family: var(--font-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   line-height: 1;
@@ -145,7 +148,6 @@ const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
 
 @media (max-width: 640px) {
   .root {
-    margin-inline: calc(var(--space-lg) * -1);
     border-radius: 0;
   }
 

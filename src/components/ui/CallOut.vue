@@ -13,7 +13,9 @@ const titleId = useId()
 <template>
   <!-- Nota y no <aside>: veinte landmarks "complementary" vuelven inútil la lista del lector -->
   <div :class="[$style.root, $style[type]]" role="note" :aria-labelledby="titleId">
-    <p :id="titleId" :class="$style.title">{{ title ?? defaultTitles[type] }}</p>
+    <p :id="titleId" :class="$style.title">
+      <span v-if="type === 'real'" aria-hidden="true">// </span>{{ title ?? defaultTitles[type] }}
+    </p>
     <slot />
   </div>
 </template>
@@ -21,10 +23,6 @@ const titleId = useId()
 <style module>
 .root {
   margin: var(--space-lg) 0;
-  padding: var(--space-md);
-  max-width: var(--measure);
-  border: 1px solid;
-  border-radius: var(--radius-lg);
   font-size: var(--font-size-body-sm);
   line-height: var(--line-height-body-sm);
 }
@@ -38,13 +36,28 @@ const titleId = useId()
   font-weight: var(--font-weight-semibold);
 }
 
+/* La firma de la guía: una nota al margen, no otra caja más */
 .real {
-  border-color: var(--c-brand);
-  background: var(--c-brand-soft);
+  max-width: var(--measure);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--c-brand);
 }
 
 .real .title {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-medium);
   color: var(--c-brand-text);
+}
+
+/* Las cajas sobresalen lo mismo que el código: el texto de dentro queda alineado con la prosa */
+.warning,
+.info {
+  max-width: var(--box-max);
+  margin-inline: calc(var(--bleed) * -1);
+  padding: var(--space-md) var(--bleed);
+  border: 1px solid;
+  border-radius: var(--radius-lg);
 }
 
 .warning {
@@ -59,5 +72,13 @@ const titleId = useId()
 .info {
   border-color: var(--c-divider-strong);
   background: var(--c-bg-soft);
+}
+
+@media (max-width: 640px) {
+  .warning,
+  .info {
+    border-inline: 0;
+    border-radius: 0;
+  }
 }
 </style>

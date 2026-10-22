@@ -4,60 +4,52 @@ import BaseButton from '../ui/BaseButton.vue'
 import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
 
-const { levels } = defineProps<{ levels: { topics: { id: string }[] }[] }>()
-
-// Un nivel de la guía por cada valor, en el mismo orden que toc.ts
-const copy = {
-  cero: {
-    tagline:
-      'Todo Vue 3 en una sola página: lo básico, lo intermedio y lo avanzado. Con código que puedes tocar y ejemplos de la vida real.',
-    cta: 'Empezar desde cero',
-  },
-  algo: {
-    tagline:
-      'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes: props, slots, watchers, composables y provide / inject.',
-    cta: 'Seguir por lo intermedio',
-  },
-  bastante: {
-    tagline:
-      'La reactividad por dentro, defineModel, Transition y Teleport, rendimiento y TypeScript.',
-    cta: 'Llévame a lo avanzado',
-  },
-}
-
-type Level = keyof typeof copy
+const { levels, copy } = defineProps<{
+  levels: { topics: { id: string }[] }[]
+  copy: Record<string, { tagline: string; cta: string }>
+}>()
 
 const options = Object.keys(copy)
 
-const level = ref<Level>('cero')
+const level = ref(options[0] ?? '')
 const current = computed(() => copy[level.value])
-const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.id)
+const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0]?.id}`)
 </script>
 
 <template>
   <section id="top" :class="$style.root" aria-labelledby="hero-title">
     <HeroBackdrop :step="options.indexOf(level)" />
     <div :class="$style.content">
-      <h1 id="hero-title" :class="$style.title">
-        Vue 3, de
-        <Transition
-          mode="out-in"
-          :enter-from-class="$style.wordEnter"
-          :leave-to-class="$style.wordLeave"
-          :enter-active-class="$style.wordActive"
-          :leave-active-class="$style.wordActive"
-        >
-          <span :key="level" :class="$style.accent">{{ level }}</span>
-        </Transition>
-        <br />
-        a que te pregunten&nbsp;a&nbsp;ti
-      </h1>
-      <p :class="$style.tagline" aria-live="polite">{{ current.tagline }}</p>
-      <HeroLevelPicker v-model="level" :options="options" />
-      <div :class="$style.actions">
-        <BaseButton size="lg" :href="`#${target}`">{{ current.cta }}</BaseButton>
+      <div :class="$style.intro">
+        <h1 id="hero-title" :class="$style.title">
+          Vue 3, de
+          <Transition
+            mode="out-in"
+            :enter-from-class="$style.wordEnter"
+            :leave-to-class="$style.wordLeave"
+            :enter-active-class="$style.wordActive"
+            :leave-active-class="$style.wordActive"
+          >
+            <span :key="level" :class="$style.accent">{{ level }}</span>
+          </Transition>
+          <br />
+          a que te pregunten&nbsp;a&nbsp;ti
+        </h1>
+        <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
-      <p :class="$style.madeWith">Esta página está hecha con Vue {{ version }}.</p>
+      <HeroLevelPicker
+        v-model="level"
+        :class="$style.picker"
+        :options="options"
+        :title="`Vue 3, de ${level}`"
+        :target="target"
+      />
+      <div :class="$style.cta">
+        <div :class="$style.actions">
+          <BaseButton size="lg" :href="target">{{ current?.cta }}</BaseButton>
+        </div>
+        <p :class="$style.madeWith">Esta página está hecha con Vue {{ version }}.</p>
+      </div>
     </div>
   </section>
 </template>
@@ -69,17 +61,21 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
   position: relative;
   display: grid;
   place-items: center;
-  min-height: calc(100vh - var(--hero-top));
   min-height: calc(100svh - var(--hero-top));
   padding: var(--space-3xl) var(--space-xl);
   overflow: clip;
-  text-align: center;
   view-timeline: --hero block;
 }
 
 .content {
   position: relative;
+  display: grid;
+  grid-template:
+    'intro picker' auto
+    'cta picker' auto / minmax(0, 7fr) minmax(0, 5fr);
+  column-gap: var(--space-3xl);
   width: 100%;
+  max-width: var(--hero-max);
 }
 
 /* Al salir el hero cada capa se va a su ritmo: el título se aleja y se
@@ -89,7 +85,8 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
     .title,
     .tagline,
     .actions,
-    .madeWith {
+    .madeWith,
+    .picker {
       animation-timing-function: linear;
       animation-fill-mode: both;
       animation-timeline: --hero;
@@ -100,7 +97,8 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
       animation-range: exit 0% exit 85%;
     }
 
-    .tagline {
+    .tagline,
+    .picker {
       animation-name: fadeDown;
       animation-range: exit 0% exit 60%;
     }
@@ -128,61 +126,79 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
   }
 }
 
+/* En móvil el panel va entre el texto y el botón: primero eliges, luego entras */
+.intro {
+  grid-area: intro;
+  align-self: end;
+}
+
+.picker {
+  grid-area: picker;
+  align-self: center;
+}
+
+.cta {
+  grid-area: cta;
+}
+
 .title {
   margin: 0;
+  font-family: var(--font-display);
   font-size: var(--font-size-display);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-heavy);
   line-height: var(--line-height-display);
   letter-spacing: var(--letter-spacing-display);
   color: var(--c-text-1);
   text-wrap: balance;
+  transform-origin: left center;
 }
 
+/* El mismo verde que el valor elegido en el panel: la palabra es ese ref */
 .accent {
   display: inline-block;
-  background: var(--accent-gradient);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  padding: 0 var(--space-xs);
+  border-radius: var(--radius-lg);
+  background: var(--c-brand-soft);
+  color: var(--c-brand-text);
 }
 
-.wordActive {
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out),
-    filter var(--duration-fast) var(--ease-out);
+@media (prefers-reduced-motion: no-preference) {
+  .wordActive {
+    transition-property: opacity, transform, filter;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-out);
+  }
 }
 
-.wordEnter {
+.wordEnter,
+.wordLeave {
   opacity: 0;
   filter: blur(var(--blur-swap));
   transform: translateY(var(--space-xs));
 }
 
 .wordLeave {
-  opacity: 0;
-  filter: blur(var(--blur-swap));
   transform: translateY(calc(var(--space-xs) * -1));
 }
 
 .tagline {
-  max-width: var(--hero-max);
-  margin: var(--space-lg) auto var(--space-xl);
+  max-width: var(--measure);
+  margin: var(--space-lg) 0 var(--space-xl);
   font-size: var(--font-size-lead);
   line-height: var(--line-height-lead);
   color: var(--c-text-2);
-  text-wrap: balance;
+  text-wrap: pretty;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
   gap: var(--space-md);
 }
 
 .madeWith {
   margin: var(--space-lg) 0 0;
+  font-family: var(--font-mono);
   font-size: var(--font-size-caption);
   color: var(--c-text-2);
 }
@@ -194,19 +210,20 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
     padding: var(--space-3xl) var(--space-lg);
   }
 
+  .content {
+    grid-template: 'intro' 'picker' 'cta' / minmax(0, 1fr);
+    row-gap: var(--space-xl);
+    max-width: var(--box-max);
+  }
+
+
   .title {
     font-size: var(--font-size-display-md);
-    letter-spacing: var(--letter-spacing-display-sm);
   }
 
   .tagline {
+    margin-bottom: 0;
     font-size: var(--font-size-lead-sm);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wordActive {
-    transition: none;
   }
 }
 
@@ -220,8 +237,9 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
   }
 
   .tagline {
-    margin: var(--space-md) auto;
+    margin-top: var(--space-md);
   }
+
 
   /* Botones a ancho completo sin tocar su estilo: los estira el contenedor */
   .actions {

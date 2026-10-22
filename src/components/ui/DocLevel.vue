@@ -8,7 +8,7 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
     :class="[$style.root, id === 'y-ahora-que' && $style.compact]"
     data-content-section
   >
-    <p v-if="eyebrow" :class="$style.eyebrow">{{ eyebrow }}</p>
+    <p v-if="eyebrow" :class="$style.eyebrow"><span aria-hidden="true">// </span>{{ eyebrow }}</p>
     <h2 :class="$style.heading">{{ title }}</h2>
     <p v-if="summary" :class="$style.summary">{{ summary }}</p>
     <slot />
@@ -32,18 +32,26 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 }
 
 .eyebrow {
-  margin: 0 0 var(--space-xxs);
+  margin: 0 0 var(--space-xs);
+  font-family: var(--font-mono);
   font-size: var(--font-size-caption);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-medium);
   color: var(--c-brand-text);
 }
 
 .heading {
-  margin: 0 0 var(--space-xs);
+  margin: 0 0 var(--space-sm);
+  font-family: var(--font-display);
   font-size: var(--font-size-headline-lg);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-heavy);
   line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-headline-lg);
+}
+
+.summary,
+.root > p,
+.root > ol {
+  max-width: var(--measure);
 }
 
 .summary {

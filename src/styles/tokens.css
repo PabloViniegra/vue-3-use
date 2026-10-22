@@ -1,13 +1,11 @@
-/* Tokens de DESIGN.md. Paleta y medidas tomadas de @vue/theme (vuejs.org), con el verde
-   de texto oscurecido lo justo para cumplir AA sobre todas las superficies claras. */
+/* Tokens de DESIGN.md. Paleta tomada de @vue/theme (vuejs.org), con el verde de texto
+   oscurecido lo justo para cumplir AA sobre todas las superficies claras. */
 :root {
   --c-brand: #42b883;
   --c-brand-light: #42d392;
   --c-brand-text: #287953;
   --c-brand-soft: rgba(66, 184, 131, 0.12);
-  --c-accent-soft: rgba(100, 126, 255, 0.14);
   --c-on-brand: #1a1a1a;
-  --c-accent-blue: #647eff;
 
   --c-bg: #ffffff;
   --c-bg-soft: #f9f9f9;
@@ -28,19 +26,18 @@
   --c-scrim: rgba(0, 0, 0, 0.6);
   --c-focus: #287953;
 
-  --accent-gradient: linear-gradient(315deg, var(--c-brand-text) 25%, var(--c-accent-blue));
-
   --font-sans: 'Inter Variable', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  --font-mono: ui-monospace, Menlo, Monaco, Consolas, 'DejaVu Sans Mono', 'Liberation Mono',
+  --font-display: 'Bricolage Grotesque Variable', var(--font-sans);
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, Menlo, Monaco, Consolas, 'DejaVu Sans Mono', 'Liberation Mono',
     'Courier New', monospace;
 
-  --font-size-display: 76px;
+  --font-size-display: 64px;
   --font-size-display-md: 48px;
-  --font-size-display-sm: 36px;
-  --font-size-headline-lg: 36px;
-  --font-size-headline-lg-sm: 28px;
-  --font-size-headline-md: 22px;
+  --font-size-display-sm: 38px;
+  --font-size-headline-lg: 40px;
+  --font-size-headline-lg-sm: 30px;
+  --font-size-headline-md: 24px;
   --font-size-title: 20px;
   --font-size-lead: 22px;
   --font-size-lead-sm: 18px;
@@ -48,27 +45,26 @@
   --font-size-body-sm: 15px;
   --font-size-label: 14px;
   --font-size-caption: 13px;
-  --font-size-code: 14px;
+  --font-size-code: 13.5px;
 
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
-  --font-weight-black: 900;
+  --font-weight-heavy: 800;
 
-  --line-height-display: 1.1;
-  --line-height-heading: 1.2;
-  --line-height-title: 1.4;
+  --line-height-display: 1.02;
+  --line-height-heading: 1.1;
+  --line-height-title: 1.3;
   --line-height-lead: 1.5;
   --line-height-body: 1.7;
   --line-height-body-sm: 1.6;
   --line-height-label: 1.5;
   --line-height-code: 1.7;
 
-  --letter-spacing-display: -1.5px;
-  --letter-spacing-display-sm: -1px;
-  --letter-spacing-headline-lg: -0.02em;
-  --letter-spacing-headline-md: -0.01em;
+  --letter-spacing-display: -0.035em;
+  --letter-spacing-headline-lg: -0.025em;
+  --letter-spacing-headline-md: -0.015em;
 
   --radius-sm: 4px;
   --radius-md: 6px;
@@ -90,9 +86,14 @@
   --local-nav-height: 45px;
   --sidebar-width: 272px;
   --content-max: 784px;
+  --content-max-wide: 980px;
   --layout-max: 1056px;
-  --hero-max: 960px;
+  --layout-max-wide: 1252px;
+  --hero-max: 1152px;
   --measure: 580px;
+  --bleed: 24px;
+  --box-max: calc(var(--measure) + var(--bleed) * 2);
+  --note-width: 240px;
   --doc-level-intrinsic-size: 8700px;
   --doc-level-intrinsic-size-mobile: 10400px;
   --doc-end-intrinsic-size: 480px;
@@ -104,7 +105,6 @@
   --button-sm-padding: 14px;
   --button-lg-height: 48px;
   --button-lg-padding: 28px;
-  --demo-padding: 20px;
   --demo-area-height: 160px;
   --switch-width: 40px;
   --switch-height: 22px;
@@ -137,7 +137,6 @@
 :root.dark {
   --c-brand-text: #42d392;
   --c-brand-soft: rgba(66, 184, 131, 0.16);
-  --c-accent-soft: rgba(100, 126, 255, 0.2);
 
   --c-bg: #1a1a1a;
   --c-bg-soft: #242424;

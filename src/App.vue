@@ -12,6 +12,7 @@ import { useKeyShortcut } from './composables/useKeyShortcut'
 import { useMediaQuery } from './composables/useMediaQuery'
 import { useTheme } from './composables/useTheme'
 import GuideContent from './features/guide/GuideContent.vue'
+import { heroCopy } from './features/guide/content/hero'
 import { levels } from './features/guide/content/toc'
 
 const sidebarGroups = [...levels, { id: 'y-ahora-que', title: 'Y ahora, ¿qué?' }]
@@ -74,7 +75,7 @@ useKeyShortcut('/', () => {
   />
 
   <div :inert="isModal">
-    <TheHero :levels="levels" />
+    <TheHero :levels="levels" :copy="heroCopy" />
   </div>
 
   <div :class="$style.layout">
@@ -119,6 +120,13 @@ useKeyShortcut('/', () => {
   min-width: 0;
   max-width: var(--content-max);
   padding: 0 var(--space-2xl) var(--space-3xl) var(--space-3xl);
+}
+
+/* Columna de notas al margen: ver DocTopic */
+@media (min-width: 1280px) {
+  .content {
+    max-width: var(--content-max-wide);
+  }
 }
 
 @media (max-width: 960px) {

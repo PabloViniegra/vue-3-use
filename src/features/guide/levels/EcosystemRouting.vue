@@ -27,14 +27,16 @@ import RouterDemo from '../demos/RouterDemo.vue'
       Si creas el proyecto con <code>npm create vue@latest</code>, el asistente te pregunta
       si quieres Router y Pinia y te deja todo esto montado.
     </p>
-    <CallOut>
-      <p>
-        Vue es el motor del coche. Funciona solo, pero para ir de viaje le pones GPS (el
-        router), una guantera que comparten todos los que van dentro (Pinia) y alguien que
-        se acuerda de por dónde hay gasolineras para no preguntar en cada pueblo (TanStack
-        Query).
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          Vue es el motor del coche. Funciona solo, pero para ir de viaje le pones GPS (el
+          router), una guantera que comparten todos los que van dentro (Pinia) y alguien que
+          se acuerda de por dónde hay gasolineras para no preguntar en cada pueblo (TanStack
+          Query).
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 
   <DocTopic id="vue-router" title="Vue Router">
@@ -77,12 +79,14 @@ import RouterDemo from '../demos/RouterDemo.vue'
         sesión.
       </p>
     </CallOut>
-    <CallOut>
-      <p>
-        El router es el directorio de un centro comercial. Buscas «tienda 42» y te dice en qué
-        planta está, sin que tengas que salir a la calle y volver a entrar. El guard es el
-        segurata de la zona VIP: si no tienes pase, te manda a la taquilla.
-      </p>
-    </CallOut>
+    <template #note>
+      <CallOut>
+        <p>
+          El router es el directorio de un centro comercial. Buscas «tienda 42» y te dice en qué
+          planta está, sin que tengas que salir a la calle y volver a entrar. El guard es el
+          segurata de la zona VIP: si no tienes pase, te manda a la taquilla.
+        </p>
+      </CallOut>
+    </template>
   </DocTopic>
 </template>
