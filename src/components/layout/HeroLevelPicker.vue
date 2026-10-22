@@ -1,5 +1,6 @@
 <script setup lang="ts">
 defineProps<{ options: readonly string[] }>()
+
 const level = defineModel<string>({ required: true })
 </script>
 

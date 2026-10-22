@@ -2,9 +2,11 @@
 import { useTemplateRef } from 'vue'
 
 defineProps<{ open: boolean; location: { level?: string; topic: string } }>()
+
 const emit = defineEmits<{ toggle: [] }>()
 
 const button = useTemplateRef('button')
+
 defineExpose({ focus: () => button.value?.focus() })
 </script>
 

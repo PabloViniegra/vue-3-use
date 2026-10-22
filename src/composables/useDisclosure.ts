@@ -7,6 +7,7 @@ export function useDisclosure(returnFocus?: () => void) {
   function closeOnEscape(e: KeyboardEvent) {
     if (e.key !== 'Escape') return
     open.value = false
+
     // Tras el render: el disparador puede estar inert mientras el panel sigue abierto
     if (returnFocus) nextTick(returnFocus)
   }

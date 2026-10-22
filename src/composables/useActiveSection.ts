@@ -9,6 +9,7 @@ export function useActiveSection(ids: string[]) {
   // llega a la franja, así que al tocar fondo se marca ella
   function onScroll() {
     const first = document.getElementById(ids[0])
+
     if (first && first.getBoundingClientRect().top > window.innerHeight * 0.3) activeId.value = ''
 
     if (!observer) {
@@ -17,12 +18,15 @@ export function useActiveSection(ids: string[]) {
         .find((element) => {
           if (!element) return false
           const { top, bottom } = element.getBoundingClientRect()
+
           return bottom > 80 && top < window.innerHeight * 0.3
         })
+
       if (active) activeId.value = active.id
     }
 
     const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2
+
     if (atBottom) activeId.value = ids[ids.length - 1]
   }
 
@@ -40,9 +44,11 @@ export function useActiveSection(ids: string[]) {
 
       for (const id of ids) {
         const el = document.getElementById(id)
+
         if (el) observer.observe(el)
       }
     }
+
     window.addEventListener('scroll', onScroll, { passive: true })
     // En el siguiente frame el layout ya está calculado y leerlo no fuerza un reflujo
     frame = requestAnimationFrame(onScroll)

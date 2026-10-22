@@ -17,9 +17,11 @@ watch(
     if (!near) return
     let stale = false
     onWatcherCleanup(() => (stale = true))
+
     try {
       const { highlight } = await import('../../lib/highlight')
       const result = await highlight(code, lang)
+
       if (!stale) html.value = result
     } catch {
       html.value = ''

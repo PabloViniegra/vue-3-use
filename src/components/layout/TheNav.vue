@@ -2,6 +2,7 @@
 import vueLogo from '../../assets/vue.svg'
 
 defineProps<{ links: { id: string; title: string }[]; dark: boolean }>()
+
 const emit = defineEmits<{ toggleTheme: [] }>()
 </script>
 

@@ -20,12 +20,16 @@ const normalize = (text: string) =>
 // Si coincide el nivel se ve entero; si no, solo sus temas que coinciden
 const visibleGroups = computed(() => {
   const q = normalize(query.value)
+
   if (!q) return props.groups
+
   return props.groups.flatMap((group) => {
     if (normalize(group.title).includes(q)) return [group]
+
     const topics = group.topics?.filter((topic) =>
       [topic.title, ...(topic.keywords ?? [])].some((text) => normalize(text).includes(q)),
     )
+
     return topics?.length ? [{ ...group, topics }] : []
   })
 })
@@ -46,16 +50,19 @@ function clearFilter() {
 // La sidebar tiene su propio scroll: si el tema activo queda fuera, la acercamos a él.
 // Se mueve solo su scrollTop; scrollIntoView arrastraría también la página
 const root = useTemplateRef('root')
+
 watch(
   () => props.activeId,
   async () => {
     await nextTick()
     const nav = root.value
     const link = nav?.querySelector<HTMLElement>('[aria-current]')
+
     if (!nav || !link) return
     const bounds = nav.getBoundingClientRect()
     const rect = link.getBoundingClientRect()
     const margin = rect.height
+
     if (rect.top < bounds.top + margin) nav.scrollTop -= bounds.top + margin - rect.top
     else if (rect.bottom > bounds.bottom - margin) nav.scrollTop += rect.bottom - bounds.bottom + margin
   },

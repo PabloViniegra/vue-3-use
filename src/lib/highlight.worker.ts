@@ -2,13 +2,16 @@ import { createHighlighterCore, type HighlighterCore } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
 
 type HighlightRequest = { id: number; code: string; lang: string }
+
 type HighlightResponse = { id: number; html?: string; error?: string }
+
 type WorkerScope = {
   addEventListener(type: 'message', listener: (event: MessageEvent<HighlightRequest>) => void): void
   postMessage(message: HighlightResponse): void
 }
 
-const workerScope = self as unknown as WorkerScope
+// SAFETY: this module is only loaded as the dedicated Worker entry in `highlight.ts`.
+const workerScope = self as WorkerScope
 
 // Mantiene los colores accesibles sobre los fondos de código de ambos temas.
 const colorReplacements = {
@@ -36,12 +39,14 @@ function getHighlighter() {
     ],
     engine: createJavaScriptRegexEngine(),
   })
+
   return highlighter
 }
 
 workerScope.addEventListener('message', async ({ data }) => {
   try {
     const hl = await getHighlighter()
+
     const html = hl.codeToHtml(data.code, {
       lang: data.lang,
       themes: { light: 'github-light', dark: 'github-dark' },
@@ -55,6 +60,7 @@ workerScope.addEventListener('message', async ({ data }) => {
         },
       ],
     })
+
     workerScope.postMessage({ id: data.id, html })
   } catch (error) {
     workerScope.postMessage({

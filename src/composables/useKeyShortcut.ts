@@ -4,10 +4,15 @@ import { onMounted, onUnmounted } from 'vue'
 export function useKeyShortcut(key: string, handler: () => void) {
   function onKeydown(e: KeyboardEvent) {
     if (e.key !== key || e.ctrlKey || e.metaKey || e.altKey) return
-    const target = e.target as HTMLElement
-    if (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
+    const target = e.target
+
+    if (
+      target instanceof HTMLElement &&
+      (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
+    ) {
       return
     }
+
     e.preventDefault()
     handler()
   }

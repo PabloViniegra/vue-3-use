@@ -9,6 +9,7 @@ let siguienteId = 2
 
 function agregar() {
   const texto = nueva.value.trim()
+
   if (!texto) return
   lista.value.push({ id: siguienteId++, texto })
   nueva.value = ''

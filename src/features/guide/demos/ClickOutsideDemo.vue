@@ -8,8 +8,9 @@ type ClickOutsideEl = HTMLElement & { _onClickOutside?: (e: PointerEvent) => voi
 const vClickFuera: Directive<ClickOutsideEl, () => void> = {
   mounted(el, binding) {
     el._onClickOutside = (e) => {
-      if (!el.contains(e.target as Node)) binding.value()
+      if (!(e.target instanceof Node) || !el.contains(e.target)) binding.value()
     }
+
     document.addEventListener('pointerdown', el._onClickOutside)
   },
   unmounted(el) {

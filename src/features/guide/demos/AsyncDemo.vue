@@ -13,9 +13,11 @@ function descargar(falla: boolean) {
   return new Promise<Component>((resolve, reject) => {
     const id = window.setTimeout(() => {
       timers.delete(id)
+
       if (falla) reject(new Error('Sin conexión'))
       else resolve({ render: () => h('p', GRAFICO) })
     }, 1200)
+
     timers.add(id)
   })
 }

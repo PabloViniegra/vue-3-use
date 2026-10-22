@@ -19,6 +19,7 @@ const guardadoA = ref('')
 
 watch(texto, (valor) => {
   estado.value = 'typing'
+
   // Cada pulsación cancela el guardado pendiente: solo se guarda al parar
   const timer = setTimeout(() => {
     try {
@@ -29,6 +30,7 @@ watch(texto, (valor) => {
       estado.value = 'error'
     }
   }, 800)
+
   onWatcherCleanup(() => clearTimeout(timer))
 })
 </script>

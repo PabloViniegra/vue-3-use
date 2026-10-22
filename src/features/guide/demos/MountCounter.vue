@@ -2,6 +2,7 @@
 import { onMounted } from 'vue'
 
 defineProps<{ label: string }>()
+
 const emit = defineEmits<{ mounted: [] }>()
 
 onMounted(() => emit('mounted'))

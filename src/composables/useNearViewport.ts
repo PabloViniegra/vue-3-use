@@ -6,8 +6,10 @@ export function useNearViewport(target: Readonly<Ref<HTMLElement | null>>, rootM
 
   onMounted(() => {
     if (!target.value) return
+
     if (typeof IntersectionObserver === 'undefined') {
       isNear.value = true
+
       return
     }
 

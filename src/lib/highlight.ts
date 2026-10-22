@@ -1,5 +1,7 @@
 type HighlightRequest = { id: number; code: string; lang: string }
+
 type HighlightResponse = { id: number; html?: string; error?: string }
+
 type PendingRequest = { resolve: (html: string) => void; reject: (error: Error) => void }
 
 let worker: Worker | undefined
@@ -17,9 +19,11 @@ function getWorker() {
   worker = new Worker(new URL('./highlight.worker.ts', import.meta.url), { type: 'module' })
   worker.addEventListener('message', ({ data }: MessageEvent<HighlightResponse>) => {
     const request = pending.get(data.id)
+
     if (!request) return
 
     pending.delete(data.id)
+
     if (data.error) request.reject(new Error(data.error))
     else request.resolve(data.html ?? '')
   })
@@ -33,6 +37,7 @@ function getWorker() {
     worker?.terminate()
     worker = undefined
   })
+
   return worker
 }
 
@@ -40,6 +45,7 @@ export function highlight(code: string, lang: string) {
   return new Promise<string>((resolve, reject) => {
     const id = nextId++
     pending.set(id, { resolve, reject })
+
     try {
       getWorker().postMessage({ id, code, lang } satisfies HighlightRequest)
     } catch (error) {

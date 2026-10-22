@@ -20,16 +20,20 @@ const activeId = useActiveSection([
   ...levels.flatMap((level) => level.topics.map((t) => t.id)),
   'y-ahora-que',
 ])
+
 useAnchorNavigation()
 
 // "Nivel › tema" para la barra del índice en móvil
 const location = computed(() => {
   for (const level of levels) {
     const topic = level.topics.find((t) => t.id === activeId.value)
+
     if (topic) return { level: level.title, topic: topic.title }
   }
+
   return { topic: sidebarGroups.find((g) => g.id === activeId.value)?.title ?? 'Introducción' }
 })
+
 const { isDark, toggle: toggleTheme } = useTheme()
 const localNav = useTemplateRef('localNav')
 const menu = useDisclosure(() => localNav.value?.focus())

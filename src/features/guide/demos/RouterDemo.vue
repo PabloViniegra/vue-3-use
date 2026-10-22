@@ -22,16 +22,22 @@ const enlaces = ['/', '/productos', '/productos/42', '/cuenta', '/no-existe']
 function resolver(url: string) {
   const [ruta = '/'] = url.split('?')
   const partes = ruta.split('/').filter(Boolean)
+
   for (const r of rutas) {
     const patron = r.path.split('/').filter(Boolean)
+
     if (patron.length !== partes.length) continue
     const params: Record<string, string> = {}
+
     const encaja = patron.every((p, i) => {
       if (p.startsWith(':')) params[p.slice(1)] = partes[i]!
+
       return p.startsWith(':') || p === partes[i]
     })
+
     if (encaja) return { ...r, params }
   }
+
   return { path: '/:pathMatch(.*)*', pagina: 'Página no encontrada (404)', params: {} }
 }
 

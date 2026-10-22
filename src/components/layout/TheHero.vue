@@ -25,7 +25,8 @@ const copy = {
 }
 
 type Level = keyof typeof copy
-const options = Object.keys(copy) as Level[]
+
+const options = Object.keys(copy)
 
 const level = ref<Level>('cero')
 const current = computed(() => copy[level.value])

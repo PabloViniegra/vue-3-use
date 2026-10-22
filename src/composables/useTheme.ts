@@ -7,6 +7,7 @@ const isDark = ref(document.documentElement.classList.contains('dark'))
 
 watch(isDark, (dark) => {
   document.documentElement.classList.toggle('dark', dark)
+
   try {
     localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light')
   } catch {

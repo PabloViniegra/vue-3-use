@@ -35,10 +35,13 @@ function pedir(uid: number) {
   peticiones.value++
   timer = window.setTimeout(() => {
     fetching.value = false
+
     if (falla) {
       error.value = 'Sin conexión'
+
       return
     }
+
     cache.set(uid, { nombre: usuarios.find((u) => u.id === uid)!.nombre, pedidoEn: Date.now() })
     desdeCache.value = false
   }, 900)
@@ -48,6 +51,7 @@ function elegir(uid: number) {
   id.value = uid
   const entrada = cache.get(uid)
   desdeCache.value = !!entrada
+
   if (!entrada || Date.now() - entrada.pedidoEn > STALE_MS) return pedir(uid)
   clearTimeout(timer)
   fetching.value = false
@@ -57,6 +61,7 @@ function elegir(uid: number) {
 // Lo que hace invalidateQueries después de una mutación
 function invalidar() {
   cache.forEach((entrada) => (entrada.pedidoEn = 0))
+
   if (id.value) pedir(id.value)
 }
 
