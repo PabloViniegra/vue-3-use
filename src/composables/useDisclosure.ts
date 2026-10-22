@@ -1,4 +1,4 @@
-import { nextTick, onWatcherCleanup, ref, watch } from 'vue'
+import { nextTick, onWatcherCleanup, readonly, ref, watch } from 'vue'
 
 // returnFocus: a dónde vuelve el foco al cerrar con Esc, para que no caiga en <body>
 export function useDisclosure(returnFocus?: () => void) {
@@ -20,7 +20,8 @@ export function useDisclosure(returnFocus?: () => void) {
   })
 
   return {
-    open,
+    open: readonly(open),
+    show: () => (open.value = true),
     toggle: () => (open.value = !open.value),
     close: () => (open.value = false),
   }

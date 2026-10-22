@@ -2,11 +2,11 @@
 import { useTemplateRef } from 'vue'
 
 const query = defineModel<string>({ required: true })
-const root = useTemplateRef('root')
+const input = useTemplateRef('input')
 
 function clear() {
   query.value = ''
-  root.value?.querySelector('input')?.focus()
+  input.value?.focus()
 }
 
 function onEscape(e: KeyboardEvent) {
@@ -17,11 +17,11 @@ function onEscape(e: KeyboardEvent) {
   query.value = ''
 }
 
-defineExpose({ focus: () => root.value?.querySelector('input')?.focus() })
+defineExpose({ focus: () => input.value?.focus() })
 </script>
 
 <template>
-  <div ref="root" :class="$style.root" role="search">
+  <div :class="$style.root" role="search">
     <label class="visually-hidden" for="filtro-temas">Filtrar temas</label>
     <svg :class="$style.icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
       <circle cx="10.5" cy="10.5" r="6.5" />
@@ -29,6 +29,7 @@ defineExpose({ focus: () => root.value?.querySelector('input')?.focus() })
     </svg>
     <input
       id="filtro-temas"
+      ref="input"
       v-model="query"
       :class="$style.input"
       type="search"

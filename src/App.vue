@@ -13,19 +13,19 @@ import { useMediaQuery } from './composables/useMediaQuery'
 import { useTheme } from './composables/useTheme'
 import GuideContent from './features/guide/GuideContent.vue'
 import { heroCopy } from './features/guide/content/hero'
-import { levels } from './features/guide/content/toc'
+import { closing, levels } from './features/guide/content/toc'
 
-const sidebarGroups = [...levels, { id: 'y-ahora-que', title: 'Y ahora, ¿qué?' }]
+const sidebarGroups = [...levels, closing]
 
 const activeId = useActiveSection([
   ...levels.flatMap((level) => level.topics.map((t) => t.id)),
-  'y-ahora-que',
+  closing.id,
 ])
 
 useAnchorNavigation()
 
 // "Nivel › tema" para la barra del índice en móvil
-const location = computed(() => {
+const breadcrumb = computed(() => {
   for (const level of levels) {
     const topic = level.topics.find((t) => t.id === activeId.value)
 
@@ -57,7 +57,7 @@ watch(isModal, (modal) => {
 
 // En móvil el índice está plegado: hay que abrirlo antes de enfocar el filtro
 useKeyShortcut('/', () => {
-  if (isMobile.value) menu.open.value = true
+  if (isMobile.value) menu.show()
   sidebar.value?.focusFilter()
 })
 </script>
@@ -69,13 +69,13 @@ useKeyShortcut('/', () => {
   <TheLocalNav
     ref="localNav"
     :open="menu.open.value"
-    :location="location"
+    :location="breadcrumb"
     :inert="isModal"
     @toggle="menu.toggle"
   />
 
   <div :inert="isModal">
-    <TheHero :levels="levels" :copy="heroCopy" />
+    <TheHero :copy="heroCopy" />
   </div>
 
   <div :class="$style.layout">

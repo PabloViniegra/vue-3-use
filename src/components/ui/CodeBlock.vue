@@ -2,7 +2,7 @@
 import { computed, onWatcherCleanup, ref, useTemplateRef, watch } from 'vue'
 import { useNearViewport } from '../../composables/useNearViewport'
 
-const props = withDefaults(defineProps<{ code: string; lang?: string }>(), { lang: 'vue' })
+const { code, lang = 'vue' } = defineProps<{ code: string; lang?: string }>()
 
 // Mientras carga Shiki (o si falla) se ve el código sin colores
 const html = ref('')
@@ -12,19 +12,19 @@ const root = useTemplateRef('root')
 const isNear = useNearViewport(root)
 
 watch(
-  () => [props.code, props.lang, isNear.value] as const,
-  async ([code, lang, near]) => {
+  () => [code, lang, isNear.value] as const,
+  async ([source, language, near]) => {
     if (!near) return
     let stale = false
     onWatcherCleanup(() => (stale = true))
 
     try {
       const { highlight } = await import('../../lib/highlight')
-      const result = await highlight(code, lang)
+      const result = await highlight(source, language)
 
       if (!stale) html.value = result
     } catch {
-      html.value = ''
+      if (!stale) html.value = ''
     }
   },
   { immediate: true },
@@ -34,7 +34,7 @@ const status = ref<'idle' | 'copied' | 'error'>('idle')
 
 async function copy() {
   try {
-    await navigator.clipboard.writeText(props.code)
+    await navigator.clipboard.writeText(code)
     status.value = 'copied'
   } catch {
     status.value = 'error'
@@ -49,8 +49,8 @@ watch(status, (value) => {
 
 const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
 const copyError = 'Selecciona el código y cópialo manualmente.'
-const lineCount = computed(() => props.code.split('\n').length)
-const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript', typescript: 'TypeScript', bash: 'Terminal' })[props.lang] ?? props.lang)
+const lineCount = computed(() => code.split('\n').length)
+const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript', typescript: 'TypeScript', bash: 'Terminal' })[lang] ?? lang)
 </script>
 
 <template>
@@ -65,7 +65,7 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
           <path v-if="status === 'copied'" d="m5 12 4 4L19 6" />
           <template v-else><rect x="8" y="8" width="12" height="13" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></template>
         </svg>
-        {{ labels[status] }}<span class="visually-hidden"> código {{ lang }}</span>
+        {{ labels[status] }}<span class="visually-hidden"> código {{ languageLabel }}</span>
       </button>
     </div>
     <span class="visually-hidden" role="status">{{ status === 'idle' ? '' : `${labels[status]}${status === 'error' ? `. ${copyError}` : ''}` }}</span>

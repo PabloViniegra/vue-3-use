@@ -181,7 +181,7 @@ test('el error de copia mantiene instrucciones para recuperarse', async ({ page 
     })
   })
   await page.goto('/#reactividad')
-  const copy = page.locator('#reactividad').getByRole('button', { name: /código vue$/ }).first()
+  const copy = page.locator('#reactividad').getByRole('button', { name: /código Vue$/ }).first()
 
   await copy.click()
   await expect(page.getByText('Selecciona el código y cópialo manualmente.', { exact: true })).toBeVisible()

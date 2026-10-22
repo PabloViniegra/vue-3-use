@@ -1,11 +1,11 @@
 <script setup lang="ts">
-defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
+defineProps<{ id: string; title: string; eyebrow?: string; summary?: string; compact?: boolean }>()
 </script>
 
 <template>
   <section
     :id="id"
-    :class="[$style.root, id === 'y-ahora-que' && $style.compact]"
+    :class="[$style.root, compact && $style.compact]"
     data-content-section
   >
     <p v-if="eyebrow" :class="$style.eyebrow"><span aria-hidden="true">// </span>{{ eyebrow }}</p>

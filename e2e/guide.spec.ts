@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { levels } from '../src/features/guide/content/toc.ts'
+import { closing, levels } from '../src/features/guide/content/toc.ts'
 
 const topicIds = levels.flatMap((level) => level.topics.map((topic) => topic.id))
 
@@ -23,9 +23,19 @@ test('cada entrada del índice apunta a una sección que existe', async ({ page 
   await page.goto('/')
   const sidebar = page.getByRole('navigation', { name: 'Índice' })
 
-  for (const id of [...levels.map((level) => level.id), ...topicIds, 'y-ahora-que']) {
+  for (const id of [...levels.map((level) => level.id), ...topicIds, closing.id]) {
     await expect(page.locator(`[id="${id}"]`), `falta la sección #${id}`).toHaveCount(1)
     await expect(sidebar.locator(`a[href="#${id}"]`), `falta el enlace a #${id}`).toHaveCount(1)
+  }
+})
+
+test('cada tema tiene el mismo título en el índice y en su encabezado', async ({ page }) => {
+  await page.goto('/')
+
+  for (const topic of levels.flatMap((level) => level.topics)) {
+    await expect(page.locator(`[id="${topic.id}"] h3`), `título distinto en #${topic.id}`).toHaveText(
+      new RegExp(`^\\s*${topic.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*#\\s*$`),
+    )
   }
 })
 
@@ -90,13 +100,13 @@ test('el código se copia con teclado sin incluir los números de línea', async
   const topic = page.locator('#reactividad')
   const source = topic.locator('pre.shiki').first()
   await expect(source).toBeVisible()
-  const copy = topic.getByRole('button', { name: /código vue$/ }).first()
+  const copy = topic.getByRole('button', { name: /código Vue$/ }).first()
 
   await expect(copy).toBeVisible()
   await copy.focus()
   await page.keyboard.press('Enter')
 
-  await expect(copy).toHaveText('Copiado código vue')
+  await expect(copy).toHaveText('Copiado código Vue')
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await source.textContent())
   await expect(topic.getByRole('status').first()).toHaveText('Copiado')
 })
@@ -108,9 +118,9 @@ test('si el portapapeles falla se informa del error', async ({ page }) => {
     })
   })
   await page.goto('/#reactividad')
-  const copy = page.locator('#reactividad').getByRole('button', { name: /código vue$/ }).first()
+  const copy = page.locator('#reactividad').getByRole('button', { name: /código Vue$/ }).first()
   await copy.click()
-  await expect(copy).toHaveText('No se pudo copiar código vue')
+  await expect(copy).toHaveText('No se pudo copiar código Vue')
 })
 
 test('el modo oscuro se mantiene al recargar', async ({ page }) => {

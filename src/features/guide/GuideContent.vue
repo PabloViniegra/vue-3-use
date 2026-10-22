@@ -1,6 +1,7 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import DocLevel from '../../components/ui/DocLevel.vue'
-import { levels } from './content/toc'
+import { closing, levels, type LevelId } from './content/toc'
 import AdvancedLevel from './levels/AdvancedLevel.vue'
 import BasicLevel from './levels/BasicLevel.vue'
 import EcosystemLevel from './levels/EcosystemLevel.vue'
@@ -11,7 +12,7 @@ const levelComponents = {
   intermedio: IntermediateLevel,
   avanzado: AdvancedLevel,
   ecosistema: EcosystemLevel,
-}
+} satisfies Record<LevelId, Component>
 </script>
 
 <template>
@@ -23,10 +24,10 @@ const levelComponents = {
     :eyebrow="`Nivel ${i + 1} de ${levels.length}`"
     :summary="level.summary"
   >
-    <component :is="levelComponents[level.id as keyof typeof levelComponents]" />
+    <component :is="levelComponents[level.id]" />
   </DocLevel>
 
-  <DocLevel id="y-ahora-que" title="Y ahora, ¿qué?">
+  <DocLevel :id="closing.id" :title="closing.title" compact>
     <p>
       Leer sobre Vue te da el mapa. Lo que de verdad te hace dominarlo es construir cosas y
       romperlas. Tres proyectos que tocan casi todo lo de esta página:

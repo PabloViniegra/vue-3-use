@@ -5,8 +5,10 @@ export interface Topic {
   keywords?: string[]
 }
 
+export type LevelId = 'basico' | 'intermedio' | 'avanzado' | 'ecosistema'
+
 export interface Level {
-  id: string
+  id: LevelId
   title: string
   summary: string
   topics: Topic[]
@@ -207,3 +209,6 @@ export const levels: Level[] = [
     ],
   },
 ]
+
+// Cierre de la guía: no es un nivel, pero tiene entrada propia en el índice
+export const closing = { id: 'y-ahora-que', title: 'Y ahora, ¿qué?' }

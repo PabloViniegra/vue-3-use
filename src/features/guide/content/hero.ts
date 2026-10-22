@@ -1,18 +1,26 @@
-// Un nivel de la guía por cada valor del ref del hero, en el mismo orden que toc.ts
+import { levels, type LevelId } from './toc'
+
+// El CTA lleva al primer tema del nivel
+const firstTopic = (id: LevelId) => `#${levels.find((level) => level.id === id)?.topics[0]?.id ?? id}`
+
+// Un valor del ref del hero por nivel; el orden marca cuánto se abre el fondo
 export const heroCopy = {
   cero: {
+    target: firstTopic('basico'),
     tagline:
       'Todo Vue 3 en una sola página: lo básico, lo intermedio y lo avanzado. Con código que puedes tocar y ejemplos de la vida real.',
     cta: 'Empezar desde cero',
   },
   algo: {
+    target: firstTopic('intermedio'),
     tagline:
       'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes: props, slots, watchers, composables y provide / inject.',
     cta: 'Seguir por lo intermedio',
   },
   bastante: {
+    target: firstTopic('avanzado'),
     tagline:
       'La reactividad por dentro, defineModel, Transition y Teleport, rendimiento y TypeScript.',
     cta: 'Llévame a lo avanzado',
   },
-} satisfies Record<string, { tagline: string; cta: string }>
+} satisfies Record<string, { target: string; tagline: string; cta: string }>

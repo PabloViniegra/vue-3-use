@@ -4,16 +4,15 @@ import BaseButton from '../ui/BaseButton.vue'
 import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
 
-const { levels, copy } = defineProps<{
-  levels: { topics: { id: string }[] }[]
-  copy: Record<string, { tagline: string; cta: string }>
+const { copy } = defineProps<{
+  copy: Record<string, { target: string; tagline: string; cta: string }>
 }>()
 
 const options = Object.keys(copy)
 
 const level = ref(options[0] ?? '')
 const current = computed(() => copy[level.value])
-const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0]?.id}`)
+const target = computed(() => current.value?.target ?? '#contenido')
 </script>
 
 <template>
