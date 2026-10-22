@@ -16,7 +16,7 @@ const model = defineModel<string>({ required: true })
   font-size: var(--font-size-body-sm);
   color: var(--c-text-1);
   background: var(--c-bg);
-  border: 1px solid var(--c-divider-strong);
+  border: 1px solid var(--c-control-border);
   border-radius: var(--radius-lg);
   padding: var(--space-xs) var(--space-sm);
 }

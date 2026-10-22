@@ -110,7 +110,7 @@ const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
   line-height: var(--line-height-label);
   color: var(--c-text-2);
   background: var(--c-bg);
-  border: 1px solid var(--c-divider);
+  border: 1px solid var(--c-control-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   opacity: 0;

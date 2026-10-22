@@ -104,4 +104,10 @@ const level = defineModel<string>({ required: true })
     transition: none;
   }
 }
+
+@media (max-width: 480px) {
+  .root {
+    margin-bottom: var(--space-md);
+  }
+}
 </style>

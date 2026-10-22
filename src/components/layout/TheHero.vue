@@ -158,8 +158,16 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
 }
 
 @media (max-width: 480px) {
+  .root {
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+  }
+
   .title {
     font-size: var(--font-size-display-sm);
+  }
+
+  .tagline {
+    margin: var(--space-md) auto;
   }
 
   /* Botones a ancho completo sin tocar su estilo: los estira el contenedor */

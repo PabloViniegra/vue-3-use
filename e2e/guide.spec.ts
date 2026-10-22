@@ -52,6 +52,12 @@ test('el filtro ignora tildes, busca por keywords y Esc lo vacía', async ({ pag
   await filter.fill('defineStore')
   await expect(topicLinks).toHaveText(['Pinia'])
 
+  await filter.fill('pasar datos al hijo')
+  await expect(topicLinks).toHaveText(['Props y eventos'])
+
+  await filter.fill('pedir datos a una API')
+  await expect(topicLinks).toHaveText(['TanStack Query'])
+
   await filter.fill('zzz')
   await expect(sidebar.getByText('Ningún tema habla de «zzz».')).toBeVisible()
 
@@ -86,12 +92,29 @@ test.describe('en móvil', () => {
 
   test('la tecla / abre el índice con el foco en el filtro', async ({ page }) => {
     await page.goto('/')
-    const menuButton = page.getByRole('button', { name: 'Índice' })
+    const menuButton = page.getByRole('button', { name: 'Índice', exact: true })
 
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false')
     await page.keyboard.press('/')
 
     await expect(menuButton).toHaveAttribute('aria-expanded', 'true')
     await expect(page.getByRole('searchbox', { name: 'Filtrar temas' })).toBeFocused()
+  })
+
+  test('el índice se cierra con un botón visible y devuelve el foco', async ({ page }) => {
+    await page.goto('/')
+    const menuButton = page.getByRole('button', { name: 'Índice', exact: true })
+
+    await menuButton.click()
+    await page.getByRole('button', { name: 'Cerrar índice' }).click()
+
+    await expect(menuButton).toHaveAttribute('aria-expanded', 'false')
+    await expect(menuButton).toBeFocused()
+  })
+
+  test('el hero compacto deja asomar el primer nivel', async ({ page }) => {
+    await page.goto('/')
+
+    await expect(page.getByRole('heading', { level: 2, name: 'Básico' })).toBeInViewport()
   })
 })

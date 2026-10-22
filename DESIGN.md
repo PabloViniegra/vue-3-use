@@ -14,6 +14,10 @@ colors:
   bg-mute: "#f1f1f1"
   divider: "rgba(60, 60, 60, 0.12)"
   divider-strong: "rgba(60, 60, 60, 0.29)"
+  control-border: "#888888"
+  control-border-dark: "#7a7a7a"
+  brand-control-border: "#4c4c4c"
+  brand-control-border-dark: "#1a1a1a"
   text-1: "#213547"
   text-2: "rgba(60, 60, 60, 0.78)"
   text-code: "#476582"
@@ -266,6 +270,10 @@ clase `dark`. Si un token no tiene variante `-dark`, vale para los dos modos.
   `bg-soft` en los dos modos.
 - **`bg` → `bg-soft` → `bg-mute`**: tres niveles de superficie. La jerarquía se marca con
   estos fondos y con `divider`, no con sombras.
+- **`control-border`**: borde de campos y controles. `#888888` en claro supera 3:1 sobre
+  `bg-mute`; `#7a7a7a` en oscuro supera 3:1 sobre `bg-mute`.
+- **`brand-control-border`**: contorno del botón verde; en claro `#4c4c4c` contrasta 3.4:1
+  con `brand`. En oscuro se funde con `bg`: la superficie verde ya contrasta 7:1 con ella.
 - **`warning*`**: solo para callouts de advertencia.
 - **`focus`**: color del anillo de `:focus-visible`. `#287953` en claro (≥ 4.7:1 sobre las
   superficies claras) y `#42b883` en oscuro (≥ 6.2:1).

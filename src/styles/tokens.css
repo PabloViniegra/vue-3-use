@@ -13,6 +13,8 @@
   --c-bg-mute: #f1f1f1;
   --c-divider: rgba(60, 60, 60, 0.12);
   --c-divider-strong: rgba(60, 60, 60, 0.29);
+  --c-control-border: #888888;
+  --c-brand-control-border: #4c4c4c;
   --c-text-1: #213547;
   --c-text-2: rgba(60, 60, 60, 0.78);
   --c-text-code: #476582;
@@ -137,6 +139,8 @@
   --c-bg-mute: #2f2f2f;
   --c-divider: rgba(84, 84, 84, 0.65);
   --c-divider-strong: #545454;
+  --c-control-border: #7a7a7a;
+  --c-brand-control-border: #1a1a1a;
   --c-text-1: rgba(255, 255, 245, 0.86);
   --c-text-2: rgba(235, 235, 235, 0.6);
   --c-text-code: #c9def1;

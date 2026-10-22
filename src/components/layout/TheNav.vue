@@ -93,7 +93,7 @@ const emit = defineEmits<{ toggleTheme: [] }>()
   height: var(--switch-height);
   padding: 0;
   border-radius: var(--radius-full);
-  border: 1px solid var(--c-divider-strong);
+  border: 1px solid var(--c-control-border);
   background: var(--c-bg-mute);
   cursor: pointer;
 }
@@ -105,7 +105,7 @@ const emit = defineEmits<{ toggleTheme: [] }>()
 }
 
 .switch:hover {
-  border-color: var(--c-brand);
+  border-color: var(--c-brand-text);
 }
 
 .knob {

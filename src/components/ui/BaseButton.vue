@@ -38,7 +38,7 @@ const {
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
-  border: 1px solid transparent;
+  border: 1px solid var(--c-control-border);
   border-radius: var(--radius-full);
   font-weight: var(--font-weight-semibold);
   line-height: 1;
@@ -62,6 +62,7 @@ const {
 .brand {
   background: var(--c-brand);
   color: var(--c-on-brand);
+  border-color: var(--c-brand-control-border);
 }
 
 .brand:not(:disabled):hover {
@@ -71,11 +72,10 @@ const {
 .alt {
   background: var(--c-bg-mute);
   color: var(--c-text-1);
-  border-color: var(--c-divider);
 }
 
 .alt:not(:disabled):hover {
-  border-color: var(--c-divider-strong);
+  border-color: var(--c-brand-text);
 }
 
 .sm {

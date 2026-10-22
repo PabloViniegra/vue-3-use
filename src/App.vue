@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, useTemplateRef, watch } from 'vue'
+import { computed, nextTick, useTemplateRef, watch } from 'vue'
 import TheFooter from './components/layout/TheFooter.vue'
 import TheHero from './components/layout/TheHero.vue'
 import TheLocalNav from './components/layout/TheLocalNav.vue'
@@ -40,6 +40,12 @@ const menu = useDisclosure(() => localNav.value?.focus())
 const sidebar = useTemplateRef('sidebar')
 const isMobile = useMediaQuery('(max-width: 960px)')
 
+function closeSidebar(restoreFocus = false) {
+  menu.close()
+
+  if (restoreFocus) nextTick(() => localNav.value?.focus())
+}
+
 // Con el índice abierto en móvil, lo de detrás no se enfoca ni se lee: Tab no se escapa
 const isModal = computed(() => menu.open.value && isMobile.value)
 
@@ -77,7 +83,7 @@ useKeyShortcut('/', () => {
       :groups="sidebarGroups"
       :active-id="activeId"
       :open="menu.open.value"
-      @close="menu.close"
+      @close="closeSidebar"
     />
 
     <main id="contenido" :class="$style.content" :inert="isModal">

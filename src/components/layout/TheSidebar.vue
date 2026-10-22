@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue'
 import SidebarFilter from './SidebarFilter.vue'
+import SidebarPanelHeader from './SidebarPanelHeader.vue'
 
 interface SidebarGroup {
   id: string
@@ -9,7 +10,7 @@ interface SidebarGroup {
 }
 
 const props = defineProps<{ groups: SidebarGroup[]; activeId: string; open: boolean }>()
-const emit = defineEmits<{ close: [] }>()
+const emit = defineEmits<{ close: [restoreFocus?: boolean] }>()
 
 const query = ref('')
 
@@ -72,8 +73,9 @@ defineExpose({ focusFilter })
 </script>
 
 <template>
-  <div v-if="open" :class="$style.scrim" @click="emit('close')" />
+  <div v-if="open" :class="$style.scrim" @click="emit('close', true)" />
   <nav id="sidebar" ref="root" :class="[$style.root, open && $style.open]" aria-label="Índice">
+    <SidebarPanelHeader v-if="open" @close="emit('close', true)" />
     <SidebarFilter ref="filter" v-model="query" />
     <p class="visually-hidden" aria-live="polite">
       {{ query ? `${matchCount} ${matchCount === 1 ? 'tema' : 'temas'}` : '' }}
