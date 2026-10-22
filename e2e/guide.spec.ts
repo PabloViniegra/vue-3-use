@@ -60,13 +60,13 @@ test('el filtro ignora tildes, busca por keywords y Esc lo vacía', async ({ pag
   await expect(topicLinks).toHaveText(['Componentes asíncronos'])
 
   await filter.fill('defineStore')
-  await expect(topicLinks).toHaveText(['Pinia'])
+  await expect(topicLinks).toHaveText(['Pinia coincide con «defineStore»'])
 
   await filter.fill('pasar datos al hijo')
-  await expect(topicLinks).toHaveText(['Props y eventos'])
+  await expect(topicLinks).toHaveText(['Props y eventos coincide con «pasar datos al hijo»'])
 
   await filter.fill('pedir datos a una API')
-  await expect(topicLinks).toHaveText(['TanStack Query'])
+  await expect(topicLinks).toHaveText(['TanStack Query coincide con «pedir datos a una API»'])
 
   await filter.fill('zzz')
   await expect(sidebar.getByText('Ningún tema habla de «zzz».')).toBeVisible()

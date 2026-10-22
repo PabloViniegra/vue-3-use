@@ -30,8 +30,8 @@ defineProps<{ label: string }>()
   font-family: var(--font-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
-  color: var(--c-text-2);
-  background: var(--c-bg-soft);
+  color: var(--c-brand-text);
+  background: var(--c-brand-soft);
   border-bottom: 1px solid var(--c-divider);
 }
 

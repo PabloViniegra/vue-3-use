@@ -38,6 +38,15 @@ const visibleGroups = computed(() => {
   })
 })
 
+// Si el tema aparece por un sinónimo y no por su título, se dice cuál
+function matchedKeyword(topic: { title: string; keywords?: string[] }) {
+  const q = normalize(query.value)
+
+  if (!q || normalize(topic.title).includes(q)) return undefined
+
+  return topic.keywords?.find((keyword) => normalize(keyword).includes(q))
+}
+
 const matchCount = computed(() =>
   visibleGroups.value.reduce((total, group) => total + (group.topics?.length ?? 1), 0),
 )
@@ -65,12 +74,12 @@ const currentGroupId = computed(
 const groupNumber = (id: string) =>
   String(props.groups.findIndex((g) => g.id === id) + 1).padStart(2, '0')
 
-defineExpose({ focusFilter })
+defineExpose({ focusFilter, focusPanel: () => nextTick(() => root.value?.focus()) })
 </script>
 
 <template>
   <div v-if="open" :class="$style.scrim" @click="emit('close', true)" />
-  <nav id="sidebar" ref="root" :class="[$style.root, open && $style.open]" aria-label="Índice">
+  <nav id="sidebar" ref="root" :tabindex="open ? -1 : undefined" :class="[$style.root, open && $style.open]" aria-label="Índice">
     <SidebarPanelHeader v-if="open" @close="emit('close', true)" />
     <SidebarFilter ref="filter" v-model="query" />
     <p class="visually-hidden" aria-live="polite">
@@ -100,6 +109,7 @@ defineExpose({ focusFilter })
             @click="emit('close')"
           >
             {{ topic.title }}
+            <span v-if="matchedKeyword(topic)" :class="$style.reason" aria-hidden="true">coincide con «{{ matchedKeyword(topic) }}»</span>
           </a>
         </li>
       </ul>
@@ -108,6 +118,11 @@ defineExpose({ focusFilter })
 </template>
 
 <style module>
+/* Solo recibe el foco por código al abrir el panel táctil; el anillo ahí no señala nada accionable */
+.root:focus {
+  outline: none;
+}
+
 .root {
   position: sticky;
   top: var(--nav-height);
@@ -158,12 +173,20 @@ defineExpose({ focusFilter })
 
 .link {
   display: block;
+  min-block-size: var(--space-lg);
   padding: var(--space-xxs) 0;
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-label);
   color: var(--c-text-2);
   transition: color var(--duration-fast);
+}
+
+.reason {
+  display: block;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-regular);
+  color: var(--c-text-2);
 }
 
 .link:hover {

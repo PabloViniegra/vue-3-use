@@ -43,10 +43,13 @@ async function quitar(id: number) {
   <form ref="formulario" :class="$style.add" @submit.prevent="agregar">
     <label class="visually-hidden" for="demo-lista">Producto</label>
     <BaseField id="demo-lista" v-model="nueva" name="producto" autocomplete="off" placeholder="Por ejemplo, leche…" maxlength="40" />
-    <BaseButton type="submit" :disabled="!nueva.trim()">Añadir</BaseButton>
+    <BaseButton type="submit" :disabled="!nueva.trim()" aria-describedby="demo-lista-pista">Añadir</BaseButton>
   </form>
 
-  <p :class="$style.hint">Estás escribiendo: <q>{{ nueva || '…' }}</q></p>
+  <p id="demo-lista-pista" :class="$style.hint">
+    <template v-if="nueva.trim()">Estás escribiendo: <q>{{ nueva }}</q></template>
+    <template v-else>Escribe un producto para poder añadirlo.</template>
+  </p>
 
   <p role="status" class="visually-hidden">{{ estado }}</p>
 

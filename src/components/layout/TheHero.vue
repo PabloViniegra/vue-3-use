@@ -5,7 +5,7 @@ import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
 
 const { copy } = defineProps<{
-  copy: Record<string, { target: string; tagline: string; cta: string }>
+  copy: Record<string, { label: string; phrase: string; target: string; tagline: string; cta: string }>
 }>()
 
 const options = Object.keys(copy)
@@ -21,7 +21,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
     <div :class="$style.content">
       <div :class="$style.intro">
         <h1 id="hero-title" :class="$style.title">
-          Vue 3, de
+          Vue 3,
           <Transition
             mode="out-in"
             :enter-from-class="$style.wordEnter"
@@ -29,25 +29,26 @@ const target = computed(() => current.value?.target ?? '#contenido')
             :enter-active-class="$style.wordActive"
             :leave-active-class="$style.wordActive"
           >
-            <span :key="level" :class="$style.accent">{{ level }}</span>
-          </Transition>
-          <br />
-          a que te pregunten&nbsp;a&nbsp;ti
+            <span :key="level" :class="$style.accent">{{ current?.phrase }}</span>
+          </Transition
+          >,<br />
+          hasta que te pregunten&nbsp;a&nbsp;ti
         </h1>
         <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
       <HeroLevelPicker
         v-model="level"
+        :hint="current?.label ?? ''"
         :class="$style.picker"
         :options="options"
-        :title="`Vue 3, de ${level}`"
+        :title="`Vue 3, ${current?.phrase}`"
         :target="target"
       />
       <div :class="$style.cta">
         <div :class="$style.actions">
           <BaseButton size="lg" :href="target">{{ current?.cta }}</BaseButton>
         </div>
-        <p :class="$style.madeWith">Esta página está hecha con Vue {{ version }}.</p>
+        <p :class="$style.madeWith">Proyecto no oficial, hecho con Vue {{ version }}.</p>
       </div>
     </div>
   </section>
@@ -60,10 +61,12 @@ const target = computed(() => current.value?.target ?? '#contenido')
   position: relative;
   display: grid;
   place-items: center;
-  min-height: calc(100svh - var(--hero-top));
+  min-height: min(calc(100svh - var(--hero-top)), var(--hero-min-height));
   padding: var(--space-3xl) var(--space-xl);
   overflow: clip;
   view-timeline: --hero block;
+  /* Con auto, el scroll-padding de la nav hace que el hero ya esté "saliendo" en reposo */
+  view-timeline-inset: 0;
 }
 
 .content {
@@ -177,7 +180,9 @@ const target = computed(() => current.value?.target ?? '#contenido')
   transform: translateY(calc(var(--space-xs) * -1));
 }
 
+/* Reserva las líneas del tagline más largo: al cambiar de nivel el botón no se mueve */
 .tagline {
+  min-block-size: 3lh;
   max-width: var(--measure);
   margin: var(--space-lg) 0 var(--space-xl);
   font-size: var(--font-size-lead);
@@ -203,6 +208,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
   .root {
     --hero-top: calc(var(--nav-height) + var(--local-nav-height));
 
+    min-height: calc(100svh - var(--hero-top));
     padding: var(--space-3xl) var(--space-lg);
   }
 
@@ -211,7 +217,6 @@ const target = computed(() => current.value?.target ?? '#contenido')
     row-gap: var(--space-xl);
     max-width: var(--box-max);
   }
-
 
   .title {
     font-size: var(--font-size-display-md);
@@ -234,8 +239,8 @@ const target = computed(() => current.value?.target ?? '#contenido')
 
   .tagline {
     margin-top: var(--space-md);
+    min-block-size: 4lh;
   }
-
 
   /* Botones a ancho completo sin tocar su estilo: los estira el contenedor */
   .actions {

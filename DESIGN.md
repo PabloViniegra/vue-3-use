@@ -141,6 +141,7 @@ spacing:
   layout-max-wide: 1252px
   local-nav-height: 45px
   hero-max: 1152px
+  hero-min-height: 560px
   measure: 580px
   bleed: 24px
   box-max: 628px
@@ -326,7 +327,7 @@ nunca decide qué etiqueta de encabezado se usa.
   a sangre completa (sin radio ni bordes laterales).
 - **Notas al margen**: desde 1280px el contenido pasa a `content-max-wide` (y el bloque a
   `layout-max-wide`) y cada tema es una rejilla `measure` + `note-width`. La analogía "En la
-  vida real" va en la columna derecha, `sticky` bajo la nav. Por debajo, al final del tema.
+  vida real" va en la columna derecha, `sticky` bajo la nav y desplazada `3xl` para que arranque a la altura del código, no del primer párrafo. Por debajo, al final del tema.
 - **Escala de espaciado**: solo los valores de `spacing`. Entre temas, `2xl`; entre niveles,
   `3xl` con un divisor; dentro de un bloque, `md` o `lg`.
 - **Breakpoints**: 1280px (notas al margen), 960px (el hero se apila: texto, panel y botón; la sidebar pasa a panel deslizante y aparece la barra "Índice"),

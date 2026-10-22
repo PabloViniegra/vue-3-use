@@ -90,6 +90,7 @@
   --layout-max: 1056px;
   --layout-max-wide: 1252px;
   --hero-max: 1152px;
+  --hero-min-height: 560px;
   --measure: 580px;
   --bleed: 24px;
   --box-max: calc(var(--measure) + var(--bleed) * 2);

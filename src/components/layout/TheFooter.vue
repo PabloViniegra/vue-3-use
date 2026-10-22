@@ -1,7 +1,7 @@
 <template>
   <footer :class="$style.root">
     <p>
-      Hecha con Vue 3 y Vite. Estilo inspirado en
+      Proyecto no oficial de Vue, hecho con Vue 3 y Vite. Estilo inspirado en
       <a href="https://vuejs.org" target="_blank" rel="noopener">vuejs.org</a>, contenido
       basado en su documentación.
     </p>

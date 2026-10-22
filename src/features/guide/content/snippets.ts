@@ -83,7 +83,9 @@ import { ref, computed } from 'vue'
 const cafes = ref(2)
 const croissants = ref(1)
 
-const total = computed(() => cafes.value * 1.8 + croissants.value * 2.2)
+const total = computed(
+  () => cafes.value * 1.8 + croissants.value * 2.2,
+)
 // total.value solo se recalcula si cambian cafes o croissants
 `
 
@@ -197,13 +199,13 @@ const resultados = ref([])
 
 watch(busqueda, async (texto) => {
   const controller = new AbortController()
-  // Si busqueda cambia antes de que llegue la respuesta, se cancela
+  // Si busqueda cambia antes de que llegue la respuesta, se
+  // cancela
   onWatcherCleanup(() => controller.abort())
 
   try {
-    const res = await fetch(\`/api/buscar?q=\${encodeURIComponent(texto)}\`, {
-      signal: controller.signal
-    })
+    const url = \`/api/buscar?q=\${encodeURIComponent(texto)}\`
+    const res = await fetch(url, { signal: controller.signal })
     if (!res.ok) throw new Error(\`Error \${res.status}\`)
     resultados.value = await res.json()
   } catch (e) {
@@ -219,10 +221,14 @@ watchEffect(() => {
 `
 
 export const watchOptions = code`
-watch(() => usuario.edad, (nueva, vieja) => { /* ... */ }) // un getter
-watch(filtros, recargar, { deep: true })      // cambios dentro del objeto
-watch(id, cargarFicha, { immediate: true })   // también al arrancar
-watch(token, avisar, { once: true })          // solo la primera vez
+// Un getter
+watch(() => usuario.edad, (nueva, vieja) => { /* ... */ })
+// Cambios dentro del objeto
+watch(filtros, recargar, { deep: true })
+// También al arrancar
+watch(id, cargarFicha, { immediate: true })
+// Solo la primera vez
+watch(token, avisar, { once: true })
 `
 
 export const lifecycle = code`
@@ -255,8 +261,12 @@ export function useRaton() {
     y.value = e.pageY
   }
 
-  onMounted(() => window.addEventListener('mousemove', actualizar))
-  onUnmounted(() => window.removeEventListener('mousemove', actualizar))
+  onMounted(() => {
+    window.addEventListener('mousemove', actualizar)
+  })
+  onUnmounted(() => {
+    window.removeEventListener('mousemove', actualizar)
+  })
 
   return { x, y }
 }
@@ -282,7 +292,8 @@ provide('idioma', idioma)
 // BotonEnElNivel7.vue, sin que nadie en medio se entere
 import { inject } from 'vue'
 
-const idioma = inject('idioma', 'es') // el segundo argumento es el valor por defecto
+// El segundo argumento es el valor por defecto
+const idioma = inject('idioma', 'es')
 `
 
 export const deepReactivity = code`
@@ -291,7 +302,8 @@ import { ref, reactive, toRefs, shallowRef, nextTick } from 'vue'
 const estado = reactive({ nombre: 'Lucía', edad: 31 })
 
 // Mal: al desestructurar te llevas una copia, no una conexión
-const { edad } = estado   // edad es un 31 suelto, ya no se entera de nada
+// edad es un 31 suelto, ya no se entera de nada
+const { edad } = estado
 
 // Bien: toRefs convierte cada propiedad en un ref enlazado
 const { nombre } = toRefs(estado)
@@ -314,7 +326,7 @@ export const proxyIdea = code`
 function reactivoDeJuguete(objeto) {
   return new Proxy(objeto, {
     get(target, clave) {
-      track(target, clave)    // apunta quién está leyendo esta clave
+      track(target, clave) // apunta quién lee esta clave
       return target[clave]
     },
     set(target, clave, valor) {
@@ -330,7 +342,8 @@ export const defineModelSnippet = code`
 <!-- CampoBusqueda.vue -->
 <script setup>
 const texto = defineModel({ default: '' })
-const orden = defineModel('orden') // un segundo v-model con nombre
+// Un segundo v-model, con nombre
+const orden = defineModel('orden')
 </script>
 
 <template>
@@ -378,8 +391,15 @@ export const builtIns = code`
 </template>
 
 <style>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>
 `
 
@@ -428,7 +448,7 @@ export const performance = code`
 <!-- Se pinta una vez y Vue se olvida de él -->
 <footer v-once>© {{ anio }} Panadería Lucía</footer>
 
-<!-- La fila solo se re-renderiza si cambia lo que hay en el array -->
+<!-- La fila solo se re-renderiza si cambia lo del array -->
 <div
   v-for="fila in filas"
   :key="fila.id"
@@ -450,7 +470,8 @@ interface Props {
 // Desestructurar props es reactivo desde Vue 3.5
 const { titulo, likes = 0 } = defineProps<Props>()
 
-// Pero titulo suelto es un valor: para vigilarlo, pásalo como getter
+// Pero titulo suelto es un valor: para vigilarlo, pásalo
+// como getter
 watch(() => titulo, (nuevo) => console.log(nuevo))
 
 const emit = defineEmits<{
@@ -499,18 +520,34 @@ export const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'inicio', component: Inicio },
-    // Las demás páginas se descargan la primera vez que se visitan
-    { path: '/productos', name: 'productos', component: () => import('./pages/Productos.vue') },
-    { path: '/productos/:id', name: 'producto', component: () => import('./pages/Producto.vue') },
+    // El resto de páginas se descarga la primera vez que se abre
+    {
+      path: '/productos',
+      name: 'productos',
+      component: () => import('./pages/Productos.vue'),
+    },
+    {
+      path: '/productos/:id',
+      name: 'producto',
+      component: () => import('./pages/Producto.vue'),
+    },
     {
       path: '/cuenta',
       name: 'cuenta',
       component: () => import('./pages/Cuenta.vue'),
       meta: { requiereLogin: true },
     },
-    { path: '/login', name: 'login', component: () => import('./pages/Login.vue') },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('./pages/Login.vue'),
+    },
     // Cualquier otra URL: la página de 404
-    { path: '/:pathMatch(.*)*', name: 'no-encontrada', component: () => import('./pages/NoEncontrada.vue') },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'no-encontrada',
+      component: () => import('./pages/NoEncontrada.vue'),
+    },
   ],
 })
 `
@@ -590,14 +627,14 @@ export const useCarrito = defineStore('carrito', () => {
 `
 
 export const piniaUsage = code`
-<!-- Cabecera.vue: no sabe nada de Catalogo.vue, pero ve los mismos datos -->
+<!-- Cabecera.vue: no conoce Catalogo.vue, pero ve sus datos -->
 <script setup>
 import { storeToRefs } from 'pinia'
 import { useCarrito } from '@/stores/carrito'
 
 const carrito = useCarrito()
 
-// Desestructurar directamente rompe la reactividad: usa storeToRefs
+// Desestructurar sin más rompe la reactividad: usa storeToRefs
 const { unidades, total } = storeToRefs(carrito)
 // Las actions son funciones normales, esas sí se sacan tal cual
 const { vaciar } = carrito
@@ -625,16 +662,19 @@ async function pedirUsuario(id) {
 
 const { data, error, isPending, isError, isFetching } = useQuery({
   // La clave identifica el dato en la caché. Como lleva un ref,
-  // al cambiar id se pide el usuario nuevo (o se saca de la caché)
+  // al cambiar id se pide el usuario nuevo (o sale de la caché)
   queryKey: ['usuario', id],
   queryFn: () => pedirUsuario(id.value),
-  staleTime: 60_000, // durante un minuto el dato se considera fresco
+  // Durante un minuto el dato se considera fresco
+  staleTime: 60_000,
 })
 </script>
 
 <template>
   <p v-if="isPending">Cargando…</p>
-  <p v-else-if="isError">No se pudo cargar: {{ error.message }}</p>
+  <p v-else-if="isError">
+    No se pudo cargar: {{ error.message }}
+  </p>
   <template v-else>
     <h2>{{ data.nombre }}</h2>
     <small v-if="isFetching">Actualizando…</small>
@@ -655,17 +695,23 @@ const { mutate, isPending } = useMutation({
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cambios),
     })
-    // Sin esto, un 400 o un 500 contaría como guardado e invalidaría la caché
+    // Sin esto, un 400 o un 500 contaría como guardado e
+    // invalidaría la caché
     if (!res.ok) throw new Error(\`Error \${res.status}\`)
     return res.json()
   },
-  // Tras guardar, lo que había en caché ya no vale: que se vuelva a pedir
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['usuario'] }),
+  // Tras guardar, lo que había en caché ya no vale: que se
+  // vuelva a pedir
+  onSuccess: () =>
+    queryClient.invalidateQueries({ queryKey: ['usuario'] }),
 })
 </script>
 
 <template>
-  <button :disabled="isPending" @click="mutate({ nombre: 'Lucía' })">
+  <button
+    :disabled="isPending"
+    @click="mutate({ nombre: 'Lucía' })"
+  >
     {{ isPending ? 'Guardando…' : 'Cambiar nombre' }}
   </button>
 </template>

@@ -40,6 +40,7 @@ const localNav = useTemplateRef('localNav')
 const menu = useDisclosure(() => localNav.value?.focus())
 const sidebar = useTemplateRef('sidebar')
 const isMobile = useMediaQuery('(max-width: 960px)')
+const isTouch = useMediaQuery('(pointer: coarse)')
 
 function closeSidebar(restoreFocus = false) {
   menu.close()
@@ -51,8 +52,12 @@ function closeSidebar(restoreFocus = false) {
 const isModal = computed(() => menu.open.value && isMobile.value)
 
 // El botón que abre el índice pasa a inert: sin esto el foco cae en <body>
+// En táctil el foco va al panel: enfocar el filtro subiría el teclado y taparía el índice
 watch(isModal, (modal) => {
-  if (modal) sidebar.value?.focusFilter()
+  if (!modal) return
+
+  if (isTouch.value) sidebar.value?.focusPanel()
+  else sidebar.value?.focusFilter()
 })
 
 // En móvil el índice está plegado: hay que abrirlo antes de enfocar el filtro

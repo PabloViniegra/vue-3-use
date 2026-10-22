@@ -34,7 +34,10 @@ defineProps<{ id: string; title: string }>()
 }
 
 .anchor {
-  margin-left: var(--space-xs);
+  display: inline-block;
+  min-width: var(--button-sm-height);
+  margin-left: var(--space-xxs);
+  text-align: center;
   opacity: 0;
   transition: opacity var(--duration-fast);
 }
@@ -56,7 +59,7 @@ defineProps<{ id: string; title: string }>()
   margin-top: var(--space-xs);
 }
 
-/* Con sitio, la nota sale al margen y acompaña al tema mientras se lee */
+/* Con sitio, la nota sale al margen a la altura del código y acompaña al tema: la analogía no se adelanta al concepto */
 @media (min-width: 1280px) {
   .root {
     display: grid;
@@ -68,6 +71,7 @@ defineProps<{ id: string; title: string }>()
     position: sticky;
     top: calc(var(--nav-height) + var(--space-lg));
     align-self: start;
+    margin-top: var(--space-3xl);
   }
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-defineProps<{ options: readonly string[]; title: string; target: string }>()
+defineProps<{ options: readonly string[]; hint: string; title: string; target: string }>()
 
 const level = defineModel<string>({ required: true })
 </script>
@@ -28,15 +28,16 @@ const level = defineModel<string>({ required: true })
         >
       </p>
       <p>)</p>
+      <p :class="$style.comment">// Ahora mismo: {{ hint }}</p>
     </fieldset>
     <div :class="$style.code">
       <p :class="$style.comment">// El resto es computed y se recalcula solo</p>
       <p>
-        titulo.value
+        titulo.value =
         <span :key="title" :class="$style.value">'{{ title }}'</span>
       </p>
       <p>
-        destino.value
+        destino.value =
         <span :key="target" :class="$style.value">'{{ target }}'</span>
       </p>
     </div>
@@ -49,6 +50,7 @@ const level = defineModel<string>({ required: true })
   border-radius: var(--radius-xl);
   background: var(--c-code-bg);
   font-family: var(--font-mono);
+  font-variant-ligatures: none;
   font-size: var(--font-size-code);
   line-height: var(--line-height-code);
   color: var(--c-text-code);
@@ -107,6 +109,7 @@ const level = defineModel<string>({ required: true })
 }
 
 .chip {
+  position: relative;
   display: inline-block;
   padding: 0 var(--space-xs);
   border: 1px solid var(--c-text-2);
@@ -115,6 +118,13 @@ const level = defineModel<string>({ required: true })
     background-color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
+}
+
+/* Área táctil mayor sin mover el texto del código */
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--space-xs) * -1);
 }
 
 .option:hover .chip {

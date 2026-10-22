@@ -34,8 +34,9 @@ defineExpose({ focus: () => input.value?.focus() })
       :class="$style.input"
       type="search"
       name="tema"
-      placeholder="Por ejemplo, Pinia…"
+      placeholder="Prueba con Pinia…"
       autocomplete="off"
+      aria-keyshortcuts="/"
       @keydown.esc="onEscape"
     />
     <button v-if="query" type="button" :class="$style.clear" aria-label="Vaciar filtro" @click="clear">
