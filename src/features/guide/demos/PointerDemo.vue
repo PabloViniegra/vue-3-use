@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, useTemplateRef, type Ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref, useTemplateRef, type Ref } from 'vue'
 
 // Misma idea que useRaton, pero limitado a un elemento
 function usePuntero(target: Ref<HTMLElement | null>) {
@@ -20,7 +20,8 @@ function usePuntero(target: Ref<HTMLElement | null>) {
     target.value?.addEventListener('pointermove', mover)
     target.value?.addEventListener('pointerleave', salir)
   })
-  onUnmounted(() => {
+  // En onUnmounted la template ref ya vale null: hay que limpiar antes
+  onBeforeUnmount(() => {
     target.value?.removeEventListener('pointermove', mover)
     target.value?.removeEventListener('pointerleave', salir)
   })

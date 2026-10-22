@@ -87,13 +87,16 @@ import ClickOutsideDemo from '../demos/ClickOutsideDemo.vue'
     <p>
       La desestructuración de <code>defineProps</code>, desde Vue 3.5, mantiene la
       reactividad y te deja poner valores por defecto con la sintaxis normal de JavaScript.
-      Antes había que usar <code>withDefaults</code>.
+      Antes había que usar <code>withDefaults</code>. Ojo con una trampa: si pasas
+      <code>titulo</code> tal cual a <code>watch</code> o a un composable, le pasas el valor de
+      ese momento, no algo reactivo. Envuélvelo en un getter: <code>() =&gt; titulo</code>.
     </p>
     <p>Y si un componente debe funcionar con cualquier tipo de dato, hazlo genérico:</p>
     <CodeBlock :code="s.genericComponent" />
     <p>
       Para comprobar tipos en los <code>.vue</code> usa <code>vue-tsc</code> (el
-      <code>npm run build</code> de esta plantilla ya lo ejecuta) y la extensión oficial de
+      <code>npm run build</code> ya lo ejecuta si elegiste TypeScript al crear el proyecto) y la
+      extensión oficial de
       Vue para tu editor.
     </p>
     <CallOut>

@@ -109,7 +109,8 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
         script lees y escribes con <code>.value</code>.
       </li>
       <li>
-        <code>reactive()</code> solo vale para objetos y arrays, y se usa sin
+        <code>reactive()</code> solo vale para objetos (arrays, <code>Map</code> y
+        <code>Set</code> incluidos), y se usa sin
         <code>.value</code>.
       </li>
     </ul>

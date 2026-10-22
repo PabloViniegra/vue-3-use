@@ -22,29 +22,40 @@ const error = ref('')
 const desdeCache = ref(false)
 const peticiones = ref(0)
 const fallar = ref(false)
-let timer: number | undefined
+
+// Un timer por usuario: cambiar de usuario no cancela la petición anterior, igual que TanStack Query
+const timers = new Map<number, number>()
 
 const dato = computed(() => (id.value ? cache.get(id.value) : undefined))
 
 // Simula la red: en una app real sería la queryFn con su fetch
 function pedir(uid: number) {
-  clearTimeout(timer)
-  const falla = fallar.value
   fetching.value = true
   error.value = ''
+
+  // Si ya hay una petición en curso para este usuario, se reaprovecha
+  if (timers.has(uid)) return
+  const falla = fallar.value
   peticiones.value++
-  timer = window.setTimeout(() => {
-    fetching.value = false
+  timers.set(
+    uid,
+    window.setTimeout(() => {
+      timers.delete(uid)
+      const visible = id.value === uid
 
-    if (falla) {
-      error.value = 'Sin conexión'
+      if (visible) fetching.value = false
 
-      return
-    }
+      if (falla) {
+        if (visible) error.value = 'Sin conexión'
 
-    cache.set(uid, { nombre: usuarios.find((u) => u.id === uid)!.nombre, pedidoEn: Date.now() })
-    desdeCache.value = false
-  }, 900)
+        return
+      }
+
+      cache.set(uid, { nombre: usuarios.find((u) => u.id === uid)!.nombre, pedidoEn: Date.now() })
+
+      if (visible) desdeCache.value = false
+    }, 900),
+  )
 }
 
 function elegir(uid: number) {
@@ -53,7 +64,6 @@ function elegir(uid: number) {
   desdeCache.value = !!entrada
 
   if (!entrada || Date.now() - entrada.pedidoEn > STALE_MS) return pedir(uid)
-  clearTimeout(timer)
   fetching.value = false
   error.value = ''
 }
@@ -65,7 +75,7 @@ function invalidar() {
   if (id.value) pedir(id.value)
 }
 
-onUnmounted(() => clearTimeout(timer))
+onUnmounted(() => timers.forEach((t) => clearTimeout(t)))
 </script>
 
 <template>

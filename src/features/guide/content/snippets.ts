@@ -200,10 +200,16 @@ watch(busqueda, async (texto) => {
   // Si busqueda cambia antes de que llegue la respuesta, se cancela
   onWatcherCleanup(() => controller.abort())
 
-  const res = await fetch(\`/api/buscar?q=\${encodeURIComponent(texto)}\`, {
-    signal: controller.signal
-  })
-  resultados.value = await res.json()
+  try {
+    const res = await fetch(\`/api/buscar?q=\${encodeURIComponent(texto)}\`, {
+      signal: controller.signal
+    })
+    if (!res.ok) throw new Error(\`Error \${res.status}\`)
+    resultados.value = await res.json()
+  } catch (e) {
+    // Cancelar no es un error: es justo lo que queríamos
+    if (e.name !== 'AbortError') throw e
+  }
 })
 
 // watchEffect vigila todo lo reactivo que lea, sin decirle qué
@@ -434,7 +440,7 @@ export const performance = code`
 
 export const typescript = code`
 <script setup lang="ts">
-import { useTemplateRef } from 'vue'
+import { useTemplateRef, watch } from 'vue'
 
 interface Props {
   titulo: string
@@ -443,6 +449,9 @@ interface Props {
 
 // Desestructurar props es reactivo desde Vue 3.5
 const { titulo, likes = 0 } = defineProps<Props>()
+
+// Pero titulo suelto es un valor: para vigilarlo, pásalo como getter
+watch(() => titulo, (nuevo) => console.log(nuevo))
 
 const emit = defineEmits<{
   like: [id: number]
@@ -499,6 +508,7 @@ export const router = createRouter({
       component: () => import('./pages/Cuenta.vue'),
       meta: { requiereLogin: true },
     },
+    { path: '/login', name: 'login', component: () => import('./pages/Login.vue') },
     // Cualquier otra URL: la página de 404
     { path: '/:pathMatch(.*)*', name: 'no-encontrada', component: () => import('./pages/NoEncontrada.vue') },
   ],
@@ -639,8 +649,16 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query'
 const queryClient = useQueryClient()
 
 const { mutate, isPending } = useMutation({
-  mutationFn: (cambios) =>
-    fetch('/api/usuarios/1', { method: 'PATCH', body: JSON.stringify(cambios) }),
+  mutationFn: async (cambios) => {
+    const res = await fetch('/api/usuarios/1', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(cambios),
+    })
+    // Sin esto, un 400 o un 500 contaría como guardado e invalidaría la caché
+    if (!res.ok) throw new Error(\`Error \${res.status}\`)
+    return res.json()
+  },
   // Tras guardar, lo que había en caché ya no vale: que se vuelva a pedir
   onSuccess: () => queryClient.invalidateQueries({ queryKey: ['usuario'] }),
 })
