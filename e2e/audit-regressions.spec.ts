@@ -3,6 +3,79 @@ import { expect, test } from '@playwright/test'
 
 for (const width of [390, 1440]) {
   for (const colorScheme of ['light', 'dark'] as const) {
+    test(`el hero y el foco se mantienen a ${width}px en ${colorScheme}`, async ({ page }) => {
+      const errors: string[] = []
+
+      page.on('pageerror', (error) => errors.push(error.message))
+      await page.setViewportSize({ width, height: 900 })
+      await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' })
+      await page.goto('/')
+      await page.evaluate(() => document.fonts.ready)
+
+      const hero = page.locator('#top')
+
+      const geometry = await hero.evaluate((element) => {
+        const children = [...element.children].filter((child) => getComputedStyle(child).position !== 'absolute')
+        const bounds = element.getBoundingClientRect()
+        const content = children[0]!.getBoundingClientRect()
+
+        return { count: children.length, offset: Math.abs(content.y + content.height / 2 - bounds.y - bounds.height / 2) }
+      })
+
+      expect(geometry.count).toBe(1)
+      expect(geometry.offset).toBeLessThan(2)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false)
+
+      if (width === 390) {
+        await page.keyboard.press('/')
+        const filter = page.getByRole('searchbox', { name: 'Filtrar temas' })
+
+        await expect(filter).toBeFocused()
+        await expect(page.getByText('Saltar al contenido', { exact: true })).toHaveAttribute('inert', '')
+
+        for (let step = 0; step < 4; step++) {
+          await page.keyboard.press('Shift+Tab')
+          expect(await page.evaluate(() => {
+            const active = document.activeElement
+
+            return active === document.body || Boolean(active?.closest('#sidebar'))
+          })).toBe(true)
+        }
+
+        await filter.focus()
+        await page.keyboard.press('Escape')
+        await expect(page.getByRole('button', { name: /Índice/ })).toBeFocused()
+        await expect(page.getByText('Saltar al contenido', { exact: true })).not.toHaveAttribute('inert')
+      }
+
+      await page.goto('/#formularios')
+      const field = page.getByRole('textbox', { name: 'Producto', exact: true })
+
+      for (const product of ['Pan', 'Arroz']) {
+        await field.fill(product)
+        await field.press('Enter')
+      }
+
+      const remove = (product: string) => page.getByRole('button', { name: `Quitar ${product}`, exact: true })
+
+      await remove('Pan').focus()
+      await page.keyboard.press('Enter')
+      await expect(remove('Arroz')).toBeFocused()
+      await expect(page.locator('#formularios p[role="status"]')).toHaveText('Se ha quitado Pan. Productos restantes: 2.')
+      await page.keyboard.press('Enter')
+      await expect(remove('Leche de avena')).toBeFocused()
+      await page.keyboard.press('Enter')
+      await expect(field).toBeFocused()
+      await expect(page.locator('#formularios p[role="status"]')).toHaveText('Se ha quitado Leche de avena. Lista vacía.')
+      await field.fill('Leche de avena')
+      await field.press('Enter')
+      await remove('Leche de avena').focus()
+      await page.keyboard.press('Enter')
+      await expect(field).toBeFocused()
+      await expect(page.locator('#formularios p[role="status"]')).toHaveText('Se ha quitado Leche de avena. Lista vacía.')
+      expect(errors).toEqual([])
+    })
+
     test(`los productos largos no ocultan acciones a ${width}px en ${colorScheme}`, async ({ page }) => {
       await page.setViewportSize({ width, height: 900 })
       await page.emulateMedia({ colorScheme, reducedMotion: 'reduce' })

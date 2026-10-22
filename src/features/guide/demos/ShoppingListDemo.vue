@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { nextTick, ref, useTemplateRef } from 'vue'
 import BaseButton from '../../../components/ui/BaseButton.vue'
 import BaseField from '../../../components/ui/BaseField.vue'
 
 const nueva = ref('')
 const lista = ref([{ id: 1, texto: 'Leche de avena' }])
+const formulario = useTemplateRef('formulario')
+const productos = useTemplateRef('productos')
+const estado = ref('')
 let siguienteId = 2
 
 function agregar() {
@@ -15,13 +18,29 @@ function agregar() {
   nueva.value = ''
 }
 
-function quitar(id: number) {
+async function quitar(id: number) {
+  const indice = lista.value.findIndex((item) => item.id === id)
+  const producto = lista.value[indice]
+
+  if (!producto) return
+
   lista.value = lista.value.filter((item) => item.id !== id)
+  estado.value = ''
+
+  await nextTick()
+
+  const botones = productos.value?.querySelectorAll('button')
+
+  const destino = botones?.[Math.min(indice, lista.value.length - 1)]
+    ?? formulario.value?.querySelector('input')
+
+  destino?.focus()
+  estado.value = `Se ha quitado ${producto.texto}. ${lista.value.length ? 'Productos restantes: ' + lista.value.length + '.' : 'Lista vacía.'}`
 }
 </script>
 
 <template>
-  <form :class="$style.add" @submit.prevent="agregar">
+  <form ref="formulario" :class="$style.add" @submit.prevent="agregar">
     <label class="visually-hidden" for="demo-lista">Producto</label>
     <BaseField id="demo-lista" v-model="nueva" name="producto" autocomplete="off" placeholder="Por ejemplo, leche…" maxlength="40" />
     <BaseButton type="submit" :disabled="!nueva.trim()">Añadir</BaseButton>
@@ -29,7 +48,9 @@ function quitar(id: number) {
 
   <p :class="$style.hint">Estás escribiendo: <q>{{ nueva || '…' }}</q></p>
 
-  <ul v-if="lista.length" :class="$style.items">
+  <p role="status" class="visually-hidden">{{ estado }}</p>
+
+  <ul v-if="lista.length" ref="productos" :class="$style.items">
     <li v-for="item in lista" :key="item.id" :class="$style.item">
       <span :class="$style.text">{{ item.texto }}</span>
       <BaseButton variant="alt" size="sm" @click="quitar(item.id)">

@@ -63,7 +63,7 @@ useKeyShortcut('/', () => {
 </script>
 
 <template>
-  <a :class="$style.skip" href="#contenido">Saltar al contenido</a>
+  <a :class="$style.skip" href="#contenido" :inert="isModal">Saltar al contenido</a>
   <TheNav :links="levels" :dark="isDark" :inert="isModal" @toggle-theme="toggleTheme" />
 
   <TheLocalNav

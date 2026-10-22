@@ -10,6 +10,12 @@ defineProps<{ step: number }>()
 </template>
 
 <style module>
+.root {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
 /* El halo nace detrás del panel de código, que es lo que hace cambiar la página */
 .glow {
   position: absolute;
