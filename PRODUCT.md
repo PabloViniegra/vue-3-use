@@ -35,7 +35,7 @@ y para un equipo concreto, no un sustituto de la documentación oficial.
 - SPA de una sola página, sin rutas ni backend. Debe seguir así.
 - Publicada en la web, desplegada en Vercel.
 - Solo castellano de España; no habrá traducciones.
-- Tres niveles (Básico, Intermedio, Avanzado) definidos en `src/features/guide/content/toc.ts`, que alimenta
+- Cuatro niveles (Básico, Intermedio, Avanzado y Ecosistema) definidos en `src/features/guide/content/toc.ts`, que alimenta
   sidebar, hero y sección activa.
 - Demos interactivas reales en `src/features/guide/demos/`.
 - Stack fijado: Vue 3.5, Vite, TypeScript, pnpm. No se añaden dependencias sin preguntar.

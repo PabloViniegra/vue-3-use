@@ -3,7 +3,7 @@ import vueLogo from '../../assets/vue.svg'
 
 defineProps<{ links: { id: string; title: string }[]; dark: boolean }>()
 
-const emit = defineEmits<{ toggleTheme: [event: MouseEvent] }>()
+const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
 </script>
 
 <template>
@@ -19,6 +19,10 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent] }>()
         Docs oficiales<span class="visually-hidden"> (se abre en otra pestaña)</span>
       </a>
     </nav>
+
+    <button type="button" :class="$style.search" aria-keyshortcuts="/" @click="emit('search')">
+      Buscar tema <kbd :class="$style.kbd" aria-hidden="true">/</kbd>
+    </button>
 
     <button
       type="button"
@@ -86,6 +90,35 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent] }>()
   text-decoration: none;
 }
 
+.search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  height: var(--button-sm-height);
+  padding: 0 var(--space-xs) 0 var(--space-sm);
+  border: 1px solid var(--c-control-border);
+  border-radius: var(--radius-lg);
+  background: var(--c-bg-soft);
+  font: inherit;
+  font-size: var(--font-size-label);
+  color: var(--c-text-2);
+  cursor: pointer;
+  transition: border-color var(--duration-fast);
+}
+
+.search:hover {
+  border-color: var(--c-brand-text);
+}
+
+.kbd {
+  padding: 0 var(--space-xs);
+  border: 1px solid var(--c-divider-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-caption);
+  color: var(--c-text-2);
+}
+
 .switch {
   position: relative;
   flex-shrink: 0;
@@ -138,13 +171,15 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent] }>()
     padding: 0 var(--space-md);
   }
 
-  .links {
+  .links,
+  .search {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .knob,
+  .search,
   .links a {
     transition: none;
   }

@@ -5,6 +5,7 @@ import DemoBox from '../../../components/ui/DemoBox.vue'
 import DocTopic from '../../../components/ui/DocTopic.vue'
 import * as s from '../content/snippets'
 import AsyncDemo from '../demos/AsyncDemo.vue'
+import ModelDemo from '../demos/ModelDemo.vue'
 import TemplateRefDemo from '../demos/TemplateRefDemo.vue'
 import TransitionDemo from '../demos/TransitionDemo.vue'
 </script>
@@ -60,6 +61,9 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <code>ref</code> que ya hace las dos cosas.
     </p>
     <CodeBlock :code="s.defineModelSnippet" />
+    <DemoBox label="defineModel">
+      <ModelDemo />
+    </DemoBox>
     <template #note>
       <CallOut>
         <p>

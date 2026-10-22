@@ -148,10 +148,6 @@ spacing:
   note-width: 240px
   demo-area-height: 160px
   card-min: 220px
-  doc-level-intrinsic-size: 8700px
-  doc-level-intrinsic-size-mobile: 10400px
-  doc-end-intrinsic-size: 480px
-  doc-end-intrinsic-size-mobile: 720px
 components:
   button-brand:
     backgroundColor: "{colors.brand}"
@@ -348,8 +344,9 @@ Solo hay dos sombras, ambas funcionales:
 - Panel de la sidebar en móvil: `0 12px 32px rgba(0, 0, 0, 0.2)` sobre un `scrim`.
 - Pomo del interruptor de tema: `0 1px 2px rgba(0, 0, 0, 0.2)`.
 
-Capas (`z-index`): nav 30, panel de la sidebar 25, scrim 24, barra del índice 20 y enlace
-"saltar al contenido" 50. No se añaden capas fuera de esta tabla.
+Capas (`z-index`): panel de la sidebar 32, scrim 31, nav 30, barra del índice 20 y enlace
+"saltar al contenido" 50. El scrim tapa también la nav: con el índice abierto en móvil está
+`inert` y no debe parecer usable. No se añaden capas fuera de esta tabla.
 
 ## Shapes
 
@@ -400,7 +397,8 @@ no con clases que pasa el padre.
   (`SidebarFilter`) que ignora tildes y mayúsculas, busca en el título y en las `keywords` de
   cada tema (`toc.ts`), conserva la búsqueda en el parámetro `tema` de la URL, anuncia el número
   de resultados y tiene estado vacío con "Vaciar filtro"; `/` lo enfoca (y en móvil abre antes
-  el índice) y Esc lo vacía. En móvil, la
+  el índice) y Esc lo vacía. Por encima de 768px la nav muestra el botón "Buscar tema" con la
+  tecla `/`, que hace lo mismo que el atajo. En móvil, la
   barra "Índice" va justo debajo de la nav desde el principio de la página y muestra a la
   derecha dónde estás ("Nivel › tema", recortado con elipsis, o "Introducción" mientras se ve
   el hero: hasta la primera sección no hay ninguna activa). La sidebar desplaza su propio scroll
@@ -511,8 +509,8 @@ src/
 ├── components/
 │   ├── ui/              # primitivas sin dominio: BaseButton, BaseField, BaseLinkGrid,
 │   │                    # CodeBlock, CallOut, DemoBox, DocTopic, DocLevel
-│   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroLevelPicker,
-│                        # HeroBackdrop), TheSidebar (+ SidebarFilter, SidebarEmpty), TheFooter
+│   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroTitle,
+│                        # HeroLevelPicker, HeroBackdrop), TheSidebar (+ SidebarFilter, SidebarEmpty), TheFooter
 ├── features/
 │   └── guide/
 │       ├── GuideContent.vue  # niveles + "Y ahora, ¿qué?"

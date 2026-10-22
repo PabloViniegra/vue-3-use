@@ -7,13 +7,22 @@ const emit = defineEmits<{ close: [] }>()
 <template>
   <div :class="$style.root">
     <span :class="$style.label">Índice</span>
-    <BaseButton size="lg" variant="alt" @click="emit('close')">Cerrar índice</BaseButton>
+    <BaseButton variant="alt" square aria-label="Cerrar índice" @click="emit('close')">
+      <svg :class="$style.icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </BaseButton>
   </div>
 </template>
 
 <style module>
 .root {
   display: none;
+}
+
+.icon {
+  width: var(--icon-md);
+  height: var(--icon-md);
 }
 
 .label {

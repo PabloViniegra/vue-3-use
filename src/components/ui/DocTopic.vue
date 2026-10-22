@@ -5,7 +5,8 @@ defineProps<{ id: string; title: string }>()
 <template>
   <section :id="id" :class="$style.root">
     <div :class="$style.main">
-      <h3 :class="$style.heading">
+      <!-- Sin aria-label el nombre del encabezado incluiría también el del enlace ancla -->
+      <h3 :class="$style.heading" :aria-label="title">
         {{ title }}
         <a :class="$style.anchor" :href="`#${id}`" :aria-label="`Enlace a ${title}`">#</a>
       </h3>

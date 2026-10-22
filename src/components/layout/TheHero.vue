@@ -3,6 +3,7 @@ import { computed, ref, version } from 'vue'
 import BaseButton from '../ui/BaseButton.vue'
 import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
+import HeroTitle from './HeroTitle.vue'
 
 const { copy } = defineProps<{
   copy: Record<string, { label: string; phrase: string; target: string; tagline: string; cta: string }>
@@ -20,20 +21,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
     <HeroBackdrop :step="options.indexOf(level)" />
     <div :class="$style.content">
       <div :class="$style.intro">
-        <h1 id="hero-title" :class="$style.title">
-          Vue 3,
-          <Transition
-            mode="out-in"
-            :enter-from-class="$style.wordEnter"
-            :leave-to-class="$style.wordLeave"
-            :enter-active-class="$style.wordActive"
-            :leave-active-class="$style.wordActive"
-          >
-            <span :key="level" :class="$style.accent">{{ current?.phrase }}</span>
-          </Transition
-          >,<br />
-          hasta que te pregunten&nbsp;a&nbsp;ti
-        </h1>
+        <HeroTitle id="hero-title" :class="$style.title" :phrase="current?.phrase ?? ''" />
         <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
       <HeroLevelPicker
@@ -142,42 +130,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
 }
 
 .title {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--font-size-display);
-  font-weight: var(--font-weight-heavy);
-  line-height: var(--line-height-display);
-  letter-spacing: var(--letter-spacing-display);
-  color: var(--c-text-1);
-  text-wrap: balance;
   transform-origin: left center;
-}
-
-/* El mismo verde que el valor elegido en el panel: la palabra es ese ref */
-.accent {
-  display: inline-block;
-  padding: 0 var(--space-xs);
-  border-radius: var(--radius-lg);
-  background: var(--c-brand-soft);
-  color: var(--c-brand-text);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .wordActive {
-    transition-property: opacity, transform;
-    transition-duration: var(--duration-fast);
-    transition-timing-function: var(--ease-out);
-  }
-}
-
-.wordEnter,
-.wordLeave {
-  opacity: 0;
-  transform: translateY(var(--space-xs));
-}
-
-.wordLeave {
-  transform: translateY(calc(var(--space-xs) * -1));
 }
 
 /* Reserva las líneas del tagline más largo: al cambiar de nivel el botón no se mueve */
@@ -218,10 +171,6 @@ const target = computed(() => current.value?.target ?? '#contenido')
     max-width: var(--box-max);
   }
 
-  .title {
-    font-size: var(--font-size-display-md);
-  }
-
   .tagline {
     margin-bottom: 0;
     font-size: var(--font-size-lead-sm);
@@ -231,10 +180,6 @@ const target = computed(() => current.value?.target ?? '#contenido')
 @media (max-width: 480px) {
   .root {
     padding: var(--space-xl) var(--space-lg);
-  }
-
-  .title {
-    font-size: var(--font-size-display-sm);
   }
 
   .tagline {

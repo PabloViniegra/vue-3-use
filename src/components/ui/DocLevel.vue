@@ -1,13 +1,9 @@
 <script setup lang="ts">
-defineProps<{ id: string; title: string; eyebrow?: string; summary?: string; compact?: boolean }>()
+defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 </script>
 
 <template>
-  <section
-    :id="id"
-    :class="[$style.root, compact && $style.compact]"
-    data-content-section
-  >
+  <section :id="id" :class="$style.root">
     <p v-if="eyebrow" :class="$style.eyebrow"><span aria-hidden="true">// </span>{{ eyebrow }}</p>
     <h2 :class="$style.heading">{{ title }}</h2>
     <p v-if="summary" :class="$style.summary">{{ summary }}</p>
@@ -18,19 +14,11 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string; com
 <style module>
 .root {
   padding-top: var(--space-3xl);
-  content-visibility: auto;
-  /* La contención de pintado debe incluir el sangrado de los bloques de código. */
-  overflow-clip-margin: var(--bleed);
-  contain-intrinsic-size: auto var(--doc-level-intrinsic-size);
 }
 
 .root + .root {
   margin-top: var(--space-3xl);
   border-top: 1px solid var(--c-divider);
-}
-
-.compact {
-  contain-intrinsic-size: auto var(--doc-end-intrinsic-size);
 }
 
 .eyebrow {
@@ -74,11 +62,6 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string; com
 @media (max-width: 960px) {
   .root {
     padding-top: var(--space-2xl);
-    contain-intrinsic-size: auto var(--doc-level-intrinsic-size-mobile);
-  }
-
-  .compact {
-    contain-intrinsic-size: auto var(--doc-end-intrinsic-size-mobile);
   }
 
   .heading {

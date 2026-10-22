@@ -95,10 +95,6 @@
   --bleed: 24px;
   --box-max: calc(var(--measure) + var(--bleed) * 2);
   --note-width: 240px;
-  --doc-level-intrinsic-size: 8700px;
-  --doc-level-intrinsic-size-mobile: 10400px;
-  --doc-end-intrinsic-size: 480px;
-  --doc-end-intrinsic-size-mobile: 720px;
 
   --button-height: 40px;
   --button-padding: 20px;
@@ -127,8 +123,8 @@
   --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --z-local-nav: 20;
-  --z-scrim: 24;
-  --z-panel: 25;
+  --z-scrim: 31;
+  --z-panel: 32;
   --z-nav: 30;
   --z-skip: 50;
 

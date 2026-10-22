@@ -6,6 +6,8 @@ import DocTopic from '../../../components/ui/DocTopic.vue'
 import * as s from '../content/snippets'
 import DraftDemo from '../demos/DraftDemo.vue'
 import PointerDemo from '../demos/PointerDemo.vue'
+import PropsDemo from '../demos/PropsDemo.vue'
+import SlotsDemo from '../demos/SlotsDemo.vue'
 </script>
 
 <template>
@@ -21,6 +23,9 @@ import PointerDemo from '../demos/PointerDemo.vue'
       El hijo no toca <code>likes</code>. Solo avisa de que alguien ha pulsado, y el padre,
       que es el dueño del dato, decide qué hacer. Eso es el <em>flujo unidireccional</em>.
     </p>
+    <DemoBox label="Props y eventos">
+      <PropsDemo />
+    </DemoBox>
     <template #note>
       <CallOut>
         <p>
@@ -45,6 +50,9 @@ import PointerDemo from '../demos/PointerDemo.vue'
       construyes componentes “contenedor”: tarjetas, modales, layouts, tablas.
     </p>
     <CodeBlock :code="s.slots" />
+    <DemoBox label="Slots">
+      <SlotsDemo />
+    </DemoBox>
     <template #note>
       <CallOut>
         <p>

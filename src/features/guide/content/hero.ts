@@ -10,7 +10,7 @@ export const heroCopy = {
     phrase: 'de cero',
     target: firstTopic('basico'),
     tagline:
-      'Todo Vue 3 en una sola página: lo básico, lo intermedio y lo avanzado. Con código que puedes tocar y ejemplos de la vida real.',
+      'Todo Vue 3 en una sola página: lo básico, lo intermedio, lo avanzado y el ecosistema. Con código que puedes tocar y ejemplos de la vida real.',
     cta: 'Empezar desde cero',
   },
   algo: {

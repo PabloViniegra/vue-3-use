@@ -27,7 +27,7 @@ const levelComponents = {
     <component :is="levelComponents[level.id]" />
   </DocLevel>
 
-  <DocLevel :id="closing.id" :title="closing.title" compact>
+  <DocLevel :id="closing.id" :title="closing.title">
     <p>
       Leer sobre Vue te da el mapa. Lo que de verdad te hace dominarlo es construir cosas y
       romperlas. Tres proyectos que tocan casi todo lo de esta página:

@@ -138,6 +138,14 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
   overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--c-control-border) var(--c-code-bg);
+  /* Sombra en el borde con más código: las capas "local" la tapan al llegar a cada extremo.
+     En móvil la barra de scroll no se ve, así que es la única pista de que el código sigue */
+  background:
+    linear-gradient(to right, var(--c-code-bg) 30%, transparent) left / var(--space-lg) 100% no-repeat local,
+    linear-gradient(to left, var(--c-code-bg) 30%, transparent) right / var(--space-lg) 100% no-repeat local,
+    linear-gradient(to right, var(--c-divider-strong), transparent) left / var(--space-sm) 100% no-repeat scroll,
+    linear-gradient(to left, var(--c-divider-strong), transparent) right / var(--space-sm) 100% no-repeat scroll,
+    var(--c-code-bg);
 }
 
 .root :global(pre:focus-visible) {

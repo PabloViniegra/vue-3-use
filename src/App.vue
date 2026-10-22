@@ -6,7 +6,6 @@ import TheLocalNav from './components/layout/TheLocalNav.vue'
 import TheNav from './components/layout/TheNav.vue'
 import TheSidebar from './components/layout/TheSidebar.vue'
 import { useActiveSection } from './composables/useActiveSection'
-import { useAnchorNavigation } from './composables/useAnchorNavigation'
 import { useDisclosure } from './composables/useDisclosure'
 import { useKeyShortcut } from './composables/useKeyShortcut'
 import { useMediaQuery } from './composables/useMediaQuery'
@@ -21,8 +20,6 @@ const activeId = useActiveSection([
   ...levels.flatMap((level) => level.topics.map((t) => t.id)),
   closing.id,
 ])
-
-useAnchorNavigation()
 
 // "Nivel › tema" para la barra del índice en móvil
 const breadcrumb = computed(() => {
@@ -61,15 +58,23 @@ watch(isModal, (modal) => {
 })
 
 // En móvil el índice está plegado: hay que abrirlo antes de enfocar el filtro
-useKeyShortcut('/', () => {
+function openFilter() {
   if (isMobile.value) menu.show()
   sidebar.value?.focusFilter()
-})
+}
+
+useKeyShortcut('/', openFilter)
 </script>
 
 <template>
   <a :class="$style.skip" href="#contenido" :inert="isModal">Saltar al contenido</a>
-  <TheNav :links="levels" :dark="isDark" :inert="isModal" @toggle-theme="toggleTheme" />
+  <TheNav
+    :links="levels"
+    :dark="isDark"
+    :inert="isModal"
+    @toggle-theme="toggleTheme"
+    @search="openFilter"
+  />
 
   <TheLocalNav
     ref="localNav"

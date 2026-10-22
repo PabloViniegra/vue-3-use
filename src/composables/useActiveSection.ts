@@ -33,11 +33,20 @@ export function useActiveSection(ids: string[]) {
   onMounted(() => {
     // La sección activa es la que cruza la franja superior de la pantalla
     if (typeof IntersectionObserver !== 'undefined') {
+      // Las entradas solo avisan de cambios y llegan en lotes sin orden garantizado; con el
+      // conjunto de secciones visibles la activa no depende de qué cambió en último lugar
+      const visible = new Set<string>()
+
       observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
-            if (entry.isIntersecting) activeId.value = entry.target.id
+            if (entry.isIntersecting) visible.add(entry.target.id)
+            else visible.delete(entry.target.id)
           }
+
+          const active = ids.find((id) => visible.has(id))
+
+          if (active) activeId.value = active
         },
         { rootMargin: '-80px 0px -70% 0px' },
       )
