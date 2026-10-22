@@ -71,9 +71,9 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
 
   <DocTopic id="plantillas" title="Plantillas">
     <p>
-      La plantilla es HTML con superpoderes. Todo lo que declares en
-      <code>&lt;script setup&gt;</code> está disponible aquí directamente. Hay tres cosas que
-      vas a escribir el 90 % del tiempo: mostrar datos, enlazar atributos y escuchar eventos.
+      La plantilla es HTML con sintaxis extra para enlazarlo a tus datos. Todo lo que declares
+      en <code>&lt;script setup&gt;</code> está disponible aquí directamente. Hay tres cosas
+      que vas a escribir constantemente: mostrar datos, enlazar atributos y escuchar eventos.
     </p>
     <CodeBlock :code="s.templateSyntax" />
     <p>
@@ -129,7 +129,7 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
       <p>
         La documentación oficial recomienda <code>ref</code> por defecto. Funciona con todo,
         se puede reasignar entera y el <code>.value</code> te recuerda en todo momento que
-        esa variable es reactiva. Te acostumbras en dos días.
+        esa variable es reactiva.
       </p>
     </CallOut>
   </DocTopic>

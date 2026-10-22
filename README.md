@@ -21,10 +21,11 @@ pnpm dev
 | Comando | Para qué sirve |
 | --- | --- |
 | `pnpm dev` | Inicia el servidor de desarrollo de Vite. |
+| `pnpm lint` | Pasa oxlint con las reglas anti-slop de `tools/oxlint/anti-slop/`. |
 | `pnpm build` | Comprueba los tipos con `vue-tsc` y genera la versión de producción en `dist/`. |
 | `pnpm preview` | Sirve localmente la versión generada; ejecuta antes `pnpm build`. |
 
-No hay scripts de tests ni de lint configurados.
+No hay scripts de tests configurados.
 
 ## Estructura
 

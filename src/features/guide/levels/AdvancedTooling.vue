@@ -72,20 +72,20 @@ import ClickOutsideDemo from '../demos/ClickOutsideDemo.vue'
     <CallOut type="info">
       <p>
         Mide antes de optimizar. La pestaña de rendimiento de Vue DevTools te dice qué
-        componentes tardan en renderizar. Optimizar a ojo suele acabar en código más feo y
-        exactamente igual de lento.
+        componentes tardan en renderizar. Optimizar sin medir suele acabar en código más
+        complicado y igual de lento.
       </p>
     </CallOut>
   </DocTopic>
 
   <DocTopic id="typescript" title="TypeScript">
     <p>
-      Vue 3 está escrito en TypeScript y se nota. Con <code>lang="ts"</code>, las macros
-      aceptan tipos directamente y el editor te avisa si pasas una prop que no toca.
+      Con <code>lang="ts"</code>, las macros aceptan tipos directamente y el editor te avisa
+      si pasas una prop que no toca.
     </p>
     <CodeBlock :code="s.typescript" />
     <p>
-      Fíjate en la desestructuración de <code>defineProps</code>: desde Vue 3.5 mantiene la
+      La desestructuración de <code>defineProps</code>, desde Vue 3.5, mantiene la
       reactividad y te deja poner valores por defecto con la sintaxis normal de JavaScript.
       Antes había que usar <code>withDefaults</code>.
     </p>

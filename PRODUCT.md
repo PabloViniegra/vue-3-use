@@ -35,9 +35,9 @@ y para un equipo concreto, no un sustituto de la documentación oficial.
 - SPA de una sola página, sin rutas ni backend. Debe seguir así.
 - Publicada en la web, desplegada en Vercel.
 - Solo castellano de España; no habrá traducciones.
-- Tres niveles (Básico, Intermedio, Avanzado) definidos en `src/content/toc.ts`, que alimenta
+- Tres niveles (Básico, Intermedio, Avanzado) definidos en `src/features/guide/content/toc.ts`, que alimenta
   sidebar, hero y sección activa.
-- Demos interactivas reales en `src/components/demos/`.
+- Demos interactivas reales en `src/features/guide/demos/`.
 - Stack fijado: Vue 3.5, Vite, TypeScript, pnpm. No se añaden dependencias sin preguntar.
 
 ## Brand Commitments
@@ -48,7 +48,7 @@ y para un equipo concreto, no un sustituto de la documentación oficial.
 
 ## Evidence on Hand
 
-- Contenido de los temas, snippets (`src/content/snippets.ts`) y demos propias.
+- Contenido de los temas, snippets (`src/features/guide/content/snippets.ts`) y demos propias.
 - No hay testimonios, métricas de uso ni avales. No se inventan.
 
 ## Product Principles

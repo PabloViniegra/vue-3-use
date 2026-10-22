@@ -83,7 +83,7 @@ import StoreDemo from '../demos/StoreDemo.vue'
       </li>
     </ul>
     <p>
-      Fíjate en la diferencia entre <code>isPending</code> (aún no hay ningún dato) e
+      No confundas <code>isPending</code> (aún no hay ningún dato) con
       <code>isFetching</code> (hay una petición en marcha, aunque ya tengas algo que
       enseñar). Lo primero es para pintar un spinner; lo segundo, como mucho un aviso
       discreto.

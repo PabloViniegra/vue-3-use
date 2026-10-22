@@ -142,7 +142,7 @@ export const levels: Level[] = [
   {
     id: 'ecosistema',
     title: 'Ecosistema',
-    summary: 'Las librerías que vas a meter en casi cualquier app real: rutas, estado global y datos del servidor.',
+    summary: 'Las librerías que suelen acompañar a Vue: rutas, estado global y datos del servidor.',
     topics: [
       {
         id: 'mapa-ecosistema',

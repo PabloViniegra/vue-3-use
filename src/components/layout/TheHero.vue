@@ -9,7 +9,7 @@ const { levels } = defineProps<{ levels: { topics: { id: string }[] }[] }>()
 const copy = {
   cero: {
     tagline:
-      'Todo Vue 3 en una sola página: lo básico, lo intermedio y lo que sale en las entrevistas. Con código que puedes tocar y ejemplos de la vida real.',
+      'Todo Vue 3 en una sola página: lo básico, lo intermedio y lo avanzado. Con código que puedes tocar y ejemplos de la vida real.',
     cta: 'Empezar desde cero',
   },
   algo: {
@@ -19,7 +19,7 @@ const copy = {
   },
   bastante: {
     tagline:
-      'Lo que sale en las entrevistas: la reactividad por dentro, defineModel, Transition y Teleport, rendimiento y TypeScript.',
+      'La reactividad por dentro, defineModel, Transition y Teleport, rendimiento y TypeScript.',
     cta: 'Llévame a lo avanzado',
   },
 }

@@ -47,6 +47,7 @@ const { x, y, dentro } = usePuntero(area)
   position: relative;
   height: var(--demo-area-height);
   border-radius: var(--radius-lg);
+  /* La cuadrícula da referencia espacial para ver cuánto se mueve el puntero */
   background:
     radial-gradient(circle, var(--c-divider-strong) 1px, transparent 1px) 0 0 / var(--space-md)
       var(--space-md),

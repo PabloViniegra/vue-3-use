@@ -10,7 +10,7 @@ type WorkerScope = {
   postMessage(message: HighlightResponse): void
 }
 
-// SAFETY: this module is only loaded as the dedicated Worker entry in `highlight.ts`.
+// SAFETY: este módulo solo se carga como Worker dedicado desde `highlight.ts`.
 const workerScope = self as WorkerScope
 
 // Mantiene los colores accesibles sobre los fondos de código de ambos temas.

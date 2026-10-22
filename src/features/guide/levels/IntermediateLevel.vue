@@ -142,7 +142,8 @@ import PointerDemo from '../demos/PointerDemo.vue'
   <DocTopic id="provide-inject" title="provide / inject">
     <p>
       Cuando un dato tiene que llegar a un componente siete niveles más abajo, pasarlo como
-      prop por todos los intermedios (lo que se llama <em>prop drilling</em>) es un rollo.
+      prop por todos los intermedios (lo que se llama <em>prop drilling</em>) es tedioso y
+      ensucia componentes que no lo usan.
       <code>provide</code> lo deja disponible para todos los descendientes, e
       <code>inject</code> lo recoge donde haga falta.
     </p>
