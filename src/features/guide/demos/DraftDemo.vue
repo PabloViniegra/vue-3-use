@@ -1,48 +1,18 @@
 <script setup lang="ts">
-import { onWatcherCleanup, ref, watch } from 'vue'
 import BaseField from '../../../components/ui/BaseField.vue'
+import { useStoredDraft } from '../../../composables/useStoredDraft'
 
-const KEY = 'vue3-guia-borrador'
-
-function readDraft() {
-  try {
-    return { value: localStorage.getItem(KEY) ?? '', available: true }
-  } catch {
-    return { value: '', available: false }
-  }
-}
-
-const draft = readDraft()
-const texto = ref(draft.value)
-const estado = ref<'idle' | 'typing' | 'saved' | 'error'>(draft.available ? 'idle' : 'error')
-const guardadoA = ref('')
-
-watch(texto, (valor) => {
-  estado.value = 'typing'
-
-  // Cada pulsación cancela el guardado pendiente: solo se guarda al parar
-  const timer = setTimeout(() => {
-    try {
-      localStorage.setItem(KEY, valor)
-      guardadoA.value = new Date().toLocaleTimeString('es-ES')
-      estado.value = 'saved'
-    } catch {
-      estado.value = 'error'
-    }
-  }, 800)
-
-  onWatcherCleanup(() => clearTimeout(timer))
-})
+const { text: texto, status: estado, savedAt: guardadoA } = useStoredDraft('vue3-guia-borrador')
 </script>
 
 <template>
   <label for="demo-borrador" :class="$style.label">Escribe un borrador y para un momento</label>
-  <BaseField id="demo-borrador" v-model="texto" multiline rows="3" />
+  <BaseField id="demo-borrador" v-model="texto" name="borrador" autocomplete="off" multiline rows="3" />
   <p :class="$style.status" role="status">
     <template v-if="estado === 'typing'">Escribiendo…</template>
     <template v-else-if="estado === 'saved'">Guardado en este navegador a las {{ guardadoA }}</template>
     <template v-else-if="estado === 'error'">
-      No se pudo acceder al almacenamiento; el borrador no se conservará al recargar.
+      No se pudo acceder al almacenamiento. Permite el almacenamiento del sitio o copia el texto antes de salir.
     </template>
     <template v-else>Recarga la página después de escribir: el texto sigue ahí.</template>
   </p>

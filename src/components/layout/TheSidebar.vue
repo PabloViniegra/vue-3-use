@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef } from 'vue'
+import { computed, nextTick, useTemplateRef } from 'vue'
 import { useKeepActiveInView } from '../../composables/useKeepActiveInView'
+import { useQueryParam } from '../../composables/useQueryParam'
 import SidebarEmpty from './SidebarEmpty.vue'
 import SidebarFilter from './SidebarFilter.vue'
 import SidebarPanelHeader from './SidebarPanelHeader.vue'
@@ -14,7 +15,7 @@ interface SidebarGroup {
 const props = defineProps<{ groups: SidebarGroup[]; activeId: string; open: boolean }>()
 const emit = defineEmits<{ close: [restoreFocus?: boolean] }>()
 
-const query = ref('')
+const query = useQueryParam('tema')
 
 // Sin tildes ni mayúsculas: "asincronos" encuentra "Componentes asíncronos"
 const normalize = (text: string) =>
@@ -115,6 +116,7 @@ defineExpose({ focusFilter })
   width: var(--sidebar-width);
   height: calc(100vh - var(--nav-height));
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-xl) var(--space-lg) var(--space-4xl) var(--space-xl);
   background: var(--c-bg-soft);
   border-right: 1px solid var(--c-divider);

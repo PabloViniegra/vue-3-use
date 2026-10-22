@@ -32,7 +32,8 @@ defineExpose({ focus: () => root.value?.querySelector('input')?.focus() })
       v-model="query"
       :class="$style.input"
       type="search"
-      placeholder="Filtrar temas"
+      name="tema"
+      placeholder="Por ejemplo, Pinia…"
       autocomplete="off"
       @keydown.esc="onEscape"
     />

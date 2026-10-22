@@ -23,7 +23,7 @@ function quitar(id: number) {
 <template>
   <form :class="$style.add" @submit.prevent="agregar">
     <label class="visually-hidden" for="demo-lista">Producto</label>
-    <BaseField id="demo-lista" v-model="nueva" placeholder="¿Qué falta?" maxlength="40" />
+    <BaseField id="demo-lista" v-model="nueva" name="producto" autocomplete="off" placeholder="Por ejemplo, leche…" maxlength="40" />
     <BaseButton type="submit" :disabled="!nueva.trim()">Añadir</BaseButton>
   </form>
 
@@ -31,7 +31,7 @@ function quitar(id: number) {
 
   <ul v-if="lista.length" :class="$style.items">
     <li v-for="item in lista" :key="item.id" :class="$style.item">
-      {{ item.texto }}
+      <span :class="$style.text">{{ item.texto }}</span>
       <BaseButton variant="alt" size="sm" @click="quitar(item.id)">
         Quitar<span class="visually-hidden"> {{ item.texto }}</span>
       </BaseButton>
@@ -47,6 +47,7 @@ function quitar(id: number) {
 }
 
 .hint {
+  overflow-wrap: anywhere;
   margin: var(--space-sm) 0 0;
   font-size: var(--font-size-label);
   color: var(--c-text-2);
@@ -65,5 +66,11 @@ function quitar(id: number) {
   gap: var(--space-sm);
   padding: var(--space-xs) 0;
   border-bottom: 1px solid var(--c-divider);
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 </style>

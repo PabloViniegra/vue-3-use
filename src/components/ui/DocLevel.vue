@@ -42,6 +42,7 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 }
 
 .heading {
+  text-wrap: balance;
   margin: 0 0 var(--space-sm);
   font-family: var(--font-display);
   font-size: var(--font-size-headline-lg);

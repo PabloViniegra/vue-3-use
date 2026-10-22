@@ -8,6 +8,9 @@ let activeTransition: ViewTransition | undefined
 
 watch(isDark, (dark) => {
   document.documentElement.classList.toggle('dark', dark)
+  document.querySelector('meta[name="theme-color"]')?.setAttribute(
+    'content', getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim(),
+  )
 
   try {
     localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light')

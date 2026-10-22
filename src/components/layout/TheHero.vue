@@ -78,8 +78,7 @@ const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0
   max-width: var(--hero-max);
 }
 
-/* Al salir el hero cada capa se va a su ritmo: el título se aleja y se
-   desenfoca, y el resto se desvanece antes para dejar el título como último en irse */
+/* El resto se desvanece antes para dejar el título como último en irse. */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .title,
@@ -114,7 +113,6 @@ const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0
 @keyframes titleAway {
   to {
     opacity: 0;
-    filter: blur(var(--blur-scroll));
     transform: translateY(var(--space-3xl)) scale(0.88);
   }
 }
@@ -164,7 +162,7 @@ const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0
 
 @media (prefers-reduced-motion: no-preference) {
   .wordActive {
-    transition-property: opacity, transform, filter;
+    transition-property: opacity, transform;
     transition-duration: var(--duration-fast);
     transition-timing-function: var(--ease-out);
   }
@@ -173,7 +171,6 @@ const target = computed(() => `#${levels[options.indexOf(level.value)]?.topics[0
 .wordEnter,
 .wordLeave {
   opacity: 0;
-  filter: blur(var(--blur-swap));
   transform: translateY(var(--space-xs));
 }
 

@@ -9,7 +9,7 @@ const visible = ref(false)
   <BaseButton :aria-expanded="visible" @click="visible = !visible">
     {{ visible ? 'Ocultar aviso' : 'Mostrar aviso' }}
   </BaseButton>
-  <div :class="$style.stage">
+  <div :class="$style.stage" aria-live="polite">
     <Transition
       :enter-from-class="$style.hidden"
       :enter-active-class="$style.animating"

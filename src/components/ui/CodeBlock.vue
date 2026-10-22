@@ -42,12 +42,13 @@ async function copy() {
 }
 
 watch(status, (value) => {
-  if (value === 'idle') return
+  if (value !== 'copied') return
   const timer = setTimeout(() => (status.value = 'idle'), 2000)
   onWatcherCleanup(() => clearTimeout(timer))
 })
 
 const labels = { idle: 'Copiar', copied: 'Copiado', error: 'No se pudo copiar' }
+const copyError = 'Selecciona el código y cópialo manualmente.'
 const lineCount = computed(() => props.code.split('\n').length)
 const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript', typescript: 'TypeScript', bash: 'Terminal' })[props.lang] ?? props.lang)
 </script>
@@ -67,8 +68,9 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
         {{ labels[status] }}<span class="visually-hidden"> código {{ lang }}</span>
       </button>
     </div>
-    <span class="visually-hidden" role="status">{{ status === 'idle' ? '' : labels[status] }}</span>
-    <div :class="$style.body">
+    <span class="visually-hidden" role="status">{{ status === 'idle' ? '' : `${labels[status]}${status === 'error' ? `. ${copyError}` : ''}` }}</span>
+    <p v-if="status === 'error'" :class="$style.error">{{ copyError }}</p>
+    <div :class="$style.body" translate="no">
       <div :class="$style.gutter" aria-hidden="true"><span v-for="line in lineCount" :key="line">{{ line }}</span></div>
       <div v-if="html" :class="$style.source" v-html="html" />
       <div v-else :class="$style.source"><pre tabindex="0"><code>{{ code }}</code></pre></div>
@@ -99,6 +101,13 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
 
 .body {
   display: flex;
+}
+
+.error {
+  margin: 0;
+  padding: var(--space-xs) var(--bleed);
+  font-size: var(--font-size-label);
+  color: var(--c-text-1);
 }
 
 .gutter {

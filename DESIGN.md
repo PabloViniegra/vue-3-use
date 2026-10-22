@@ -378,7 +378,8 @@ no con clases que pasa el padre.
   y botón "Copiar" siempre visible con los estados Copiado y No se pudo copiar. El estado
   Copiado usa `brand-text` sobre `brand-soft`. Cuerpo en `code-bg` con numeración de líneas
   no seleccionable y oculta a lectores de pantalla; el scroll horizontal queda dentro del código.
-  Muestra el texto plano con la misma estructura mientras Shiki carga o si falla.
+  Muestra el texto plano con la misma estructura mientras Shiki carga o si falla. El código
+  lleva `translate="no"`. Si falla la copia, se mantiene una indicación para copiar manualmente.
 - **CallOut** (`real` | `warning` | `info`): "En la vida real" es la variante por defecto y la
   firma de la guía: nota al margen con título mono «En la vida real» e icono de libro decorativo
   en una superficie de 32px con radio `md`. Cabecera y prosa separadas por `sm`, texto con
@@ -396,8 +397,9 @@ no con clases que pasa el padre.
   `brand-text`, peso semibold y `aria-current="location"`; cada nivel lleva su número mono
   (`01`…) y el del nivel en el que estás se pone en `brand-text`. Arriba lleva un filtro de temas
   (`SidebarFilter`) que ignora tildes y mayúsculas, busca en el título y en las `keywords` de
-  cada tema (`toc.ts`), anuncia el número de resultados y tiene estado vacío con "Vaciar
-  filtro"; `/` lo enfoca (y en móvil abre antes el índice) y Esc lo vacía. En móvil, la
+  cada tema (`toc.ts`), conserva la búsqueda en el parámetro `tema` de la URL, anuncia el número
+  de resultados y tiene estado vacío con "Vaciar filtro"; `/` lo enfoca (y en móvil abre antes
+  el índice) y Esc lo vacía. En móvil, la
   barra "Índice" va justo debajo de la nav desde el principio de la página y muestra a la
   derecha dónde estás ("Nivel › tema", recortado con elipsis, o "Introducción" mientras se ve
   el hero: hasta la primera sección no hay ninguna activa). La sidebar desplaza su propio scroll
@@ -420,6 +422,7 @@ no con clases que pasa el padre.
   píxeles desde el control y el viewport, no tokens de diseño. Los pseudoelementos de esta
   transición de documento se definen en `base.css`; se suspenden las transiciones locales
   durante la captura para mostrar los colores finales, sin fundidos superpuestos.
+  El `theme-color` del navegador sigue el fondo del tema, también antes del primer pintado.
 
 ## Do's and Don'ts
 

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { type Directive, ref } from 'vue'
+import { type Directive, ref, useTemplateRef } from 'vue'
 import BaseButton from '../../../components/ui/BaseButton.vue'
+import { useDisclosureFocus } from '../../../composables/useDisclosureFocus'
 
 type ClickOutsideEl = HTMLElement & { _onClickOutside?: (e: PointerEvent) => void }
 
@@ -20,6 +21,9 @@ const vClickFuera: Directive<ClickOutsideEl, () => void> = {
 
 const abierto = ref(false)
 const cierres = ref(0)
+const root = useTemplateRef('root')
+
+useDisclosureFocus(abierto, root)
 
 function cerrar() {
   abierto.value = false
@@ -28,11 +32,13 @@ function cerrar() {
 </script>
 
 <template>
-  <div v-if="abierto" v-click-fuera="cerrar" :class="$style.menu">
-    <p>Este menú tiene <code>v-click-fuera</code>. Pincha en cualquier otro sitio de la página.</p>
-    <BaseButton size="sm" variant="alt" @click="abierto = false">Cerrar desde dentro</BaseButton>
+  <div ref="root">
+    <div v-if="abierto" v-click-fuera="cerrar" :class="$style.menu">
+      <p>Este menú tiene <code>v-click-fuera</code>. Pincha en cualquier otro sitio de la página.</p>
+      <BaseButton size="sm" variant="alt" @click="abierto = false">Cerrar desde dentro</BaseButton>
+    </div>
+    <BaseButton v-else size="sm" @click="abierto = true">Abrir el menú</BaseButton>
   </div>
-  <BaseButton v-else size="sm" @click="abierto = true">Abrir el menú</BaseButton>
   <p :class="$style.out" aria-live="polite">
     Cerrado desde fuera {{ cierres }} {{ cierres === 1 ? 'vez' : 'veces' }}
   </p>
