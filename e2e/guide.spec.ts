@@ -66,6 +66,18 @@ test('el filtro ignora tildes, busca por keywords y Esc lo vacía', async ({ pag
   await expect(topicLinks).toHaveCount(topicIds.length)
 })
 
+test('el botón del buscador vacía el filtro y devuelve el foco', async ({ page }) => {
+  await page.goto('/')
+  await page.keyboard.press('/')
+  const filter = page.getByRole('searchbox', { name: 'Filtrar temas' })
+  await expect(filter).toBeFocused()
+  await filter.fill('tans')
+  await page.getByRole('button', { name: 'Vaciar filtro', exact: true }).click()
+  await expect(filter).toHaveValue('')
+  await expect(filter).toBeFocused()
+  await expect(page.getByRole('navigation', { name: 'Índice' }).locator('li a')).toHaveCount(topicIds.length)
+})
+
 test('los bloques de código se resaltan con Shiki', async ({ page }) => {
   await page.goto('/#reactividad')
 
