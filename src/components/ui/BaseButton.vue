@@ -45,9 +45,14 @@ const {
   text-align: center;
   cursor: pointer;
   transition:
-    background-color var(--duration-fast),
-    border-color var(--duration-fast),
-    color var(--duration-fast);
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.root:not(:disabled):active {
+  transform: scale(0.97);
 }
 
 .root:hover {

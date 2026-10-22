@@ -215,7 +215,7 @@ defineExpose({ focusFilter })
     transform: translateX(-100%);
     visibility: hidden;
     transition:
-      transform var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-drawer),
       visibility var(--duration-base);
   }
 
@@ -224,7 +224,7 @@ defineExpose({ focusFilter })
     transform: none;
     visibility: visible;
     transition:
-      transform var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-drawer),
       visibility 0s;
     box-shadow: var(--shadow-panel);
   }

@@ -5,6 +5,7 @@
   --c-brand-light: #42d392;
   --c-brand-text: #287953;
   --c-brand-soft: rgba(66, 184, 131, 0.12);
+  --c-accent-soft: rgba(100, 126, 255, 0.14);
   --c-on-brand: #1a1a1a;
   --c-accent-blue: #647eff;
 
@@ -117,9 +118,12 @@
   --shadow-panel: 0 12px 32px rgba(0, 0, 0, 0.2);
   --shadow-knob: 0 1px 2px rgba(0, 0, 0, 0.2);
 
+  --blur-swap: 2px;
+  --blur-scroll: 12px;
   --duration-fast: 150ms;
   --duration-base: 250ms;
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
   --z-local-nav: 20;
   --z-scrim: 24;
@@ -133,6 +137,7 @@
 :root.dark {
   --c-brand-text: #42d392;
   --c-brand-soft: rgba(66, 184, 131, 0.16);
+  --c-accent-soft: rgba(100, 126, 255, 0.2);
 
   --c-bg: #1a1a1a;
   --c-bg-soft: #242424;

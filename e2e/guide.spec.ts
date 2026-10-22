@@ -112,9 +112,13 @@ test.describe('en móvil', () => {
     await expect(menuButton).toBeFocused()
   })
 
-  test('el hero compacto deja asomar el primer nivel', async ({ page }) => {
+  test('el hero ocupa todo el viewport', async ({ page }) => {
     await page.goto('/')
 
-    await expect(page.getByRole('heading', { level: 2, name: 'Básico' })).toBeInViewport()
+    const hero = await page.locator('#top').boundingBox()
+    const viewport = page.viewportSize()!
+
+    expect(Math.round(hero!.y + hero!.height)).toBeGreaterThanOrEqual(viewport.height)
+    await expect(page.getByRole('heading', { level: 2, name: 'Básico' })).not.toBeInViewport()
   })
 })

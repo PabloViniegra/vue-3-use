@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, version } from 'vue'
 import BaseButton from '../ui/BaseButton.vue'
+import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
 
 const { levels } = defineProps<{ levels: { topics: { id: string }[] }[] }>()
@@ -35,33 +36,96 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
 
 <template>
   <section id="top" :class="$style.root" aria-labelledby="hero-title">
-    <h1 id="hero-title" :class="$style.title">
-      Vue 3, de
-      <Transition
-        mode="out-in"
-        :enter-from-class="$style.wordEnter"
-        :leave-to-class="$style.wordLeave"
-        :enter-active-class="$style.wordActive"
-        :leave-active-class="$style.wordActive"
-      >
-        <span :key="level" :class="$style.accent">{{ level }}</span>
-      </Transition>
-      <br />
-      a que te pregunten&nbsp;a&nbsp;ti
-    </h1>
-    <p :class="$style.tagline" aria-live="polite">{{ current.tagline }}</p>
-    <HeroLevelPicker v-model="level" :options="options" />
-    <div :class="$style.actions">
-      <BaseButton size="lg" :href="`#${target}`">{{ current.cta }}</BaseButton>
+    <HeroBackdrop :step="options.indexOf(level)" />
+    <div :class="$style.content">
+      <h1 id="hero-title" :class="$style.title">
+        Vue 3, de
+        <Transition
+          mode="out-in"
+          :enter-from-class="$style.wordEnter"
+          :leave-to-class="$style.wordLeave"
+          :enter-active-class="$style.wordActive"
+          :leave-active-class="$style.wordActive"
+        >
+          <span :key="level" :class="$style.accent">{{ level }}</span>
+        </Transition>
+        <br />
+        a que te pregunten&nbsp;a&nbsp;ti
+      </h1>
+      <p :class="$style.tagline" aria-live="polite">{{ current.tagline }}</p>
+      <HeroLevelPicker v-model="level" :options="options" />
+      <div :class="$style.actions">
+        <BaseButton size="lg" :href="`#${target}`">{{ current.cta }}</BaseButton>
+      </div>
+      <p :class="$style.madeWith">Esta página está hecha con Vue {{ version }}.</p>
     </div>
-    <p :class="$style.madeWith">Esta página está hecha con Vue {{ version }}.</p>
   </section>
 </template>
 
 <style module>
 .root {
-  padding: var(--space-4xl) var(--space-xl) var(--space-3xl);
+  --hero-top: var(--nav-height);
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: calc(100vh - var(--hero-top));
+  min-height: calc(100svh - var(--hero-top));
+  padding: var(--space-3xl) var(--space-xl);
+  overflow: clip;
   text-align: center;
+  view-timeline: --hero block;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+}
+
+/* Al salir el hero cada capa se va a su ritmo: el título se aleja y se
+   desenfoca, y el resto se desvanece antes para dejar el título como último en irse */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .title,
+    .tagline,
+    .actions,
+    .madeWith {
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --hero;
+    }
+
+    .title {
+      animation-name: titleAway;
+      animation-range: exit 0% exit 85%;
+    }
+
+    .tagline {
+      animation-name: fadeDown;
+      animation-range: exit 0% exit 60%;
+    }
+
+    .actions,
+    .madeWith {
+      animation-name: fadeDown;
+      animation-range: exit 0% exit 40%;
+    }
+  }
+}
+
+@keyframes titleAway {
+  to {
+    opacity: 0;
+    filter: blur(var(--blur-scroll));
+    transform: translateY(var(--space-3xl)) scale(0.88);
+  }
+}
+
+@keyframes fadeDown {
+  to {
+    opacity: 0;
+    transform: translateY(var(--space-2xl));
+  }
 }
 
 .title {
@@ -85,16 +149,19 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
 .wordActive {
   transition:
     opacity var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
+    transform var(--duration-fast) var(--ease-out),
+    filter var(--duration-fast) var(--ease-out);
 }
 
 .wordEnter {
   opacity: 0;
+  filter: blur(var(--blur-swap));
   transform: translateY(var(--space-xs));
 }
 
 .wordLeave {
   opacity: 0;
+  filter: blur(var(--blur-swap));
   transform: translateY(calc(var(--space-xs) * -1));
 }
 
@@ -122,7 +189,9 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
 
 @media (max-width: 960px) {
   .root {
-    padding: var(--space-3xl) var(--space-lg) var(--space-2xl);
+    --hero-top: calc(var(--nav-height) + var(--local-nav-height));
+
+    padding: var(--space-3xl) var(--space-lg);
   }
 
   .title {
@@ -130,23 +199,7 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
     letter-spacing: var(--letter-spacing-display-sm);
   }
 
-  .wordActive {
-  transition:
-    opacity var(--duration-fast) var(--ease-out),
-    transform var(--duration-fast) var(--ease-out);
-}
-
-.wordEnter {
-  opacity: 0;
-  transform: translateY(var(--space-xs));
-}
-
-.wordLeave {
-  opacity: 0;
-  transform: translateY(calc(var(--space-xs) * -1));
-}
-
-.tagline {
+  .tagline {
     font-size: var(--font-size-lead-sm);
   }
 }
@@ -159,7 +212,7 @@ const target = computed(() => levels[options.indexOf(level.value)]?.topics[0]?.i
 
 @media (max-width: 480px) {
   .root {
-    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+    padding: var(--space-xl) var(--space-lg);
   }
 
   .title {
