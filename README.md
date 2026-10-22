@@ -24,8 +24,9 @@ pnpm dev
 | `pnpm lint` | Pasa oxlint con las reglas anti-slop de `tools/oxlint/anti-slop/`. |
 | `pnpm build` | Comprueba los tipos con `vue-tsc` y genera la versión de producción en `dist/`. |
 | `pnpm preview` | Sirve localmente la versión generada; ejecuta antes `pnpm build`. |
+| `pnpm test:e2e` | Genera el build y pasa los tests E2E de `e2e/` con Playwright (Chromium). |
 
-No hay scripts de tests configurados.
+La primera vez instala el navegador con `pnpm exec playwright install chromium`.
 
 ## Estructura
 
