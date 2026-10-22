@@ -14,7 +14,12 @@ const titleId = useId()
   <!-- Nota y no <aside>: veinte landmarks "complementary" vuelven inútil la lista del lector -->
   <div :class="[$style.root, $style[type]]" role="note" :aria-labelledby="titleId">
     <p :id="titleId" :class="$style.title">
-      <span v-if="type === 'real'" aria-hidden="true">// </span>{{ title ?? defaultTitles[type] }}
+      <span v-if="type === 'real'" :class="$style.symbol" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v15m0-15C9 3 5 3 2 4v14c3-1 7-1 10 2m0-15c3-2 7-2 10-1v14c-3-1-7-1-10 2" />
+        </svg>
+      </span>
+      {{ title ?? defaultTitles[type] }}
     </p>
     <slot />
   </div>
@@ -39,15 +44,40 @@ const titleId = useId()
 /* La firma de la guía: una nota al margen, no otra caja más */
 .real {
   max-width: var(--measure);
-  padding-top: var(--space-sm);
-  border-top: 1px solid var(--c-brand);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--c-divider-strong);
+  line-height: var(--line-height-body);
 }
 
 .real .title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
   font-family: var(--font-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   color: var(--c-brand-text);
+}
+
+.symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--button-sm-height);
+  height: var(--button-sm-height);
+  color: var(--c-brand-text);
+  background: var(--c-brand-soft);
+  border-radius: var(--radius-md);
+}
+
+.symbol svg {
+  width: var(--icon-md);
+  height: var(--icon-md);
+}
+
+.real p + p {
+  margin-top: var(--space-sm);
 }
 
 /* Las cajas sobresalen lo mismo que el código: el texto de dentro queda alineado con la prosa */

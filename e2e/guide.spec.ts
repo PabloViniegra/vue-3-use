@@ -72,6 +72,35 @@ test('los bloques de código se resaltan con Shiki', async ({ page }) => {
   await expect(page.locator('#reactividad pre.shiki').first()).toBeVisible()
 })
 
+test('el código se copia con teclado sin incluir los números de línea', async ({ page, context }) => {
+  await context.grantPermissions(['clipboard-read', 'clipboard-write'])
+  await page.goto('/#reactividad')
+  const topic = page.locator('#reactividad')
+  const source = topic.locator('pre.shiki').first()
+  await expect(source).toBeVisible()
+  const copy = topic.getByRole('button', { name: /código vue$/ }).first()
+
+  await expect(copy).toBeVisible()
+  await copy.focus()
+  await page.keyboard.press('Enter')
+
+  await expect(copy).toHaveText('Copiado código vue')
+  expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(await source.textContent())
+  await expect(topic.getByRole('status').first()).toHaveText('Copiado')
+})
+
+test('si el portapapeles falla se informa del error', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: () => Promise.reject(new Error('Sin permiso')) },
+    })
+  })
+  await page.goto('/#reactividad')
+  const copy = page.locator('#reactividad').getByRole('button', { name: /código vue$/ }).first()
+  await copy.click()
+  await expect(copy).toHaveText('No se pudo copiar código vue')
+})
+
 test('el modo oscuro se mantiene al recargar', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/')

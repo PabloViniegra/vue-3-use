@@ -299,7 +299,7 @@ Tres familias, cada una con un papel fijo (`--font-display`, `--font-sans`, `--f
   ajusta solo al tamaño.
 - **Inter** (`@fontsource-variable/inter`): prosa, navegación, botones y campos.
 - **JetBrains Mono** (`@fontsource-variable/jetbrains-mono`): código y la "voz de editor":
-  eyebrows de nivel y de nota (`// …`, con el `//` oculto al lector de pantalla), números de
+  eyebrows de nivel (`// …`, con el `//` oculto al lector de pantalla), títulos de nota, números de
   nivel, etiqueta de demo y de lenguaje y el panel del hero.
 
 Los woff2 `latin` de Inter y Bricolage se precargan en `index.html`.
@@ -360,7 +360,8 @@ Capas (`z-index`): nav 30, panel de la sidebar 25, scrim 24, barra del índice 2
 
 `warning` e `info` son cajas con borde de 1px en el color de su tipo (sin franja lateral, que
 es el tópico de callout más reconocible). `real` no es una caja: es una nota con un filete
-superior de 1px en `brand`. Párrafos y listas no pasan de `measure` (580px) para que las
+superior de 1px en `divider-strong` y cabecera con un libro en `brand-text` sobre `brand-soft`.
+Párrafos y listas no pasan de `measure` (580px) para que las
 líneas no superen unos 80 caracteres.
 
 ## Components
@@ -373,10 +374,15 @@ no con clases que pasa el padre.
   `<a>`; si ejecuta algo, un `<button type="button">`. `square` para botones de un carácter.
 - **Field** (`BaseField`): input o, con `multiline`, textarea, con `v-model`. Siempre con
   `label`, aunque sea `.visually-hidden`.
-- **CodeBlock**: código resaltado, etiqueta de lenguaje y botón "Copiar" con los estados
-  Copiado y No se pudo copiar. Muestra el texto plano mientras Shiki carga o si falla.
+- **CodeBlock**: marco de editor plano con cabecera en `bg-soft`, lenguaje e icono de código,
+  y botón "Copiar" siempre visible con los estados Copiado y No se pudo copiar. El estado
+  Copiado usa `brand-text` sobre `brand-soft`. Cuerpo en `code-bg` con numeración de líneas
+  no seleccionable y oculta a lectores de pantalla; el scroll horizontal queda dentro del código.
+  Muestra el texto plano con la misma estructura mientras Shiki carga o si falla.
 - **CallOut** (`real` | `warning` | `info`): "En la vida real" es la variante por defecto y la
-  firma de la guía: nota al margen con título mono `// En la vida real`. Una analogía por
+  firma de la guía: nota al margen con título mono «En la vida real» e icono de libro decorativo
+  en una superficie de 32px con radio `md`. Cabecera y prosa separadas por `sm`, texto con
+  interlineado `body` y filete superior neutro, sin fondo ni sombra para el conjunto. Una analogía por
   tema como máximo y siempre en el slot `note` de `DocTopic`. Es un `div role="note"` con el
   título como nombre accesible, no un `<aside>`, para no llenar la página de landmarks.
 - **DemoBox**: marco de las demos en vivo, con cabecera mono "Pruébalo · …". Las demos son

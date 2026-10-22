@@ -19,6 +19,8 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 .root {
   padding-top: var(--space-3xl);
   content-visibility: auto;
+  /* La contención de pintado debe incluir el sangrado de los bloques de código. */
+  overflow-clip-margin: var(--bleed);
   contain-intrinsic-size: auto var(--doc-level-intrinsic-size);
 }
 
