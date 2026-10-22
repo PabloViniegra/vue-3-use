@@ -30,9 +30,36 @@ body {
   background: var(--c-bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition:
-    background-color var(--duration-base),
-    color var(--duration-base);
+}
+
+/* La captura nueva lleva los colores finales, no transiciones de cada superficie. */
+html[data-theme-transition] *,
+html[data-theme-transition] *::before,
+html[data-theme-transition] *::after {
+  transition: none !important;
+}
+
+html[data-theme-transition]::view-transition-group(root) {
+  animation: none;
+}
+
+html[data-theme-transition]::view-transition-old(root),
+html[data-theme-transition]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-transition]::view-transition-new(root) {
+  animation: themeReveal var(--duration-base) var(--ease-out) both;
+}
+
+@keyframes themeReveal {
+  from {
+    clip-path: circle(0 at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+  to {
+    clip-path: circle(var(--theme-reveal-radius) at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
 }
 
 ::selection {
@@ -92,7 +119,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body {
-    transition: none;
+  html[data-theme-transition]::view-transition-new(root) {
+    animation: none;
   }
 }

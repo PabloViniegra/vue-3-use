@@ -3,7 +3,7 @@ import vueLogo from '../../assets/vue.svg'
 
 defineProps<{ links: { id: string; title: string }[]; dark: boolean }>()
 
-const emit = defineEmits<{ toggleTheme: [] }>()
+const emit = defineEmits<{ toggleTheme: [event: MouseEvent] }>()
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const emit = defineEmits<{ toggleTheme: [] }>()
       role="switch"
       :aria-checked="dark"
       aria-label="Modo oscuro"
-      @click="emit('toggleTheme')"
+      @click="emit('toggleTheme', $event)"
     >
       <span :class="$style.knob" aria-hidden="true">
         <svg v-if="dark" viewBox="0 0 24 24"><path d="M12.1 22a10 10 0 0 1-1.1-19.9 1 1 0 0 1 .9 1.6A6 6 0 0 0 20.3 12a1 1 0 0 1 1.6.9A10 10 0 0 1 12.1 22Z" /></svg>
