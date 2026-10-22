@@ -117,7 +117,8 @@ const level = defineModel<string>({ required: true })
   transition:
     background-color var(--duration-fast) var(--ease-out),
     border-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out);
+    color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
 }
 
 /* Área táctil mayor sin mover el texto del código */
@@ -129,6 +130,10 @@ const level = defineModel<string>({ required: true })
 
 .option:hover .chip {
   border-color: var(--c-brand-text);
+}
+
+.option:active .chip {
+  transform: scale(var(--press-scale));
 }
 
 /* En claro el verde contra el panel no llega a 3:1: el contorno oscuro marca el estado */

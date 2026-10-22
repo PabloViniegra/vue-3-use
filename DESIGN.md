@@ -7,6 +7,7 @@ colors:
   brand-light: "#42d392"
   brand-text: "#287953"
   brand-soft: "rgba(66, 184, 131, 0.12)"
+  logo-inner: "#35495e"
   on-brand: "#1a1a1a"
   bg: "#ffffff"
   bg-soft: "#f9f9f9"
@@ -28,6 +29,7 @@ colors:
   focus: "#287953"
   brand-text-dark: "#42d392"
   brand-soft-dark: "rgba(66, 184, 131, 0.16)"
+  logo-inner-dark: "#5f7d9c"
   bg-dark: "#1a1a1a"
   bg-soft-dark: "#242424"
   bg-mute-dark: "#2f2f2f"
@@ -43,19 +45,19 @@ colors:
 typography:
   display:
     fontFamily: Bricolage Grotesque
-    fontSize: 64px
+    fontSize: 80px
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
   display-md:
     fontFamily: Bricolage Grotesque
-    fontSize: 48px
+    fontSize: 60px
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
   display-sm:
     fontFamily: Bricolage Grotesque
-    fontSize: 38px
+    fontSize: 42px
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
@@ -301,8 +303,8 @@ Tres familias, cada una con un papel fijo (`--font-display`, `--font-sans`, `--f
 
 Los woff2 `latin` de Inter y Bricolage se precargan en `index.html`.
 
-- `display` solo existe una vez: el h1 del hero. Baja a 48px por debajo de 960px y a 38px por
-  debajo de 480px.
+- `display` solo existe una vez: el h1 del hero. Baja a 60px por debajo de 960px y a 42px por
+  debajo de 480px. La palabra de acento lleva un cursor de editor parpadeante (desactivado con movimiento reducido).
 - `headline-lg` = h2 de cada nivel (30px en móvil). `headline-md` = h3 de cada tema.
 - `lead` para el subtítulo del hero (18px en móvil); `body` para la prosa.
 - `label` para la navegación, la sidebar y los botones; `caption` para metadatos.
@@ -391,7 +393,7 @@ no con clases que pasa el padre.
 - **DocLevel**: `section` con `id` + `h2` de nivel, eyebrow mono (`// Nivel 1 de 4`) y resumen
   opcionales.
 - **LinkGrid** (`BaseLinkGrid`): rejilla de enlaces externos con descripción (el ecosistema).
-- **Nav / Sidebar / Hero**: piezas de layout únicas. La sidebar marca la sección activa con
+- **Nav / Sidebar / Hero**: piezas de layout únicas. La marca de la nav es un wordmark en Bricolage 800 (`title`) donde "de cero" lleva la misma palabra resaltada del hero (`brand-text` sobre `brand-soft`). El logo es SVG en línea: al pasar el ratón (solo con puntero real), enfocar o pulsar, la V interior se hunde en la exterior (`--logo-dip`, 250 ms, `--ease-out`, sin movimiento reducido), y al pulsar la marca entera se encoge (`--press-scale`, 150 ms). `--c-logo-inner` es el azul del logo, con variante oscura. La sidebar marca la sección activa con
   `brand-text`, peso semibold y `aria-current="location"`; cada nivel lleva su número mono
   (`01`…) y el del nivel en el que estás se pone en `brand-text`. Arriba lleva un filtro de temas
   (`SidebarFilter`) que ignora tildes y mayúsculas, busca en el título y en las `keywords` de
@@ -410,7 +412,7 @@ no con clases que pasa el padre.
   `computed` que dependen de él (`titulo.value`, `destino.value`) con su valor en vivo. El
   valor cambia la palabra de acento del `h1` (transición ≤ 250 ms), el subtítulo
   (`aria-live="polite"`) y el texto y el destino del botón, que lleva al primer tema del nivel
-  en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra.
+  en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra. Al cargar, los tres bloques entran en cascada (`--stagger` 60 ms, 250 ms, `--ease-out`, solo opacidad con movimiento reducido) y las opciones del panel se encogen al pulsarlas (`--press-scale`).
   Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
 - **Switch de tema**: `role="switch"` con `aria-checked`. El modo elegido se guarda en
   `localStorage` y, si no hay ninguno, se sigue `prefers-color-scheme`. Al accionarlo, el nuevo

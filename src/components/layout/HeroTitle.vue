@@ -42,7 +42,23 @@ defineProps<{ phrase: string }>()
   color: var(--c-brand-text);
 }
 
+/* El cursor de editor: la palabra es un valor que se puede cambiar */
+.accent::after {
+  content: '';
+  display: inline-block;
+  width: var(--space-xxs);
+  height: 0.75em;
+  margin-left: var(--space-xxs);
+  border-radius: var(--radius-sm);
+  background: var(--c-brand-text);
+  vertical-align: -0.04em;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .accent::after {
+    animation: caret 1.1s steps(1) infinite;
+  }
+
   .wordActive {
     transition-property: opacity, transform;
     transition-duration: var(--duration-fast);
@@ -58,6 +74,12 @@ defineProps<{ phrase: string }>()
 
 .wordLeave {
   transform: translateY(calc(var(--space-xs) * -1));
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
 }
 
 @media (max-width: 960px) {

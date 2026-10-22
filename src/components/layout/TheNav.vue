@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import vueLogo from '../../assets/vue.svg'
-
 defineProps<{ links: { id: string; title: string }[]; dark: boolean }>()
 
 const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
@@ -9,8 +7,12 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
 <template>
   <header :class="$style.root">
     <a :class="$style.brand" href="#top">
-      <img :src="vueLogo" alt="" width="28" height="28" />
-      <span>Vue 3 de cero</span>
+      <svg :class="$style.logo" viewBox="0 0 256 198" aria-hidden="true" focusable="false">
+        <path :class="$style.green" d="M204.8 0H256L128 220.8L0 0h97.92L128 51.2L157.44 0h47.36Z" />
+        <path :class="$style.green" d="m0 0l128 220.8L256 0h-51.2L128 132.48L50.56 0H0Z" />
+        <path :class="$style.inner" d="M50.56 0L128 133.12L204.8 0h-47.36L128 51.2L97.92 0H50.56Z" />
+      </svg>
+      <span :class="$style.wordmark">Vue 3 <span :class="$style.accent">de cero</span></span>
     </a>
 
     <nav :class="$style.links" aria-label="Niveles">
@@ -59,18 +61,61 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
   align-items: center;
   gap: var(--space-sm);
   margin-right: auto;
-  font-size: var(--font-size-body);
-  font-weight: var(--font-weight-semibold);
   color: var(--c-text-1);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 
 .brand:hover {
   text-decoration: none;
 }
 
-.brand img {
+.brand:active {
+  transform: scale(var(--press-scale));
+}
+
+.logo {
   width: var(--logo-size);
   height: auto;
+  overflow: visible;
+}
+
+.green {
+  fill: var(--c-brand);
+}
+
+.inner {
+  fill: var(--c-logo-inner);
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+/* La V interior se hunde en la exterior: un valor que se asienta */
+@media (hover: hover) {
+  .brand:hover .inner {
+    transform: translateY(var(--logo-dip));
+  }
+}
+
+.brand:focus-visible .inner,
+.brand:active .inner {
+  transform: translateY(var(--logo-dip));
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--font-size-title);
+  font-weight: var(--font-weight-heavy);
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-headline-md);
+  white-space: nowrap;
+}
+
+/* La misma palabra resaltada del hero: "de cero" es el valor elegido */
+.accent {
+  display: inline-block;
+  padding: var(--space-xxs) var(--space-xs);
+  border-radius: var(--radius-md);
+  background: var(--c-brand-soft);
+  color: var(--c-brand-text);
 }
 
 .links {
@@ -178,6 +223,8 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .brand,
+  .inner,
   .knob,
   .search,
   .links a {

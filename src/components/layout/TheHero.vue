@@ -24,14 +24,16 @@ const target = computed(() => current.value?.target ?? '#contenido')
         <HeroTitle id="hero-title" :class="$style.title" :phrase="current?.phrase ?? ''" />
         <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
-      <HeroLevelPicker
-        v-model="level"
-        :hint="current?.label ?? ''"
-        :class="$style.picker"
-        :options="options"
-        :title="`Vue 3, ${current?.phrase}`"
-        :target="target"
-      />
+      <div :class="$style.pickerSlot">
+        <HeroLevelPicker
+          v-model="level"
+          :hint="current?.label ?? ''"
+          :class="$style.picker"
+          :options="options"
+          :title="`Vue 3, ${current?.phrase}`"
+          :target="target"
+        />
+      </div>
       <div :class="$style.cta">
         <div :class="$style.actions">
           <BaseButton size="lg" :href="target">{{ current?.cta }}</BaseButton>
@@ -66,6 +68,37 @@ const target = computed(() => current.value?.target ?? '#contenido')
   column-gap: var(--space-3xl);
   width: 100%;
   max-width: var(--hero-max);
+}
+
+/* Entrada al cargar: texto, panel y botón llegan en cascada. Van en los contenedores porque
+   los hijos ya llevan la animación de salida por scroll. */
+.intro,
+.pickerSlot,
+.cta {
+  animation: heroIn var(--duration-base) var(--ease-out) both;
+}
+
+.pickerSlot {
+  animation-delay: var(--stagger);
+}
+
+.cta {
+  animation-delay: calc(var(--stagger) * 2);
+}
+
+@keyframes heroIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-sm));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes heroIn {
+    from {
+      opacity: 0;
+    }
+  }
 }
 
 /* El resto se desvanece antes para dejar el título como último en irse. */
@@ -120,7 +153,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
   align-self: end;
 }
 
-.picker {
+.pickerSlot {
   grid-area: picker;
   align-self: center;
 }
