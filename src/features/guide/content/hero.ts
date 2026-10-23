@@ -18,7 +18,7 @@ export const heroCopy = {
     phrase: 'con base',
     target: firstTopic('intermedio'),
     tagline:
-      'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes: props, slots, watchers, composables y provide / inject.',
+      'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes: props, slots, atributos heredados, watchers, composables y provide / inject.',
     cta: 'Seguir por lo intermedio',
   },
   bastante: {
@@ -26,7 +26,7 @@ export const heroCopy = {
     phrase: 'a fondo',
     target: firstTopic('avanzado'),
     tagline:
-      'La reactividad por dentro, defineModel, Transition y Teleport, rendimiento y TypeScript.',
+      'La reactividad por dentro, nextTick, defineModel, Transition y Teleport, plugins, rendimiento y TypeScript.',
     cta: 'Llévame a lo avanzado',
   },
 } satisfies Record<string, { label: string; phrase: string; target: string; tagline: string; cta: string }>

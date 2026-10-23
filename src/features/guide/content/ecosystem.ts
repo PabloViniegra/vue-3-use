@@ -26,9 +26,14 @@ export const ecosystem: EcosystemItem[] = [
     text: 'Servidor de desarrollo y build. Lo que mueve esta página.',
   },
   {
-    name: 'Vitest y Vue Test Utils',
+    name: 'Vitest',
+    href: 'https://vitest.dev',
+    text: 'El ejecutor de tests de Vite: rápido y con la misma configuración.',
+  },
+  {
+    name: 'Vue Test Utils',
     href: 'https://test-utils.vuejs.org',
-    text: 'Tests unitarios y de componentes.',
+    text: 'Montar componentes y comprobar su DOM y sus eventos.',
   },
   {
     name: 'Nuxt',

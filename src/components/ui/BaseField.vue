@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const { multiline = false } = defineProps<{ multiline?: boolean }>()
-const model = defineModel<string>({ required: true })
+
+// Sin v-model funciona como campo libre: lo usan las demos que escuchan @input
+const model = defineModel<string>()
 </script>
 
 <template>

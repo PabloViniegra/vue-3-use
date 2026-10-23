@@ -516,7 +516,8 @@ src/
 ├── features/
 │   └── guide/
 │       ├── GuideContent.vue  # niveles + "Y ahora, ¿qué?"
-│       ├── levels/      # BasicLevel, IntermediateLevel, AdvancedLevel (= AdvancedInternals + AdvancedTooling),
+│       ├── levels/      # BasicLevel (= BasicStart + BasicState), IntermediateLevel (= IntermediateComponents +
+│       │                # IntermediateLogic), AdvancedLevel (= AdvancedReactivity + AdvancedInternals + AdvancedTooling),
 │       │                # EcosystemLevel (= EcosystemRouting + EcosystemData)
 │       ├── demos/       # una demo por archivo, autocontenida
 │       └── content/     # toc.ts, snippets.ts, ecosystem.ts y hero.ts: datos puros, sin Vue

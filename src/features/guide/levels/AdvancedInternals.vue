@@ -6,53 +6,10 @@ import DocTopic from '../../../components/ui/DocTopic.vue'
 import * as s from '../content/snippets'
 import AsyncDemo from '../demos/AsyncDemo.vue'
 import ModelDemo from '../demos/ModelDemo.vue'
-import TemplateRefDemo from '../demos/TemplateRefDemo.vue'
 import TransitionDemo from '../demos/TransitionDemo.vue'
 </script>
 
 <template>
-  <DocTopic id="reactividad-a-fondo" title="Reactividad a fondo">
-    <p>
-      <code>reactive()</code> envuelve tu objeto en un
-      <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Proxy" target="_blank" rel="noopener">Proxy</a>
-      de JavaScript. Cada vez que algo lee una propiedad, Vue apunta quién la leyó
-      (<em>track</em>). Cada vez que alguien la cambia, avisa solo a esos (<em>trigger</em>).
-      <code>ref()</code> hace lo mismo con un getter y un setter en <code>.value</code>.
-    </p>
-    <CodeBlock :code="s.proxyIdea" lang="js" />
-    <template #note>
-      <CallOut>
-        <p>
-          Una newsletter. Leer una propiedad dentro de un <code>computed</code> o una plantilla
-          es suscribirte. Cuando cambia, solo reciben el correo los suscriptores, no toda la
-          app. Por eso Vue sabe exactamente qué componentes repintar sin que tú se lo digas.
-        </p>
-      </CallOut>
-    </template>
-    <p>Saber esto explica las trampas típicas:</p>
-    <CodeBlock :code="s.deepReactivity" lang="js" />
-    <ul>
-      <li>
-        <strong>Desestructurar un <code>reactive</code></strong> rompe la conexión. Te
-        llevas valores sueltos. <code>toRefs</code> o <code>toRef</code> lo arreglan.
-      </li>
-      <li>
-        <strong><code>shallowRef</code> y <code>shallowReactive</code></strong> solo vigilan
-        el primer nivel. Perfectos para estructuras enormes que reemplazas de golpe (la
-        respuesta de una API, datos de un gráfico).
-      </li>
-      <li>
-        <strong><code>markRaw</code></strong> marca un objeto para que Vue nunca lo haga
-        reactivo. Útil para instancias de librerías externas como un mapa o un editor.
-      </li>
-      <li>
-        <strong>El DOM se actualiza en lote</strong>, en el siguiente tick. Si cambias un dato
-        y justo después mides el DOM, verás el valor antiguo. <code>await nextTick()</code>
-        espera a que se aplique.
-      </li>
-    </ul>
-  </DocTopic>
-
   <DocTopic id="define-model" title="defineModel">
     <p>
       Hacer que tu propio componente funcione con <code>v-model</code> antes era un pequeño
@@ -61,6 +18,14 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <code>ref</code> que ya hace las dos cosas.
     </p>
     <CodeBlock :code="s.defineModelSnippet" />
+    <p>
+      Acepta opciones y se puede tipar. <code>required</code> obliga a quien lo use a pasar el
+      <code>v-model</code>. Si desestructuras el resultado en <code>[modelo, modificadores]</code>
+      recibes también los modificadores que ponga quien lo use (<code>v-model.mayusculas</code>),
+      y las opciones <code>get</code> y <code>set</code> transforman el valor al leer y al
+      escribir.
+    </p>
+    <CodeBlock :code="s.defineModelAdvanced" />
     <DemoBox label="defineModel">
       <ModelDemo />
     </DemoBox>
@@ -68,34 +33,9 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <CallOut>
         <p>
           Los mandos de una tele compartida: el tuyo y el de tu compañera de piso controlan el
-          mismo volumen. Da igual quién lo toque, los dos ven el mismo número.
-        </p>
-      </CallOut>
-    </template>
-  </DocTopic>
-
-  <DocTopic id="template-refs" title="Template refs">
-    <p>
-      A veces necesitas el elemento del DOM de verdad: enfocar un input, medir un div, pasarle
-      un nodo a una librería de gráficos. Para eso están las template refs. Desde Vue 3.5,
-      <code>useTemplateRef</code> es la forma más clara.
-    </p>
-    <CodeBlock :code="s.templateRefs" />
-    <DemoBox label="Template refs">
-      <TemplateRefDemo />
-    </DemoBox>
-    <p>
-      El valor es <code>null</code> hasta que el componente se monta, de ahí el
-      <code>?.</code>. Si pones <code>ref</code> en un componente hijo, obtienes su instancia,
-      pero con <code>&lt;script setup&gt;</code> solo verás lo que el hijo exponga con
-      <code>defineExpose()</code>. Componentes cerrados por defecto, como debe ser.
-    </p>
-    <template #note>
-      <CallOut>
-        <p>
-          Normalmente le dices a Vue qué quieres y él se las apaña con el DOM. Una template ref
-          es pedirle el teléfono directo de un elemento para hablar con él sin intermediarios:
-          enfocarlo, medirlo. Para cambiarle el texto no lo llames; eso sigue siendo cosa de Vue.
+          mismo volumen. Da igual quién lo toque, los dos ven el mismo número. Y antes tenías que
+          cablear tú el mando (una prop para recibir el volumen y un evento para avisar de los
+          cambios); <code>defineModel</code> es el mando que ya viene cableado.
         </p>
       </CallOut>
     </template>
@@ -104,6 +44,10 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
   <DocTopic id="built-ins" title="Transition, Teleport y KeepAlive">
     <p>Tres componentes que vienen de serie y resuelven problemas muy concretos.</p>
     <CodeBlock :code="s.builtIns" />
+    <p>
+      Con <code>&lt;component :is&gt;</code> pintas el componente que le indiques, y por eso
+      encaja tan bien con <code>KeepAlive</code>.
+    </p>
     <DemoBox label="Transition">
       <TransitionDemo />
     </DemoBox>
@@ -111,18 +55,30 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       <li>
         <strong><code>&lt;Transition&gt;</code></strong> añade clases CSS en cada fase de la
         entrada y la salida. Tú pones la animación; Vue se encarga de esperar a que termine
-        antes de quitar el elemento.
+        antes de quitar el elemento. Con <code>mode="out-in"</code> sale primero lo viejo y
+        entra después lo nuevo; sin él, conviven un instante y se pisan. Para listas está
+        <code>&lt;TransitionGroup&gt;</code>, que anima altas, bajas y reordenaciones. Con
+        <code>prefers-reduced-motion</code> activado, desactívalas.
       </li>
       <li>
         <strong><code>&lt;Teleport&gt;</code></strong> pinta su contenido en otro punto del
-        DOM. Perfecto para modales y tooltips que se quedan cortados por un
-        <code>overflow: hidden</code> o un <code>z-index</code> de un padre.
+        DOM. Perfecto para avisos y tooltips que se quedan cortados por un
+        <code>overflow: hidden</code> o por el contexto de apilamiento de un ancestro
+        (<code>transform</code>, <code>z-index</code>…). Con <code>disabled</code> lo apagas, y
+        desde Vue 3.5 <code>defer</code> espera a que el destino exista si se pinta en ese
+        mismo ciclo. Para un modal, un <code>&lt;dialog&gt;</code> abierto con
+        <code>showModal()</code> ya vive en la capa superior del navegador y trae <code>Esc</code>,
+        foco y fondo inerte de serie.
       </li>
       <li>
         <strong><code>&lt;KeepAlive&gt;</code></strong> guarda en caché los componentes que
-        alternas, así no pierden su estado al ocultarse.
+        alternas, así no pierden su estado al ocultarse. <code>include</code> y
+        <code>exclude</code> eligen cuáles por nombre y <code>max</code> limita cuántos guarda.
+        Dentro de un componente cacheado, <code>onActivated</code> y
+        <code>onDeactivated</code> avisan de cuándo vuelve a verse o se esconde.
       </li>
     </ul>
+    <CodeBlock :code="s.builtInsExtra" />
     <template #note>
       <CallOut>
         <p>
@@ -142,6 +98,12 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       solo lo pide cuando se va a pintar.
     </p>
     <CodeBlock :code="s.asyncComponent" lang="js" />
+    <p>
+      <code>timeout</code> da por fallida la carga si tarda demasiado, y
+      <code>onError</code> te deja reintentar antes de rendirte. La demo de abajo usa
+      <code>onErrorCaptured</code> para que el fallo simulado no llegue a la consola; lo verás
+      explicado en <a href="#plugins-errores">Plugins y gestión de errores</a>.
+    </p>
     <DemoBox label="defineAsyncComponent">
       <AsyncDemo />
     </DemoBox>
@@ -159,11 +121,25 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
       hijos asíncronos (o con <code>await</code> en el <code>setup</code>) se resuelven.
     </p>
     <CodeBlock :code="s.suspense" />
+    <p>
+      Un detalle: un componente asíncrono dentro de un <code>&lt;Suspense&gt;</code> le cede el
+      control de la carga. Su propio <code>loadingComponent</code> se ignora y manda el
+      <code>fallback</code>, salvo que le pongas <code>suspensible: false</code>.
+    </p>
     <CallOut type="warning">
       <p>
         <code>Suspense</code> sigue marcado como experimental en la documentación oficial. Se
         usa bastante (Nuxt se apoya en él), pero su API todavía puede cambiar.
       </p>
     </CallOut>
+    <p>
+      Una nota para cuando renderices en servidor (con Nuxt, por ejemplo): el HTML llega ya
+      pintado, pero el componente no es interactivo hasta que se <em>hidrata</em>. Desde Vue
+      3.5, un componente asíncrono puede decidir cuándo: al verse en pantalla
+      (<code>hydrateOnVisible</code>), cuando el navegador esté ocioso
+      (<code>hydrateOnIdle</code>), al interactuar (<code>hydrateOnInteraction</code>) o con
+      una media query (<code>hydrateOnMediaQuery</code>). En una SPA como esta no hace falta.
+    </p>
+    <CodeBlock :code="s.hydration" lang="js" />
   </DocTopic>
 </template>

@@ -19,13 +19,15 @@ import RouterDemo from '../demos/RouterDemo.vue'
     <BaseLinkGrid :items="ecosystem" />
     <p>
       Las tres que vas a ver aquí se instalan igual y se enchufan igual: como plugins, con
-      <code>app.use()</code>, una sola vez al arrancar.
+      <code>app.use()</code>, una sola vez al arrancar (cómo se escribe uno propio lo tienes en
+      <a href="#plugins-errores">Plugins y gestión de errores</a>).
     </p>
     <CodeBlock :code="s.ecosystemInstall" lang="bash" />
     <CodeBlock :code="s.ecosystemMain" lang="js" />
     <p>
       Si creas el proyecto con <code>npm create vue@latest</code>, el asistente te pregunta
-      si quieres Router y Pinia y te deja todo esto montado.
+      si quieres Router y Pinia y te deja esos dos montados. TanStack Query no está entre las
+      opciones: lo instalas y lo registras tú.
     </p>
     <template #note>
       <CallOut>
@@ -64,11 +66,36 @@ import RouterDemo from '../demos/RouterDemo.vue'
     </p>
     <CodeBlock :code="s.routerParams" />
     <p>
+      Hay una trampa clásica. Al ir de <code>/productos/7</code> a <code>/productos/42</code>
+      Vue reutiliza el mismo componente en lugar de destruirlo y crearlo otra vez, así que
+      <code>onMounted</code> no vuelve a ejecutarse. Si cargas datos ahí, la página se queda con
+      el producto viejo. El <code>computed</code> de arriba ya reacciona; para pedir los datos,
+      usa un <code>watch</code> sobre el parámetro.
+    </p>
+    <p>
       Los <strong>guards</strong> se ejecutan antes de cada navegación y pueden dejarla pasar
       o redirigirla. Lo típico: mandar al login a quien intenta entrar en una página
       privada.
     </p>
     <CodeBlock :code="s.routerGuard" lang="js" />
+    <p>
+      Una sección con varias subpáginas (<code>/cuenta</code>, <code>/cuenta/pedidos</code>…)
+      se modela con <strong>rutas anidadas</strong>: la ruta padre pinta un layout con su propio
+      <code>&lt;RouterView&gt;</code> y las hijas aparecen dentro. En
+      <code>to.meta</code> se juntan el <code>meta</code> del padre y el de la hija, así que el
+      <code>beforeEach</code> de arriba protege también a todas las hijas.
+    </p>
+    <CodeBlock :code="s.routerNested" lang="js" />
+    <p>
+      <code>&lt;RouterLink&gt;</code> marca el enlace de la
+      página actual con <code>aria-current="page"</code> y una clase
+      (<code>router-link-exact-active</code>), así que ya sabes por dónde engancharte con CSS.
+      <code>scrollBehavior</code> decide dónde queda el scroll al navegar, y
+      <code>onBeforeRouteLeave</code> es un guard dentro del componente, ideal para avisar de
+      un formulario sin guardar. La query (<code>?orden=precio</code>) la lees en
+      <code>route.query</code>.
+    </p>
+    <CodeBlock :code="s.routerExtras" />
     <DemoBox label="Una tabla de rutas resolviendo URLs">
       <RouterDemo />
     </DemoBox>

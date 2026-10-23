@@ -121,4 +121,58 @@ import StoreDemo from '../demos/StoreDemo.vue'
       </CallOut>
     </template>
   </DocTopic>
+
+  <DocTopic id="testing" title="Testing">
+    <p>
+      Probar un componente es montarlo, interactuar con él como lo haría una persona y
+      comprobar lo que ves. <a href="https://vitest.dev" target="_blank" rel="noopener">Vitest</a>
+      ejecuta los tests (comparte configuración con Vite) y
+      <a href="https://test-utils.vuejs.org" target="_blank" rel="noopener">Vue Test Utils</a>
+      monta los componentes. El asistente de <code>npm create vue</code> te lo deja montado si
+      se lo pides.
+    </p>
+    <CodeBlock :code="s.testingInstall" lang="bash" />
+    <CodeBlock :code="s.testingConfig" lang="js" />
+    <p>
+      El contrato de un componente son sus props de entrada y, de salida, el DOM y los eventos
+      que emite. Eso es lo que se prueba, no sus variables internas:
+    </p>
+    <CodeBlock :code="s.testingSnippet" lang="js" />
+    <ul>
+      <li>
+        <code>mount</code> monta el componente de verdad, con sus hijos, y te da un
+        <code>wrapper</code>: por ahí buscas elementos, disparas eventos y miras qué ha pasado.
+      </li>
+      <li>
+        <code>trigger()</code> y <code>setValue()</code> devuelven una promesa: hay que
+        esperarla, porque el DOM se actualiza en el siguiente tick (lo viste en
+        <a href="#next-tick">nextTick y el DOM</a>).
+      </li>
+      <li>
+        <code>emitted()</code> te dice qué eventos ha emitido el componente y con qué
+        argumentos.
+      </li>
+      <li>
+        Si el componente pide datos a una API, simula la respuesta y usa
+        <code>flushPromises()</code> para esperar a que se resuelva antes de comprobar nada.
+      </li>
+    </ul>
+    <template #note>
+      <CallOut>
+        <p>
+          La prueba de calidad de una fábrica: antes de que el producto salga, alguien lo
+          enciende, aprieta los botones y mira si hace lo que dice la caja. No desmonta la
+          máquina para ver si las piezas están bien colocadas; le da igual cómo esté hecha por
+          dentro.
+        </p>
+      </CallOut>
+    </template>
+    <CallOut type="info">
+      <p>
+        Esta guía no ejecuta tests en el navegador, así que aquí no hay demo. Lo más rápido para
+        verlo en acción es el ejemplo de <code>BotonLike</code> del tema de Props y eventos:
+        copia el componente a un proyecto y pega el test.
+      </p>
+    </CallOut>
+  </DocTopic>
 </template>

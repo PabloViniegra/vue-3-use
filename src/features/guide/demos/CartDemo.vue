@@ -3,12 +3,13 @@ import { computed, reactive } from 'vue'
 import BaseButton from '../../../components/ui/BaseButton.vue'
 
 const productos = reactive([
-  { id: 'cafe', nombre: 'Café con leche', precio: 1.8, cantidad: 2 },
-  { id: 'croissant', nombre: 'Croissant', precio: 2.2, cantidad: 1 },
+  { id: 'cafe', nombre: 'Café con leche', precio: 180, cantidad: 2 },
+  { id: 'croissant', nombre: 'Croissant', precio: 220, cantidad: 1 },
 ])
 
 const euros = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' })
 
+// Precios en céntimos: así las sumas no arrastran decimales binarios
 const total = computed(() => productos.reduce((suma, p) => suma + p.precio * p.cantidad, 0))
 const unidades = computed(() => productos.reduce((suma, p) => suma + p.cantidad, 0))
 </script>
@@ -16,7 +17,7 @@ const unidades = computed(() => productos.reduce((suma, p) => suma + p.cantidad,
 <template>
   <ul :class="$style.items">
     <li v-for="p in productos" :key="p.id" :class="$style.item">
-      <span>{{ p.nombre }} <small :class="$style.price">{{ euros.format(p.precio) }}</small></span>
+      <span>{{ p.nombre }} <small :class="$style.price">{{ euros.format(p.precio / 100) }}</small></span>
       <span :class="$style.stepper">
         <BaseButton
           variant="alt"
@@ -44,7 +45,7 @@ const unidades = computed(() => productos.reduce((suma, p) => suma + p.cantidad,
   </ul>
   <p :class="$style.total" aria-live="polite">
     <template v-if="unidades === 0">Nada en la cuenta. Así no se desayuna.</template>
-    <template v-else>Total: <strong>{{ euros.format(total) }}</strong></template>
+    <template v-else>Total: <strong>{{ euros.format(total / 100) }}</strong></template>
   </p>
 </template>
 

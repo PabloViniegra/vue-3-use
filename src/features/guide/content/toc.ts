@@ -62,6 +62,11 @@ export const levels: Level[] = [
         keywords: ['key', 'listas', 'condicionales', 'mostrar u ocultar elementos', 'repetir una lista'],
       },
       {
+        id: 'clases-estilos',
+        title: 'Clases y estilos dinámicos',
+        keywords: [':class', ':style', 'v-bind:class', 'v-bind() en CSS', 'CSS Modules', 'cambiar el aspecto según el estado'],
+      },
+      {
         id: 'formularios',
         title: 'Eventos y v-model',
         keywords: ['v-model', '@submit', 'modificadores', 'eventos', 'input', 'enviar un formulario'],
@@ -84,14 +89,24 @@ export const levels: Level[] = [
         keywords: ['v-slot', 'scoped slots', 'template #', 'insertar contenido en un componente'],
       },
       {
+        id: 'atributos-heredados',
+        title: 'Atributos heredados',
+        keywords: ['$attrs', 'useAttrs', 'inheritAttrs', 'defineOptions', 'fallthrough', 'class en un componente', 'reenviar atributos'],
+      },
+      {
         id: 'watchers',
         title: 'watch y watchEffect',
-        keywords: ['onWatcherCleanup', 'localStorage', 'efectos', 'reaccionar cuando cambia un valor'],
+        keywords: ['onWatcherCleanup', 'flush', 'pause', 'resume', 'stop', 'localStorage', 'efectos', 'reaccionar cuando cambia un valor'],
       },
       {
         id: 'ciclo-de-vida',
         title: 'Ciclo de vida',
         keywords: ['onMounted', 'onUnmounted', 'onUpdated', 'hooks', 'lifecycle', 'al montar un componente'],
+      },
+      {
+        id: 'template-refs',
+        title: 'Template refs',
+        keywords: ['useTemplateRef', 'ref', 'defineExpose', 'DOM', 'focus', 'acceder al DOM', 'enfocar un input'],
       },
       {
         id: 'composables',
@@ -101,7 +116,12 @@ export const levels: Level[] = [
       {
         id: 'provide-inject',
         title: 'provide / inject',
-        keywords: ['inyección de dependencias', 'prop drilling', 'pasar datos a componentes lejanos'],
+        keywords: ['inyección de dependencias', 'prop drilling', 'InjectionKey', 'readonly', 'pasar datos a componentes lejanos'],
+      },
+      {
+        id: 'use-id',
+        title: 'useId',
+        keywords: ['id único', 'label for', 'accesibilidad', 'aria-describedby', 'SSR', 'ids repetidos'],
       },
     ],
   },
@@ -113,22 +133,27 @@ export const levels: Level[] = [
       {
         id: 'reactividad-a-fondo',
         title: 'Reactividad a fondo',
-        keywords: ['Proxy', 'toRefs', 'toRef', 'shallowRef', 'markRaw', 'nextTick'],
+        keywords: ['Proxy', 'toRefs', 'toRef', 'shallowRef', 'markRaw', 'track', 'trigger'],
+      },
+      {
+        id: 'next-tick',
+        title: 'nextTick y el DOM',
+        keywords: ['nextTick', 'flush', 'post', 'sync', 'actualización en lote', 'el DOM no se ha actualizado', 'scroll al final'],
+      },
+      {
+        id: 'utilidades-reactividad',
+        title: 'Utilidades de reactividad',
+        keywords: ['customRef', 'triggerRef', 'toRaw', 'readonly', 'toValue', 'MaybeRefOrGetter', 'effectScope', 'debounce'],
       },
       {
         id: 'define-model',
         title: 'defineModel',
-        keywords: ['v-model', 'modelValue', 'update:modelValue', 'v-model en un componente hijo'],
-      },
-      {
-        id: 'template-refs',
-        title: 'Template refs',
-        keywords: ['useTemplateRef', 'ref', 'defineExpose', 'DOM', 'focus', 'acceder al DOM', 'enfocar un input'],
+        keywords: ['v-model', 'modelValue', 'update:modelValue', 'modificadores', 'v-model en un componente hijo'],
       },
       {
         id: 'built-ins',
         title: 'Transition, Teleport y KeepAlive',
-        keywords: ['Transition', 'Teleport', 'KeepAlive', 'animaciones', 'modal'],
+        keywords: ['Transition', 'TransitionGroup', 'Teleport', 'KeepAlive', 'animaciones', 'modal', 'dialog'],
       },
       {
         id: 'async',
@@ -140,6 +165,8 @@ export const levels: Level[] = [
           'carga perezosa',
           'loadingComponent',
           'errorComponent',
+          'hydrateOnVisible',
+          'hidratación',
           'cargar componentes cuando se necesitan',
         ],
       },
@@ -149,14 +176,19 @@ export const levels: Level[] = [
         keywords: ['v-focus', 'custom directives', 'mounted', 'añadir comportamiento a un elemento'],
       },
       {
+        id: 'plugins-errores',
+        title: 'Plugins y gestión de errores',
+        keywords: ['app.use', 'install', 'app.config.errorHandler', 'onErrorCaptured', 'globalProperties', 'capturar errores'],
+      },
+      {
         id: 'rendimiento',
         title: 'Rendimiento',
-        keywords: ['shallowRef', 'import()', 'performance', 'optimizar'],
+        keywords: ['shallowRef', 'v-once', 'v-memo', 'import()', 'performance', 'optimizar'],
       },
       {
         id: 'typescript',
         title: 'TypeScript',
-        keywords: ['lang="ts"', 'withDefaults', 'vue-tsc', 'genéricos', 'tipos', 'tipar props y eventos'],
+        keywords: ['lang="ts"', 'withDefaults', 'vue-tsc', 'genéricos', 'defineSlots', 'InjectionKey', 'tipos', 'tipar props y eventos'],
       },
     ],
   },
@@ -181,6 +213,10 @@ export const levels: Level[] = [
           'params',
           'beforeEach',
           'guards',
+          'rutas anidadas',
+          'children',
+          'scrollBehavior',
+          'onBeforeRouteLeave',
           'cambiar de página sin recargar',
         ],
       },
@@ -212,6 +248,11 @@ export const levels: Level[] = [
           'pedir datos a una API',
           'guardar respuestas en caché',
         ],
+      },
+      {
+        id: 'testing',
+        title: 'Testing',
+        keywords: ['Vitest', 'Vue Test Utils', 'mount', 'wrapper', 'emitted', 'flushPromises', 'tests de componentes', 'probar un componente'],
       },
     ],
   },
