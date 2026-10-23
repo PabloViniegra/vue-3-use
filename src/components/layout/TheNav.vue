@@ -124,6 +124,7 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
 }
 
 .links a {
+  white-space: nowrap;
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-medium);
   color: var(--c-text-1);
@@ -146,6 +147,7 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
   background: var(--c-bg-soft);
   font: inherit;
   font-size: var(--font-size-label);
+  white-space: nowrap;
   color: var(--c-text-2);
   cursor: pointer;
   transition: border-color var(--duration-fast);
