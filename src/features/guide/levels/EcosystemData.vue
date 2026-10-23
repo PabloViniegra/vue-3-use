@@ -80,15 +80,15 @@ import StoreDemo from '../demos/StoreDemo.vue'
       <li>
         <strong>Refresca en segundo plano</strong> los datos caducados cuando se vuelven a
         usar (un componente nuevo los pide, vuelves a la pestaña…) mientras te sigue
-        enseñando el antiguo. Por defecto <code>staleTime</code> vale 0: un dato caduca nada
+        enseñando los antiguos. Por defecto <code>staleTime</code> vale 0: un dato caduca nada
         más llegar.
       </li>
     </ul>
     <p>
       No confundas <code>isPending</code> (aún no hay ningún dato) con
       <code>isFetching</code> (hay una petición en marcha, aunque ya tengas algo que
-      enseñar). Lo primero es para pintar un spinner; lo segundo, como mucho un aviso
-      discreto.
+      enseñar). Lo primero es para pintar un spinner; lo segundo, como mucho, para un
+      aviso discreto.
     </p>
     <p>
       Para escribir (crear, editar, borrar) se usa <code>useMutation</code>. Después de
@@ -99,9 +99,9 @@ import StoreDemo from '../demos/StoreDemo.vue'
       <QueryDemo />
     </DemoBox>
     <p>
-      La demo simula la red y la caché a mano para que veas cuándo se pide y cuándo no. Prueba
-      a pedir el usuario 1, luego el 2 y volver al 1, y espera más de 5 segundos antes de
-      volver.
+      La demo simula la red y la caché a mano para que veas cuándo se pide y cuándo no. Pide
+      el usuario 1, luego el 2 y vuelve al 1. Después espera más de 5 segundos y vuelve otra
+      vez al 1.
     </p>
     <CallOut type="info">
       <p>

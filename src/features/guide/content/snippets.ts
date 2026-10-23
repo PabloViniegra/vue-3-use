@@ -66,8 +66,8 @@ const hayError = ref(false)
 const progreso = ref(40)
 const color = ref('#42b883')
 
-// Si la lógica crece, que la devuelva un computed y la plantilla
-// se queda limpia
+// Si la lógica crece, que la devuelva un computed para que la
+// plantilla quede limpia
 const clases = computed(() => ({
   activo: seleccionado.value,
   'con-error': hayError.value,
@@ -600,7 +600,7 @@ const original = toRaw(estado)
 const soloLectura = readonly(estado)
 
 // toValue: acepta un valor, un ref o un getter (el tipo se llama
-// MaybeRefOrGetter). Así un composable vale con lo que le pase quien lo use
+// MaybeRefOrGetter). Así un composable acepta lo que le pase quien lo use
 function useTitulo(titulo) {
   watchEffect(() => {
     document.title = toValue(titulo)
@@ -1095,7 +1095,7 @@ export const routerNested = code`
 {
   path: '/cuenta',
   component: () => import('./pages/CuentaLayout.vue'), // lleva un <RouterView />
-  meta: { requiereLogin: true }, // to.meta hereda la de los padres
+  meta: { requiereLogin: true }, // to.meta hereda el de los padres
   children: [
     { path: '', name: 'cuenta', component: () => import('./pages/Resumen.vue') },
     // Se resuelve como /cuenta/pedidos

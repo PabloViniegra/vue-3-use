@@ -146,11 +146,11 @@ import UseIdDemo from '../demos/UseIdDemo.vue'
     </p>
     <CodeBlock :code="s.provideInject" lang="js" />
     <p>
-      La clave es un <code>Symbol</code> y no un
-      texto, así dos librerías no pisan el mismo nombre. Y se provee el estado como
-      <code>readonly</code> junto con la función que lo cambia: si cualquier descendiente
-      pudiera mutar el <code>ref</code> directamente, no sabrías quién lo ha cambiado. Si quieres que lo vea toda la aplicación, <code>app.provide</code> en
-      <code>main.js</code> hace lo mismo. Y un <code>inject</code> sin <code>provide</code>
+      La clave es un <code>Symbol</code> y no un texto, así dos librerías no pisan el mismo
+      nombre. Y se provee el estado como <code>readonly</code> junto con la función que lo
+      cambia: si cualquier descendiente pudiera mutar el <code>ref</code> directamente, no
+      sabrías quién lo ha cambiado. Si quieres que lo vea toda la aplicación,
+      <code>app.provide</code> en <code>main.js</code> hace lo mismo. Y un <code>inject</code> sin <code>provide</code>
       arriba devuelve <code>undefined</code> y avisa, salvo que le des un valor por defecto.
     </p>
     <template #note>
@@ -185,9 +185,9 @@ import UseIdDemo from '../demos/UseIdDemo.vue'
     <template #note>
       <CallOut>
         <p>
-          El número de la vez en la consulta del médico. No eliges tú el 14: te lo da la
+          El número de turno en la consulta del médico. No eliges tú el 14: te lo da la
           máquina, no se repite con el de otro paciente y sirve para que te llamen a ti y no a
-          quien se llama igual.
+          otra persona con tu mismo nombre.
         </p>
       </CallOut>
     </template>

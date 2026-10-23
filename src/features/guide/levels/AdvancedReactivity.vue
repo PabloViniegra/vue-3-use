@@ -130,7 +130,7 @@ import NextTickDemo from '../demos/NextTickDemo.vue'
     <template #note>
       <CallOut>
         <p>
-          Un ref normal es un buzón: lo que echas, está dentro. Con <code>customRef</code> el
+          Un ref normal es un buzón: lo que echas está dentro. Con <code>customRef</code> el
           buzón lo montas tú. Puedes decidir, por ejemplo, que las cartas no caigan hasta que
           lleve un rato sin entrar ninguna.
         </p>

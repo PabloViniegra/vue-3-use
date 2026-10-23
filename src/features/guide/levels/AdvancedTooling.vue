@@ -17,7 +17,7 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
     </p>
     <CodeBlock :code="s.directive" />
     <p>
-      Resérvalas para manipulación de DOM de bajo nivel: autofocus, detectar clics fuera,
+      Resérvalas para manipulación del DOM de bajo nivel: autofocus, detectar clics fuera,
       tooltips. Si lo que quieres reutilizar es lógica con estado, es un composable; si es
       marcado, es un componente.
     </p>
@@ -37,9 +37,9 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
 
   <DocTopic id="plugins-errores" title="Plugins y gestión de errores">
     <p>
-      Ya has visto <code>app.use(router)</code> y compañía. Un plugin es un objeto con un método
-      <code>install(app)</code> (o una función a secas) que recibe la aplicación y la configura
-      una sola vez: puede proveer valores con <code>app.provide</code>, registrar
+      En <a href="#ecosistema">Ecosistema</a> verás <code>app.use(router)</code> y compañía. Un
+      plugin es un objeto con un método <code>install(app)</code> (o una función a secas) que
+      recibe la aplicación y la configura una sola vez: puede proveer valores con <code>app.provide</code>, registrar
       componentes o directivas globales y tocar <code>app.config</code>.
     </p>
     <CodeBlock :code="s.pluginSnippet" lang="js" />
@@ -51,7 +51,7 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
       sale lo que aparece en <code>this</code>.
     </p>
     <p>
-      Los errores tienen su propio recorrido. Cuando algo lanza dentro de Vue (en el render, en
+      Los errores tienen su propio recorrido. Cuando algo lanza un error dentro de Vue (en el render, en
       un watcher, en un manejador de evento, en un hook), Vue lo atrapa y lo sube por los
       padres. Cualquier componente puede pararlo con <code>onErrorCaptured</code>; si
       nadie lo hace, llega a <code>app.config.errorHandler</code>; y si tampoco hay, a la
@@ -65,7 +65,7 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
       <CallOut>
         <p>
           El cuadro eléctrico de un edificio. El plugin es la instalación: se hace una vez y deja
-          enchufes y luz en todos los pisos. Si salta el térmico de un piso
+          enchufes y luz en todos los pisos. Si salta el automático de un piso
           (<code>onErrorCaptured</code>), los demás siguen con luz; y si salta algo que nadie
           esperaba, está el general de la entrada (<code>errorHandler</code>).
         </p>
@@ -147,11 +147,12 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
     <CodeBlock :code="s.typescript" />
     <p>
       La desestructuración de <code>defineProps</code>, desde Vue 3.5, mantiene la
-      reactividad y te deja poner valores por defecto con la sintaxis normal de JavaScript. Si no
-      desestructuras, <code>withDefaults</code> sigue siendo válido. Ojo con una trampa: si
-      se lo pasas tal cual a <code>watch</code>, el compilador da error. A un composable no
-      protesta, pero le llega el valor de ese momento y no algo reactivo. En los dos casos,
-      envuélvelo en un getter: <code>() =&gt; titulo</code>.
+      reactividad y te deja poner valores por defecto con la sintaxis normal de JavaScript.
+      Si no desestructuras, <code>withDefaults</code> sigue siendo válido. Ojo con una
+      trampa: si pasas una prop desestructurada (<code>titulo</code>) tal cual a
+      <code>watch</code>, el compilador da error. Si se la pasas a un composable no protesta,
+      pero le llega el valor de ese momento y no algo reactivo. En los dos casos, envuélvela
+      en un getter: <code>() =&gt; titulo</code>.
     </p>
     <p>Y si un componente debe funcionar con cualquier tipo de dato, hazlo genérico:</p>
     <CodeBlock :code="s.genericComponent" />
@@ -163,9 +164,8 @@ import ErrorsDemo from '../demos/ErrorsDemo.vue'
     <CodeBlock :code="s.typedContracts" />
     <p>
       Para comprobar tipos en los <code>.vue</code> usa <code>vue-tsc</code> (el
-      <code>npm run build</code> ya lo ejecuta si elegiste TypeScript al crear el proyecto) y la
-      extensión oficial de
-      Vue para tu editor.
+      <code>npm run build</code> ya lo ejecuta si elegiste TypeScript al crear el proyecto) y
+      la extensión oficial de Vue para tu editor.
     </p>
     <template #note>
       <CallOut>

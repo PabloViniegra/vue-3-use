@@ -18,7 +18,7 @@ export const heroCopy = {
     phrase: 'con base',
     target: firstTopic('intermedio'),
     tagline:
-      'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes: props, slots, atributos heredados, watchers, composables y provide / inject.',
+      'Ya sabes pintar cosas y qué es un ref. Toca partir la app en componentes y compartir lógica: props, slots, atributos heredados, watchers, composables y provide / inject.',
     cta: 'Seguir por lo intermedio',
   },
   bastante: {

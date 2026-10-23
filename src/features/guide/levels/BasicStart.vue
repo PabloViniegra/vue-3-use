@@ -33,8 +33,8 @@ import * as s from '../content/snippets'
 
   <DocTopic id="empezar" title="Tu primer proyecto">
     <p>
-      Necesitas Node.js instalado (Vite 8 pide la 20.19 o superior, o la 22.12 o superior). El asistente oficial te pregunta si quieres TypeScript,
-      router, Pinia, tests… Para empezar, puedes decir que no a todo.
+      Necesitas Node.js instalado (Vite 8 pide la versión 20.19 o una 22.12 en adelante). El
+      asistente oficial te pregunta si quieres TypeScript, router, Pinia, tests… Para empezar, puedes decir que no a todo.
     </p>
     <CodeBlock :code="s.createProject" lang="bash" />
     <p>

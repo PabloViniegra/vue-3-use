@@ -58,7 +58,7 @@ import TransitionDemo from '../demos/TransitionDemo.vue'
         antes de quitar el elemento. Con <code>mode="out-in"</code> sale primero lo viejo y
         entra después lo nuevo; sin él, conviven un instante y se pisan. Para listas está
         <code>&lt;TransitionGroup&gt;</code>, que anima altas, bajas y reordenaciones. Con
-        <code>prefers-reduced-motion</code> activado, desactívalas.
+        <code>prefers-reduced-motion</code> activado, desactiva las animaciones.
       </li>
       <li>
         <strong><code>&lt;Teleport&gt;</code></strong> pinta su contenido en otro punto del

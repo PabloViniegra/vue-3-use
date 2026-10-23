@@ -94,7 +94,7 @@ import SlotsDemo from '../demos/SlotsDemo.vue'
       El problema llega cuando la raíz no es el elemento que debería recibirlos. Un campo con
       etiqueta tiene un <code>&lt;label&gt;</code> por fuera, pero quien lo usa espera que
       <code>type</code> o <code>maxlength</code> lleguen al <code>&lt;input&gt;</code>. La
-      solución son dos pasos: desactivar el reparto automático con
+      solución tiene dos pasos: desactivar el reparto automático con
       <code>inheritAttrs: false</code> (en <code>&lt;script setup&gt;</code>, con
       <code>defineOptions</code>) y enlazar <code>$attrs</code> donde tú quieras.
     </p>

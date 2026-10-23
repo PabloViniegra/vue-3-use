@@ -64,8 +64,8 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     <template #note>
       <CallOut>
         <p>
-          Es el ticket de la cafetería. Nadie suma a mano cada vez que te pido el total: el
-          datáfono ya lo tiene, y solo lo rehace cuando pides otro café.
+          Es la caja de la cafetería. Nadie suma a mano cada vez que pides el total: la caja
+          ya lo tiene, y solo lo rehace cuando pides otro café.
         </p>
       </CallOut>
     </template>
@@ -114,7 +114,7 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
   <DocTopic id="clases-estilos" title="Clases y estilos dinámicos">
     <p>
       Cambiar el aspecto de algo según el estado es de lo más normal: un botón activo, un campo
-      con error, una barra de progreso. Sin tocar el DOM a mano ni pegar textos, enlazas
+      con error, una barra de progreso. Sin tocar el DOM a mano ni concatenar cadenas, enlazas
       <code>class</code> y <code>style</code> con <code>:class</code> y <code>:style</code> y
       Vue los mantiene al día.
     </p>
@@ -147,7 +147,7 @@ import VisibilityDemo from '../demos/VisibilityDemo.vue'
     </template>
     <CallOut type="warning">
       <p>
-        No montes las clases pegando textos como
+        No montes las clases concatenando cadenas como
         <code v-pre>:class="'boton ' + (activo ? 'activo' : '')"</code>: funciona hasta el día
         que se te olvida un espacio. Y reserva <code>:style</code> para valores que solo se
         conocen en ejecución (un ancho en porcentaje, unas coordenadas). Lo demás es una clase.
