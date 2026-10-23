@@ -1,9 +1,28 @@
-import { nextTick, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const STORAGE_KEY = 'vue3-guia-theme'
 
+function readSavedPreference() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+
+    if (saved === 'dark') return true
+
+    if (saved === 'light') return false
+  } catch {
+    // Si el almacenamiento está bloqueado, se usa la preferencia del sistema.
+  }
+
+  return undefined
+}
+
+const savedPreference = readSavedPreference()
+const systemPreference = window.matchMedia('(prefers-color-scheme: dark)')
+let hasManualPreference = savedPreference !== undefined
+
 // Estado a nivel de módulo: todos los componentes comparten el mismo tema.
-const isDark = ref(document.documentElement.classList.contains('dark'))
+const isDark = ref(savedPreference ?? systemPreference.matches)
+let requestedDark = isDark.value
 let activeTransition: ViewTransition | undefined
 
 watch(isDark, (dark) => {
@@ -11,15 +30,26 @@ watch(isDark, (dark) => {
   document.querySelector('meta[name="theme-color"]')?.setAttribute(
     'content', getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim(),
   )
-
-  try {
-    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light')
-  } catch {
-    // El cambio visual funciona aunque el navegador bloquee el almacenamiento.
-  }
 })
 
 export function useTheme() {
+  function followSystemPreference(event: MediaQueryListEvent) {
+    if (!hasManualPreference) {
+      requestedDark = event.matches
+      isDark.value = event.matches
+    }
+  }
+
+  onMounted(() => {
+    systemPreference.addEventListener('change', followSystemPreference)
+
+    if (!hasManualPreference) {
+      requestedDark = systemPreference.matches
+      isDark.value = systemPreference.matches
+    }
+  })
+  onUnmounted(() => systemPreference.removeEventListener('change', followSystemPreference))
+
   return { isDark, toggle }
 }
 
@@ -28,6 +58,14 @@ async function toggle(event: MouseEvent) {
 
   const bounds = event.currentTarget.getBoundingClientRect()
   const root = document.documentElement
+  const dark = (requestedDark = !requestedDark)
+  hasManualPreference = true
+
+  try {
+    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light')
+  } catch {
+    // El cambio visual funciona aunque el navegador bloquee el almacenamiento.
+  }
 
   if (activeTransition) {
     activeTransition.skipTransition()
@@ -35,7 +73,7 @@ async function toggle(event: MouseEvent) {
   }
 
   if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    isDark.value = !isDark.value
+    isDark.value = dark
 
     return
   }
@@ -50,7 +88,7 @@ async function toggle(event: MouseEvent) {
   root.dataset.themeTransition = ''
 
   const transition = document.startViewTransition(async () => {
-    isDark.value = !isDark.value
+    isDark.value = dark
 
     // La captura debe incluir la clase dark y el estado accesible del interruptor.
     await nextTick()

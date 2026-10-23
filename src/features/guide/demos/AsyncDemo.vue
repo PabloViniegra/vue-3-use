@@ -6,7 +6,7 @@ const fallar = ref(false)
 const panel = shallowRef<Component>()
 const timers = new Set<number>()
 const GRAFICO = 'GraficoVentas ya está aquí. Su código se ha pedido ahora, no al abrir la página.'
-const ERROR = 'No se pudo descargar. Desmarca el fallo y vuelve a cargarlo.'
+const ERROR = 'No se pudo descargar. Desmarca el fallo y vuelve a intentarlo.'
 
 // Simula la descarga: en una app real aquí iría import('./GraficoVentas.vue')
 function descargar(falla: boolean) {
@@ -28,7 +28,7 @@ function cargar() {
   panel.value = defineAsyncComponent({
     loader: () => descargar(falla),
     loadingComponent: { render: () => h('p', 'Descargando el componente…') },
-    errorComponent: { render: () => h('p', ERROR) },
+    errorComponent: { render: () => h('p', { role: 'alert' }, ERROR) },
     delay: 200,
   })
 }
@@ -42,7 +42,7 @@ onUnmounted(() => timers.forEach((id) => clearTimeout(id)))
 <template>
   <div :class="$style.row">
     <BaseButton size="sm" @click="cargar">
-      {{ panel ? 'Volver a cargar' : 'Cargar el gráfico' }}
+      {{ panel ? 'Reintentar carga' : 'Cargar el gráfico' }}
     </BaseButton>
     <label :class="$style.check">
       <input v-model="fallar" type="checkbox" />

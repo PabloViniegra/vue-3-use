@@ -33,7 +33,8 @@ y para un equipo concreto, no un sustituto de la documentación oficial.
 ## Capabilities and Constraints
 
 - SPA de una sola página, sin rutas ni backend. Debe seguir así.
-- Publicada en la web, desplegada en Vercel.
+- En este repo está configurado un workflow de publicación a GitHub Pages
+  (`.github/workflows/pages.yml`). El dominio y el hosting efectivos no se verifican aquí.
 - Solo castellano de España; no habrá traducciones.
 - Cuatro niveles (Básico, Intermedio, Avanzado y Ecosistema) definidos en `src/features/guide/content/toc.ts`, que alimenta
   sidebar, hero y sección activa.

@@ -394,8 +394,8 @@ import { watch } from 'vue'
 watch([pagina, orden], ([p, o]) => cargarListado(p, o))
 
 // Por defecto el callback corre ANTES de que Vue repinte.
-// Con flush: 'post' corre después, con el DOM ya actualizado
-watch(mensajes, () => bajarAlFinal(), { flush: 'post' })
+// Observa los mensajes añadidos y corre tras actualizar el DOM
+watch(() => mensajes.value.length, () => bajarAlFinal(), { flush: 'post' })
 
 // watch devuelve unos mandos (Vue 3.5)
 const { stop, pause, resume } = watch(borrador, guardar)
@@ -1198,7 +1198,7 @@ async function pedirUsuario(id) {
   return res.json()
 }
 
-const { data, error, isPending, isError, isFetching } = useQuery({
+const { data, error, isLoading, isError, isFetching } = useQuery({
   // La clave identifica el dato en la caché. Como lleva un ref,
   // al cambiar id se pide el usuario nuevo (o sale de la caché)
   queryKey: ['usuario', id],
@@ -1210,13 +1210,16 @@ const { data, error, isPending, isError, isFetching } = useQuery({
 </script>
 
 <template>
-  <p v-if="isPending">Cargando…</p>
-  <p v-else-if="isError">
+  <p v-if="isLoading">Cargando…</p>
+  <p v-else-if="isError && !data" role="alert">
     No se pudo cargar: {{ error.message }}
   </p>
-  <template v-else>
+  <template v-else-if="data">
     <h2>{{ data.nombre }}</h2>
-    <small v-if="isFetching">Actualizando…</small>
+    <small v-if="isFetching" role="status">Actualizando…</small>
+    <p v-else-if="isError" role="alert">
+      No se pudo actualizar: {{ error.message }}. Se mantiene el último dato recibido.
+    </p>
   </template>
 </template>
 `
@@ -1227,7 +1230,7 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query'
 
 const queryClient = useQueryClient()
 
-const { mutate, isPending } = useMutation({
+const { mutate, isPending, isError, error } = useMutation({
   mutationFn: async (cambios) => {
     const res = await fetch('/api/usuarios/1', {
       method: 'PATCH',
@@ -1247,6 +1250,9 @@ const { mutate, isPending } = useMutation({
 </script>
 
 <template>
+  <p v-if="isError" role="alert">
+    No se pudo guardar: {{ error.message }}. Puedes volver a intentarlo.
+  </p>
   <button
     :disabled="isPending"
     @click="mutate({ nombre: 'Lucía' })"

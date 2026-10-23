@@ -38,6 +38,7 @@ const menu = useDisclosure(() => localNav.value?.focus())
 const sidebar = useTemplateRef('sidebar')
 const isMobile = useMediaQuery('(max-width: 960px)')
 const isTouch = useMediaQuery('(pointer: coarse)')
+let focusFilterWhenOpened = false
 
 function closeSidebar(restoreFocus = false) {
   menu.close()
@@ -53,14 +54,22 @@ const isModal = computed(() => menu.open.value && isMobile.value)
 watch(isModal, (modal) => {
   if (!modal) return
 
-  if (isTouch.value) sidebar.value?.focusPanel()
-  else sidebar.value?.focusFilter()
+  if (focusFilterWhenOpened || !isTouch.value) sidebar.value?.focusFilter()
+  else sidebar.value?.focusPanel()
+
+  focusFilterWhenOpened = false
 })
 
 // En móvil el índice está plegado: hay que abrirlo antes de enfocar el filtro
 function openFilter() {
-  if (isMobile.value) menu.show()
-  sidebar.value?.focusFilter()
+  if (!isMobile.value || menu.open.value) {
+    sidebar.value?.focusFilter()
+
+    return
+  }
+
+  focusFilterWhenOpened = true
+  menu.show()
 }
 
 useKeyShortcut('/', openFilter)

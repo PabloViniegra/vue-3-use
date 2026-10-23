@@ -33,7 +33,8 @@
         } catch {
           // Si el almacenamiento está bloqueado, se usa la preferencia del sistema.
         }
-        const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+        const hasSavedPreference = saved === 'dark' || saved === 'light'
+        const dark = hasSavedPreference ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
         document.documentElement.classList.toggle('dark', dark)
         document.querySelector('meta[name="theme-color"]').content = dark ? '#1a1a1a' : '#ffffff'
       })()

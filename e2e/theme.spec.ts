@@ -53,7 +53,7 @@ for (const width of [390, 1440]) {
       expect(result.checked).toBe(String(dark))
       expect(result.overflow).toBe(false)
       await expect(page.locator('html')).not.toHaveAttribute('data-theme-transition')
-      await page.screenshot({ path: `test-results/theme-${width}-${dark ? 'dark' : 'light'}.png` })
+      await expect(page).toHaveScreenshot(`theme-${width}-${dark ? 'dark' : 'light'}.png`)
     }
 
     expect(errors).toEqual([])

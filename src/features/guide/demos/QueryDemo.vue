@@ -68,6 +68,10 @@ function elegir(uid: number) {
   error.value = ''
 }
 
+function reintentar() {
+  if (id.value) pedir(id.value)
+}
+
 // Lo que hace invalidateQueries después de una mutación
 function invalidar() {
   cache.forEach((entrada) => (entrada.pedidoEn = 0))
@@ -103,12 +107,18 @@ onUnmounted(() => timers.forEach((t) => clearTimeout(t)))
     <p v-if="!id">Elige un usuario. Todavía no se ha pedido nada.</p>
     <template v-else-if="!dato">
       <p v-if="fetching">Cargando… <code>isPending</code></p>
-      <p v-else-if="error">No se pudo cargar: {{ error }}. <code>isError</code></p>
+      <div v-else-if="error">
+        <p role="alert">No se pudo cargar: {{ error }}. <code>isError</code></p>
+        <BaseButton size="sm" variant="alt" @click="reintentar">Reintentar</BaseButton>
+      </div>
     </template>
     <template v-else>
       <p :class="$style.name">{{ dato.nombre }}</p>
       <p v-if="fetching">Ves la caché mientras se actualiza por detrás. <code>isFetching</code></p>
-      <p v-else-if="error">El refresco ha fallado ({{ error }}); sigues viendo el último dato bueno.</p>
+      <div v-else-if="error">
+        <p role="alert">El refresco ha fallado ({{ error }}); sigues viendo el último dato bueno.</p>
+        <BaseButton size="sm" variant="alt" @click="reintentar">Reintentar</BaseButton>
+      </div>
       <p v-else-if="desdeCache">Sacado de la caché al instante, sin petición.</p>
       <p v-else>Recién llegado del servidor. Durante 5 s se considera fresco.</p>
     </template>

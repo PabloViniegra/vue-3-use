@@ -52,7 +52,7 @@ const {
 }
 
 .root:not(:disabled):active {
-  transform: scale(0.97);
+  transform: scale(var(--press-scale));
 }
 
 .root:hover {

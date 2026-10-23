@@ -17,7 +17,8 @@ export default defineConfig({
   webServer: {
     command: `${process.env.CI ? '' : 'pnpm build && '}pnpm preview --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
+    // No se reutiliza un preview ajeno que podría servir otro build.
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 })

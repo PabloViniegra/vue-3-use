@@ -1,6 +1,37 @@
 /// <reference lib="dom" />
 import { expect, test } from '@playwright/test'
 
+for (const width of [320, 390, 769, 850, 960, 961, 1024, 1440]) {
+  test(`la cabecera conserva el acceso y cabe en ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 })
+    await page.emulateMedia({ reducedMotion: 'reduce' })
+    await page.goto('/')
+    await page.evaluate(() => document.fonts.ready)
+
+    const search = page.getByRole('button', { name: /Buscar tema/ })
+    const levelLinks = page.getByRole('navigation', { name: 'Niveles' })
+    const indexButton = page.getByRole('button', { name: 'Índice', exact: true })
+    const themeSwitch = page.getByRole('switch', { name: 'Modo oscuro' })
+
+    if (width <= 768) await expect(search).toBeHidden()
+    else await expect(search).toBeVisible()
+
+    if (width <= 960) {
+      await expect(levelLinks).toBeHidden()
+      await expect(indexButton).toBeVisible()
+    } else {
+      await expect(levelLinks).toBeVisible()
+      await expect(indexButton).toBeHidden()
+    }
+
+    const bounds = await themeSwitch.boundingBox()
+
+    expect(bounds).not.toBeNull()
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+  })
+}
+
 for (const width of [390, 1440]) {
   for (const colorScheme of ['light', 'dark'] as const) {
     test(`el hero y el foco se mantienen a ${width}px en ${colorScheme}`, async ({ page }) => {
@@ -100,6 +131,30 @@ for (const width of [390, 1440]) {
   }
 }
 
+test.describe('búsqueda con puntero táctil a 850px', () => {
+  test.use({ viewport: { width: 850, height: 900 }, isMobile: true, hasTouch: true })
+
+  test('Buscar tema y el atajo / dejan el foco en el filtro', async ({ page }) => {
+    await page.goto('/')
+    const search = page.getByRole('button', { name: /Buscar tema/ })
+    const searchBounds = await search.boundingBox()
+
+    expect(searchBounds).not.toBeNull()
+    await page.touchscreen.tap(
+      searchBounds!.x + searchBounds!.width / 2,
+      searchBounds!.y + searchBounds!.height / 2,
+    )
+
+    const filter = page.getByRole('searchbox', { name: 'Filtrar temas' })
+
+    await expect(filter).toBeFocused()
+    await page.getByRole('button', { name: 'Cerrar índice' }).click()
+    await expect(page.getByRole('button', { name: 'Índice', exact: true })).toBeFocused()
+    await page.keyboard.press('/')
+    await expect(filter).toBeFocused()
+  })
+})
+
 test('la demo de clic fuera mantiene el foco al abrir y cerrar con teclado', async ({ page }) => {
   await page.goto('/#directivas')
   const open = page.getByRole('button', { name: 'Abrir el menú' })
@@ -198,4 +253,90 @@ test('theme-color sigue el tema inicial, el cambio y la recarga', async ({ page 
   await expect(meta).toHaveAttribute('content', /^#(?:fff|ffffff)$/)
   await page.reload()
   await expect(meta).toHaveAttribute('content', '#ffffff')
+})
+
+test('el tema sigue al sistema hasta que se guarda una elección manual', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
+  await page.goto('/')
+  const html = page.locator('html')
+  const toggle = page.getByRole('switch', { name: 'Modo oscuro' })
+  const meta = page.locator('meta[name="theme-color"]')
+
+  expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBeNull()
+  await expect(meta).toHaveAttribute('content', '#ffffff')
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await expect(toggle).toHaveAttribute('aria-checked', 'true')
+  await expect(html).toHaveClass(/dark/)
+  await expect(meta).toHaveAttribute('content', '#1a1a1a')
+  expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBeNull()
+
+  await toggle.click()
+  await expect(toggle).toHaveAttribute('aria-checked', 'false')
+  await expect(meta).toHaveAttribute('content', /^#(?:fff|ffffff)$/)
+  expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBe('light')
+
+  await page.emulateMedia({ colorScheme: 'dark' })
+  await expect(toggle).toHaveAttribute('aria-checked', 'false')
+  await expect(html).not.toHaveClass(/dark/)
+  await expect(meta).toHaveAttribute('content', /^#(?:fff|ffffff)$/)
+})
+
+test('Query conserva el último dato bueno y permite reintentar errores', async ({ page }) => {
+  await page.goto('/#tanstack-query')
+  const topic = page.locator('#tanstack-query')
+  const fail = topic.getByRole('checkbox', { name: 'Simular que falla la red' })
+
+  await fail.check()
+  await topic.getByRole('button', { name: 'Usuario 1' }).click()
+  await expect(topic.getByRole('alert')).toContainText('Sin conexión')
+
+  await fail.uncheck()
+  await topic.getByRole('button', { name: 'Reintentar' }).click()
+  await expect(topic.getByText('Lucía Martín', { exact: true })).toBeVisible()
+
+  await fail.check()
+  await topic.getByRole('button', { name: 'Invalidar caché' }).click()
+  await expect(topic.getByRole('alert')).toContainText('último dato bueno')
+  await expect(topic.getByText('Lucía Martín', { exact: true })).toBeVisible()
+
+  await fail.uncheck()
+  await topic.getByRole('button', { name: 'Reintentar' }).click()
+  await expect(topic.getByRole('alert')).toHaveCount(0)
+  await expect(topic.getByText('Lucía Martín', { exact: true })).toBeVisible()
+})
+
+test('la demo asíncrona anuncia el fallo y puede reintentarse', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  await page.goto('/#async')
+  const topic = page.locator('#async')
+  const fail = topic.getByRole('checkbox', { name: 'Simular que falla la red' })
+
+  await fail.check()
+  await topic.getByRole('button', { name: 'Cargar el gráfico' }).click()
+  await expect(topic.getByText('Descargando el componente…')).toBeVisible()
+  await expect(topic.getByRole('alert')).toContainText('No se pudo descargar')
+
+  await fail.uncheck()
+  await topic.getByRole('button', { name: 'Reintentar carga' }).click()
+  await expect(topic.getByText(/GraficoVentas ya está aquí/)).toBeVisible()
+  expect(errors).toEqual([])
+})
+
+test('la demo de errores recupera el foco y permite volver a intentarlo', async ({ page }) => {
+  const errors: string[] = []
+  page.on('pageerror', (error) => errors.push(error.message))
+  await page.goto('/#plugins-errores')
+  const topic = page.locator('#plugins-errores')
+  const broken = topic.getByRole('button', { name: 'Pulsar el botón roto' })
+
+  await broken.click()
+  await expect(topic.getByRole('alert')).toContainText('error lanzado en el manejador de clic')
+  const retry = topic.getByRole('button', { name: 'Reintentar' })
+  await expect(retry).toBeFocused()
+  await retry.click()
+  await expect(broken).toBeVisible()
+  await broken.click()
+  await expect(topic.getByRole('alert')).toBeVisible()
+  expect(errors).toEqual([])
 })

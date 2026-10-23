@@ -1,5 +1,6 @@
 import { createHighlighterCore, type HighlighterCore } from 'shiki/core'
 import { createJavaScriptRegexEngine } from 'shiki/engine/javascript'
+import { createRetryablePromise } from './createRetryablePromise'
 
 type HighlightRequest = { id: number; code: string; lang: string }
 
@@ -26,10 +27,8 @@ const colorReplacements = {
   },
 }
 
-let highlighter: Promise<HighlighterCore> | undefined
-
-function getHighlighter() {
-  highlighter ??= createHighlighterCore({
+const getHighlighter = createRetryablePromise<HighlighterCore>(() =>
+  createHighlighterCore({
     themes: [import('shiki/themes/github-light.mjs'), import('shiki/themes/github-dark.mjs')],
     langs: [
       import('shiki/langs/vue.mjs'),
@@ -38,10 +37,8 @@ function getHighlighter() {
       import('shiki/langs/bash.mjs'),
     ],
     engine: createJavaScriptRegexEngine(),
-  })
-
-  return highlighter
-}
+  }),
+)
 
 workerScope.addEventListener('message', async ({ data }) => {
   try {

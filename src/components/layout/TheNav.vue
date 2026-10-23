@@ -211,12 +211,17 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
   color: var(--c-text-2);
 }
 
+@media (max-width: 960px) {
+  .links {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .root {
     padding: 0 var(--space-md);
   }
 
-  .links,
   .search {
     display: none;
   }

@@ -283,7 +283,7 @@ clase `dark`. Si un token no tiene variante `-dark`, vale para los dos modos.
 - **Palabra de acento del hero**: `brand-text` sobre `brand-soft`, como un valor resaltado
   en el editor. Supera 4.5:1 en los dos modos. No hay texto con degradado.
 - **Resaltado de sintaxis**: Shiki con `github-light` / `github-dark`. Los colores de token
-  que no llegan a AA sobre `code-bg` se sustituyen en `src/lib/highlight.ts` y no se tocan
+  que no llegan a AA sobre `code-bg` se sustituyen en `src/lib/highlight.worker.ts` y no se tocan
   desde CSS.
 
 Todo color nuevo se mide antes de usarlo (4.5:1 para texto, 3:1 para bordes de controles y
@@ -399,8 +399,9 @@ no con clases que pasa el padre.
   (`SidebarFilter`) que ignora tildes y mayúsculas, busca en el título y en las `keywords` de
   cada tema (`toc.ts`), conserva la búsqueda en el parámetro `tema` de la URL, anuncia el número
   de resultados y tiene estado vacío con "Vaciar filtro"; `/` lo enfoca (y en móvil abre antes
-  el índice) y Esc lo vacía. Por encima de 768px la nav muestra el botón "Buscar tema" con la
-  tecla `/`, que hace lo mismo que el atajo. En móvil, la
+  el índice) y Esc lo vacía. Hasta 960px los enlaces de nivel se sustituyen por el índice móvil;
+  por encima de 768px la nav muestra el botón "Buscar tema" con la tecla `/`, que hace lo mismo
+  que el atajo. En móvil, la
   barra "Índice" va justo debajo de la nav desde el principio de la página y muestra a la
   derecha dónde estás ("Nivel › tema", recortado con elipsis, o "Introducción" mientras se ve
   el hero: hasta la primera sección no hay ninguna activa). La sidebar desplaza su propio scroll
@@ -414,8 +415,9 @@ no con clases que pasa el padre.
   (`aria-live="polite"`) y el texto y el destino del botón, que lleva al primer tema del nivel
   en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra. Al cargar, los tres bloques entran en cascada (`--stagger` 60 ms, 250 ms, `--ease-out`, solo opacidad con movimiento reducido) y las opciones del panel se encogen al pulsarlas (`--press-scale`).
   Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
-- **Switch de tema**: `role="switch"` con `aria-checked`. El modo elegido se guarda en
-  `localStorage` y, si no hay ninguno, se sigue `prefers-color-scheme`. Al accionarlo, el nuevo
+- **Switch de tema**: `role="switch"` con `aria-checked`. La elección manual se guarda en
+  `localStorage` y, si no hay ninguna, se sigue `prefers-color-scheme`, también cuando cambia.
+  Al accionarlo, el nuevo
   tema se revela con un círculo desde el centro del interruptor, sin blur ni desplazamientos,
   usando View Transitions, `--duration-base` (250 ms) y `--ease-out`. Con movimiento reducido
   o sin soporte de la API, el cambio es inmediato; la carga inicial nunca se anima.
@@ -475,25 +477,39 @@ CSS es global.
 
 ```vue
 <script setup lang="ts">
-defineProps<{ type?: 'real' | 'warning' | 'info' }>()
+import { useId } from 'vue'
+
+const { type = 'real' } = defineProps<{ type?: 'real' | 'warning' | 'info' }>()
+const titleId = useId()
+const titles = { real: 'En la vida real', warning: 'Ojo', info: 'Para que lo sepas' }
 </script>
 
 <template>
-  <aside :class="[$style.root, $style[type ?? 'real']]">
+  <div :class="[$style.root, $style[type]]" role="note" :aria-labelledby="titleId">
+    <p :id="titleId">{{ titles[type] }}</p>
     <slot />
-  </aside>
+  </div>
 </template>
 
 <style module>
 .root {
   padding: var(--space-md);
   border-radius: var(--radius-lg);
-  border-left: 5px solid;
+  border: 1px solid;
 }
 
 .real {
-  border-color: var(--c-brand);
-  background: var(--c-brand-soft);
+  padding-top: var(--space-md);
+  border: 0;
+  border-top: 1px solid var(--c-divider-strong);
+}
+
+.warning {
+  border-color: var(--c-warning);
+}
+
+.info {
+  border-color: var(--c-divider-strong);
 }
 </style>
 ```
@@ -512,7 +528,8 @@ src/
 │   ├── ui/              # primitivas sin dominio: BaseButton, BaseField, BaseLinkGrid,
 │   │                    # CodeBlock, CallOut, DemoBox, DocTopic, DocLevel
 │   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroTitle,
-│                        # HeroLevelPicker, HeroBackdrop), TheSidebar (+ SidebarFilter, SidebarEmpty), TheFooter
+│                        # HeroLevelPicker, HeroBackdrop), TheSidebar (+ SidebarFilter,
+│                        # SidebarEmpty, SidebarGroupList, SidebarPanelHeader), TheFooter
 ├── features/
 │   └── guide/
 │       ├── GuideContent.vue  # niveles + "Y ahora, ¿qué?"
@@ -522,7 +539,7 @@ src/
 │       ├── demos/       # una demo por archivo, autocontenida
 │       └── content/     # toc.ts, snippets.ts, ecosystem.ts y hero.ts: datos puros, sin Vue
 ├── composables/         # useTheme, useActiveSection, useDisclosure, useKeyShortcut, useMediaQuery, useNearViewport, useKeepActiveInView: estado y efectos
-└── lib/                 # funciones puras o envoltorios de librerías (highlight.ts)
+└── lib/                 # highlight.ts, highlight.worker.ts y createRetryablePromise.ts
 ```
 
 ### Dirección de dependencias
@@ -553,8 +570,9 @@ lib, content → (nada del proyecto)
 - **Estado**: local con `ref`. El compartido entre componentes lejanos va en un composable de
   módulo (como `useTheme`) o con `provide/inject` si depende del árbol. Pinia solo cuando
   haya estado de dominio que varias features lean y escriban.
-- **Efectos**: dentro de composables, siempre con limpieza (`onUnmounted`,
-  `onWatcherCleanup`).
+- **Efectos**: los que usan recursos externos tienen limpieza (`onUnmounted`,
+  `onWatcherCleanup`). Se extraen a composables si se reutilizan o forman una responsabilidad
+  aparte; una reacción local y acotada puede permanecer en su SFC.
 - **Carga pesada**: diferida con `import()` (como se hace con Shiki en `CodeBlock`).
 - **Tamaño**: si un `.vue` pasa de unas 200 líneas o mezcla dos responsabilidades, se divide.
 

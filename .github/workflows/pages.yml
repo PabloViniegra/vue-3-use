@@ -1,6 +1,7 @@
 name: Pages
 
-# Solo se publica lo que ha pasado Quality (lint, build y E2E) en main
+# Solo se publica lo que ha pasado Quality (lint, build y E2E) en main.
+# La ejecución manual repite el mismo gate y solo admite main.
 on:
   workflow_run:
     workflows: [Quality]
@@ -19,7 +20,9 @@ concurrency:
 
 jobs:
   build:
-    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    if: >-
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+      || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -33,7 +36,13 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - if: github.event_name == 'workflow_dispatch'
+        run: pnpm lint
       - run: pnpm build
+      - if: github.event_name == 'workflow_dispatch'
+        run: pnpm exec playwright install --with-deps --only-shell chromium
+      - if: github.event_name == 'workflow_dispatch'
+        run: pnpm test:e2e
       - uses: actions/upload-pages-artifact@v5
         with:
           path: dist

@@ -39,8 +39,10 @@ import SlotsDemo from '../demos/SlotsDemo.vue'
         Nunca modifiques una prop dentro del hijo. Si reasignas una prop, el cambio no se aplica
         y Vue te avisa en consola. Lo traicionero es un objeto: cambiarle algo por dentro
         (<code>props.usuario.nombre = 'Lu'</code>) funciona sin aviso, pero el padre no se
-        entera de quién ha tocado su dato. Si necesitas una copia editable, crea un
-        <code>ref</code> a partir de ella, o emite un evento y que cambie el padre.
+        entera de quién ha tocado su dato. Para editar un objeto plano localmente, crea una
+        copia explícita: <code>ref({ ...props.usuario })</code>. Es superficial: los objetos
+        anidados siguen compartidos y la copia no se sincroniza si el padre cambia la prop. Si
+        quieres cambiar el dato original, emite un evento y que lo actualice el padre.
       </p>
     </CallOut>
   </DocTopic>

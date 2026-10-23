@@ -85,10 +85,11 @@ import StoreDemo from '../demos/StoreDemo.vue'
       </li>
     </ul>
     <p>
-      No confundas <code>isPending</code> (aún no hay ningún dato) con
+      No confundas <code>isPending</code> (todavía no hay un resultado correcto) con
       <code>isFetching</code> (hay una petición en marcha, aunque ya tengas algo que
-      enseñar). Lo primero es para pintar un spinner; lo segundo, como mucho, para un
-      aviso discreto.
+      enseñar). Para el indicador de carga inicial usa <code>isLoading</code>: combina ambos
+      estados y solo se activa mientras llega el primer resultado. Si falla un refresco, puede
+      haber un error y seguir disponible el último dato correcto; enseña ambos.
     </p>
     <p>
       Para escribir (crear, editar, borrar) se usa <code>useMutation</code>. Después de
@@ -101,7 +102,7 @@ import StoreDemo from '../demos/StoreDemo.vue'
     <p>
       La demo simula la red y la caché a mano para que veas cuándo se pide y cuándo no. Pide
       el usuario 1, luego el 2 y vuelve al 1. Después espera más de 5 segundos y vuelve otra
-      vez al 1.
+      vez al 1. Puedes forzar un fallo y reintentar; si ya había datos, se quedan visibles.
     </p>
     <CallOut type="info">
       <p>

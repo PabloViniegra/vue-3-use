@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test'
 import { closing, levels } from '../src/features/guide/content/toc.ts'
+import { createRetryablePromise } from '../src/lib/createRetryablePromise.ts'
 
 const topicIds = levels.flatMap((level) => level.topics.map((topic) => topic.id))
 
@@ -12,11 +13,33 @@ test('carga sin errores en consola ni excepciones', async ({ page }) => {
 
   await page.goto('/')
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
-  // Recorre la página para que se monten demos y bloques de código diferidos
-  await page.keyboard.press('End')
-  await page.waitForLoadState('networkidle')
+  // Cada bloque solicita Shiki al acercarse; End no garantiza activar los que quedan atrás.
+  const blocks = page.locator('[translate="no"]')
+
+  for (let index = 0; index < await blocks.count(); index++) {
+    const block = blocks.nth(index)
+    await block.scrollIntoViewIfNeeded()
+    await expect(block.locator('pre.shiki')).toBeVisible()
+  }
 
   expect(errors).toEqual([])
+})
+
+test('el inicializador del resaltador se puede reintentar tras un rechazo', async () => {
+  let attempts = 0
+
+  const initialize = createRetryablePromise(async () => {
+    attempts++
+
+    if (attempts === 1) throw new Error('Fallo transitorio')
+
+    return 'resaltador listo'
+  })
+
+  await expect(initialize()).rejects.toThrow('Fallo transitorio')
+  await expect(initialize()).resolves.toBe('resaltador listo')
+  await expect(initialize()).resolves.toBe('resaltador listo')
+  expect(attempts).toBe(2)
 })
 
 test('cada entrada del índice apunta a una sección que existe', async ({ page }) => {
@@ -48,6 +71,32 @@ test('al pulsar un tema del índice se navega a él y queda marcado como activo'
   await expect(page).toHaveURL(/#pinia$/)
   await expect(page.getByRole('heading', { level: 3, name: /Pinia/ })).toBeInViewport()
   await expect(sidebar.getByRole('link', { name: 'Pinia' })).toHaveAttribute('aria-current', 'location')
+})
+
+test('el hero actualiza contenido y destino al elegir nivel con el teclado', async ({ page }) => {
+  await page.goto('/')
+  const beginner = page.getByRole('radio', { name: 'cero' })
+  const intermediate = page.getByRole('radio', { name: 'algo' })
+  const advanced = page.getByRole('radio', { name: 'bastante' })
+
+  await beginner.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(intermediate).toBeChecked()
+  await expect(page.locator('#top h1')).toHaveAttribute(
+    'aria-label',
+    'Vue 3, con base, hasta que te pregunten a ti',
+  )
+  await expect(page.getByRole('link', { name: 'Seguir por lo intermedio' })).toHaveAttribute(
+    'href',
+    '#componentes',
+  )
+
+  await intermediate.press('ArrowRight')
+  await expect(advanced).toBeChecked()
+  await expect(page.getByRole('link', { name: 'Llévame a lo avanzado' })).toHaveAttribute(
+    'href',
+    '#reactividad-a-fondo',
+  )
 })
 
 test('el filtro ignora tildes, busca por keywords y Esc lo vacía', async ({ page }) => {
