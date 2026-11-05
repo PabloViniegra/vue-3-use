@@ -27,11 +27,11 @@ const texto = computed(() => busqueda.value.trim())
 
 const normalizar = (valor: string) => valor.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase()
 
-// Simula la red: una respuesta tarda 800 ms y se puede cancelar con un AbortSignal
+// La espera imita la red y deja tiempo para cancelar al teclear
 function pedirCapitales(consulta: string, signal: AbortSignal) {
   return new Promise<string[]>((resolve, reject) => {
     const timer = window.setTimeout(() => {
-      if (fallar.value) return reject(new Error('Sin conexión'))
+      if (fallar.value) return reject(new Error('sin conexión'))
       resolve(CAPITALES.filter((capital) => normalizar(capital).includes(normalizar(consulta))))
     }, 800)
 

@@ -12,31 +12,29 @@ import SignupDemo from '../demos/SignupDemo.vue'
   <DocTopic id="validacion" title="Formularios con validación">
     <p>
       Con <code>v-model</code> ya tienes los datos del formulario. Lo que falta es decirle a
-      la persona qué está mal, cuándo y dónde, sin reñirle antes de tiempo. Casi todo sale de
-      dos ideas que ya conoces: los errores son un <code>computed</code> de los datos, y un
-      poco de estado extra recuerda qué campos se han tocado.
+      la persona qué está mal y dónde, sin reñirle antes de tiempo. Para eso te bastan dos
+      cosas que ya conoces: un <code>computed</code> que saca los errores de los datos y un
+      poco de estado extra que recuerda qué campos se han tocado.
     </p>
     <CodeBlock :code="s.validation" />
     <ul>
       <li>
-        <strong>Los errores se calculan, no se guardan.</strong> Si los guardas en un
-        <code>ref</code> y los actualizas a mano, tarde o temprano uno se queda puesto cuando
-        ya no toca.
+        Calcula los errores en vez de guardarlos. Si los metes en un <code>ref</code> y los
+        actualizas a mano, tarde o temprano uno se queda puesto cuando ya no toca.
       </li>
       <li>
-        <strong>No avises mientras escribe.</strong> Que el correo es inválido al teclear la
-        primera letra no ayuda a nadie. Enseña el error al salir del campo
-        (<code>@blur</code>) o al enviar, y a partir de ahí actualízalo en vivo para que vea
-        cuándo lo ha arreglado.
+        Que el correo es inválido al teclear la primera letra no ayuda a nadie. Enseña el
+        error al salir del campo (<code>@blur</code>) o al enviar, y a partir de ahí
+        actualízalo en vivo para que la persona vea cuándo lo ha arreglado.
       </li>
       <li>
-        <strong>Al enviar con errores, lleva el foco al primero.</strong> Con
+        Al enviar con errores, lleva el foco al primero. Con
         <code>aria-invalid</code> y <code>aria-describedby</code> el lector de pantalla dice
         que el campo está mal y lee el motivo. Los <code>id</code> salen de
         <a href="#use-id">useId</a> en cuanto el campo es un componente.
       </li>
       <li>
-        <strong>No desactives el botón de enviar porque falten datos.</strong> Un botón gris
+        Deja activo el botón de enviar aunque falten datos. Un botón gris
         no explica qué falta; pulsarlo y ver los errores, sí. Mientras se envía, ignora los
         clics repetidos y márcalo con <code>aria-disabled</code>: un <code>disabled</code>
         sobre el botón que tiene el foco se lo quita, y el foco queda perdido en el
@@ -67,8 +65,9 @@ import SignupDemo from '../demos/SignupDemo.vue'
       <p>
         Para formularios grandes (pasos, campos que se repiten, reglas que dependen de otros
         campos) hay librerías como <a href="https://vee-validate.logaretm.com" target="_blank" rel="noopener">VeeValidate</a>
-        o <a href="https://formkit.com" target="_blank" rel="noopener">FormKit</a>. Por
-        debajo hacen lo mismo que aquí, así que lo que has visto te sirve para entenderlas.
+        o <a href="https://formkit.com" target="_blank" rel="noopener">FormKit</a>. Las dos
+        llevan la cuenta de qué campos se han tocado, guardan un error por campo y te dejan
+        elegir cuándo se enseña.
       </p>
     </CallOut>
   </DocTopic>
@@ -77,8 +76,8 @@ import SignupDemo from '../demos/SignupDemo.vue'
     <p>
       En <a href="#watchers">watch y watchEffect</a> viste cómo cancelar una búsqueda. Si lo
       metes en un composable, tienes un <code>useFetch</code> casero que puedes usar en
-      cualquier componente. Lo importante no es el <code>fetch</code>, que es una línea, sino
-      todo lo que pasa alrededor:
+      cualquier componente. El <code>fetch</code> es una línea; el trabajo está en lo que lo
+      rodea:
     </p>
     <CodeBlock :code="s.useFetchSnippet" lang="js" />
     <p>
@@ -90,24 +89,23 @@ import SignupDemo from '../demos/SignupDemo.vue'
     <CodeBlock :code="s.useFetchUsage" />
     <ul>
       <li>
-        <strong>Cuatro estados, no uno.</strong> Cargando, error, vacío y con datos. El vacío
-        es el que más se olvida: una lista sin elementos sin una frase que lo explique parece
-        un fallo.
+        Hay cuatro estados que pintar: cargando, error, vacío y con datos. El vacío es el que
+        más se olvida, y una lista sin elementos y sin una frase que lo explique parece un
+        fallo.
       </li>
       <li>
-        <strong>Cancela lo que ya no sirve.</strong> Si el usuario cambia el filtro antes de
+        Cancela la petición que ya no sirve. Si el usuario cambia el filtro antes de
         que llegue la respuesta, la vieja podría llegar después que la nueva y pisarla. El
         <code>AbortController</code> evita esa condición de carrera.
       </li>
       <li>
-        <strong>Cuidado con el <code>finally</code>.</strong> La petición cancelada también
-        pasa por ahí. Si apaga <code>cargando</code> sin mirar, apaga el de la petición nueva,
-        que sigue en marcha.
+        La petición cancelada también pasa por el <code>finally</code>. Si ahí apaga
+        <code>cargando</code> sin comprobar nada, apaga el de la petición nueva, que sigue en
+        marcha.
       </li>
       <li>
-        <strong>Que se pueda reintentar.</strong> Un error sin salida obliga a recargar la
-        página. Con un contador en las fuentes del <code>watch</code>, reintentar es sumarle
-        uno.
+        Un error sin salida obliga a recargar la página. Con un contador en las fuentes del
+        <code>watch</code>, reintentar es sumarle uno.
       </li>
     </ul>
     <DemoBox label="Búsqueda con cancelación">

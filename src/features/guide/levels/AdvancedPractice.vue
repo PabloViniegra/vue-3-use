@@ -11,10 +11,9 @@ import KeyIndexDemo from '../demos/KeyIndexDemo.vue'
 <template>
   <DocTopic id="accesibilidad" title="Accesibilidad">
     <p>
-      Vue no hace tu app accesible ni inaccesible: pinta el HTML que tú le pidas. La buena
-      noticia es que, con componentes, lo haces bien una vez (un botón, un campo, un modal) y
-      lo reutilizas en toda la app. La mala, que un error también se reutiliza. Casi todo
-      empieza por usar la etiqueta que toca:
+      Vue no hace tu app accesible ni inaccesible: pinta el HTML que tú le pidas. Como
+      trabajas con componentes, un botón bien hecho se reutiliza en toda la app, y uno mal
+      hecho también. Lo primero es usar la etiqueta que toca:
     </p>
     <CodeBlock :code="s.a11yBasics" />
     <DemoBox label="div contra button">
@@ -26,20 +25,19 @@ import KeyIndexDemo from '../demos/KeyIndexDemo.vue'
     </p>
     <ul>
       <li>
-        <strong>El foco.</strong> Cuando un <code>v-if</code> quita el elemento que tenía el
+        Cuando un <code>v-if</code> quita el elemento que tenía el
         foco, el foco se pierde: se queda en el <code>body</code>, el lector de pantalla no
         dice nada y, según el navegador, quien navega con teclado puede tener que volver
-        desde arriba. Llévalo a un sitio con sentido: el siguiente elemento, el campo de
-        origen o el título de lo que acaba de aparecer.
+        desde arriba. Llévalo tú a un sitio con sentido, como el siguiente elemento o el título
+        de lo que acaba de aparecer.
       </li>
       <li>
-        <strong>Los avisos.</strong> «Guardado», «3 resultados», «Se ha borrado»… Un lector
-        de pantalla no ve que el texto ha cambiado si no está en una región con
-        <code>role="status"</code> o <code>aria-live</code>, y esa región tiene que estar en el
-        DOM antes de que cambie.
+        Un aviso como «Guardado» no llega al lector de pantalla si el texto no está en una
+        región con <code>role="status"</code> o <code>aria-live</code>, y esa región tiene que
+        estar en el DOM antes de que cambie.
       </li>
       <li>
-        <strong>Las rutas.</strong> Con Vue Router, pasar de página no mueve el foco ni
+        Con Vue Router, pasar de página no mueve el foco ni
         anuncia nada. Lleva el foco al <code>h1</code> de la página nueva después de cada
         navegación, salvo en la primera carga.
       </li>
@@ -82,9 +80,8 @@ import KeyIndexDemo from '../demos/KeyIndexDemo.vue'
 
   <DocTopic id="errores-comunes" title="Errores típicos">
     <p>
-      Hay fallos que casi todo el mundo comete alguna vez con Vue. Ninguno es raro: salen de
-      cómo funciona la reactividad, y casi todos dan síntomas reconocibles. Estos no los has
-      visto todavía:
+      Hay fallos que se repiten de un proyecto de Vue a otro. Estos todavía no han salido en
+      la guía:
     </p>
     <CodeBlock :code="s.commonMistakes" lang="js" />
     <p>

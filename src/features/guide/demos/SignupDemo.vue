@@ -46,7 +46,6 @@ function enviar() {
   if (primero) return enfocar(primero)
 
   estado.value = 'enviando'
-  // Simula la petición al servidor
   timer = window.setTimeout(async () => {
     if (rechazar.value) {
       estado.value = 'editando'
@@ -119,7 +118,7 @@ onUnmounted(() => clearTimeout(timer))
         {{ estado === 'enviando' ? 'Enviando…' : 'Crear cuenta' }}
       </BaseButton>
       <p role="status" :class="$style.hint">
-        {{ estado === 'enviando' ? 'Enviando el formulario…' : 'Los errores salen al salir de cada campo o al enviar.' }}
+        {{ estado === 'enviando' ? 'Enviando el formulario…' : 'Los errores aparecen al dejar cada campo o al enviar.' }}
       </p>
     </div>
   </form>
