@@ -370,10 +370,11 @@ Cada componente vive en un único `.vue` con su CSS Module. Las variantes se exp
 no con clases que pasa el padre.
 
 - **Button** (`button-brand`, `button-alt`, `button-sm`, `button-lg`): una única acción principal por
-  bloque. Estado `disabled` al 50 % de opacidad y con `cursor: not-allowed`. Si navega es un
+  bloque. Estado `disabled` (o `aria-disabled="true"`, para el que no debe perder el foco mientras se envía algo) al 50 % de opacidad y con `cursor: not-allowed`. Si navega es un
   `<a>`; si ejecuta algo, un `<button type="button">`. `square` para botones de un carácter.
 - **Field** (`BaseField`): input o, con `multiline`, textarea, con `v-model`. Siempre con
-  `label`, aunque sea `.visually-hidden`.
+  `label`, aunque sea `.visually-hidden`. Con `invalid` lleva `aria-invalid` y borde
+  `warning-text`; el mensaje de error va fuera, enlazado con `aria-describedby`.
 - **CodeBlock**: marco de editor plano con cabecera en `bg-soft`, lenguaje e icono de código,
   y botón "Copiar" siempre visible con los estados Copiado y No se pudo copiar. El estado
   Copiado usa `brand-text` sobre `brand-soft`. Cuerpo en `code-bg` con numeración de líneas
@@ -534,7 +535,8 @@ src/
 │   └── guide/
 │       ├── GuideContent.vue  # niveles + "Y ahora, ¿qué?"
 │       ├── levels/      # BasicLevel (= BasicStart + BasicState), IntermediateLevel (= IntermediateComponents +
-│       │                # IntermediateLogic), AdvancedLevel (= AdvancedReactivity + AdvancedInternals + AdvancedTooling),
+│       │                # IntermediateLogic + IntermediatePractice), AdvancedLevel (= AdvancedReactivity + AdvancedInternals +
+│       │                # AdvancedTooling + AdvancedPractice),
 │       │                # EcosystemLevel (= EcosystemRouting + EcosystemData)
 │       ├── demos/       # una demo por archivo, autocontenida
 │       └── content/     # toc.ts, snippets.ts, ecosystem.ts y hero.ts: datos puros, sin Vue

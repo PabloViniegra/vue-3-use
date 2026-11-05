@@ -1300,3 +1300,192 @@ describe('BotonLike', () => {
   })
 })
 `
+
+export const validation = code`
+<script setup>
+import { computed, nextTick, reactive, ref, useTemplateRef } from 'vue'
+
+const datos = reactive({ nombre: '', correo: '' })
+const tocados = reactive({ nombre: false, correo: false })
+const enviando = ref(false)
+const formulario = useTemplateRef('formulario')
+
+// Los errores se derivan de los datos: no hay nada que sincronizar
+const errores = computed(() => ({
+  nombre: datos.nombre.trim() ? '' : 'Dinos cómo te llamas.',
+  correo: /^\\S+@\\S+\\.\\S+$/.test(datos.correo) ? '' : 'Ese correo no tiene buena pinta.',
+}))
+
+// Un error solo se enseña cuando el campo ya se ha tocado
+const visible = (campo) => (tocados[campo] ? errores.value[campo] : '')
+
+async function enviar() {
+  if (enviando.value) return
+  tocados.nombre = tocados.correo = true
+  const primero = Object.keys(errores.value).find((campo) => errores.value[campo])
+
+  if (primero) {
+    // Espera a que se pinten los errores para que el lector de
+    // pantalla los lea al llegar al campo
+    await nextTick()
+    formulario.value.querySelector(\`[name="\${primero}"]\`).focus()
+    return
+  }
+
+  enviando.value = true
+  try {
+    await guardar({ ...datos })
+  } finally {
+    enviando.value = false
+  }
+}
+</script>
+
+<template>
+  <form ref="formulario" novalidate @submit.prevent="enviar">
+    <label for="correo">Correo</label>
+    <input
+      id="correo"
+      v-model.trim="datos.correo"
+      name="correo"
+      type="email"
+      autocomplete="email"
+      :aria-invalid="!!visible('correo')"
+      aria-describedby="correo-error"
+      @blur="tocados.correo = true"
+    />
+    <p id="correo-error">{{ visible('correo') }}</p>
+
+    <!-- El campo nombre va igual -->
+
+    <button type="submit" :aria-disabled="enviando">
+      {{ enviando ? 'Enviando…' : 'Crear cuenta' }}
+    </button>
+  </form>
+</template>
+`
+
+export const useFetchSnippet = code`
+// useFetch.js
+import { onWatcherCleanup, ref, toValue, watch } from 'vue'
+
+export function useFetch(url) {
+  const data = ref(null)
+  const error = ref(null)
+  const cargando = ref(false)
+  const intento = ref(0)
+
+  watch([() => toValue(url), intento], async ([direccion]) => {
+    const controller = new AbortController()
+    onWatcherCleanup(() => controller.abort())
+
+    cargando.value = true
+    error.value = null
+
+    try {
+      const res = await fetch(direccion, { signal: controller.signal })
+      if (!res.ok) throw new Error(\`Error \${res.status}\`)
+      data.value = await res.json()
+    } catch (e) {
+      if (e.name !== 'AbortError') error.value = e
+    } finally {
+      // Si la han cancelado, ya hay otra petición en marcha:
+      // apagar el "cargando" ya no le toca a esta
+      if (!controller.signal.aborted) cargando.value = false
+    }
+  }, { immediate: true })
+
+  return { data, error, cargando, recargar: () => intento.value++ }
+}
+`
+
+export const useFetchUsage = code`
+<script setup>
+import { useFetch } from './useFetch'
+
+const { estado } = defineProps(['estado'])
+
+// Un getter: cuando cambia estado, se piden los pedidos nuevos
+const { data: pedidos, error, cargando, recargar } = useFetch(
+  () => \`/api/pedidos?estado=\${estado}\`
+)
+</script>
+
+<template>
+  <!-- Siempre montado: así el lector de pantalla anuncia el cambio -->
+  <p role="status">{{ cargando ? 'Cargando pedidos…' : '' }}</p>
+
+  <div v-if="error" role="alert">
+    No se han podido cargar los pedidos.
+    <button type="button" @click="recargar">Reintentar</button>
+  </div>
+  <p v-else-if="!cargando && !pedidos?.length">Todavía no tienes pedidos.</p>
+  <ul v-else-if="pedidos?.length">
+    <li v-for="pedido in pedidos" :key="pedido.id">{{ pedido.resumen }}</li>
+  </ul>
+</template>
+`
+
+export const a11yBasics = code`
+<!-- Mal: no se enfoca con Tab ni responde a Enter, y el lector
+     de pantalla no sabe que es un botón -->
+<div class="boton" @click="guardar">Guardar</div>
+
+<!-- Bien: el HTML de siempre ya trae teclado, foco y rol -->
+<button type="button" @click="guardar">Guardar</button>
+
+<!-- Un botón que solo tiene un icono necesita un nombre -->
+<button type="button" aria-label="Cerrar" @click="cerrar">
+  <IconoX aria-hidden="true" />
+</button>
+
+<!-- La región de avisos tiene que existir antes del aviso:
+     si aparece con v-if a la vez que el texto, muchos lectores
+     de pantalla no lo anuncian -->
+<p role="status">{{ mensaje }}</p>
+`
+
+export const a11yFocus = code`
+import { nextTick } from 'vue'
+import { START_LOCATION } from 'vue-router'
+
+// Al borrar el elemento que tenía el foco, el foco se pierde
+// (se queda en el body). Llévalo tú al siguiente
+async function borrar(indice) {
+  tareas.value.splice(indice, 1)
+  await nextTick()
+  const botones = lista.value.querySelectorAll('button')
+  ;(botones[indice] ?? botones[indice - 1] ?? campoNueva.value)?.focus()
+}
+
+// En una SPA cambiar de ruta no mueve el foco: llévalo al título
+// de la página nueva (con tabindex="-1" para que se pueda enfocar)
+router.afterEach(async (to, from) => {
+  // En la primera carga no hay que mover nada
+  if (from === START_LOCATION) return
+  await nextTick()
+  document.querySelector('h1')?.focus()
+})
+`
+
+export const commonMistakes = code`
+import { computed, reactive, ref, watch } from 'vue'
+
+// La plantilla solo desenvuelve los refs de primer nivel
+const contador = ref(0)
+const panel = { contador }
+// {{ panel.contador + 1 }} pinta "[object Object]1"
+
+// watch de una propiedad de reactive: le estás pasando un número
+const filtros = reactive({ pagina: 1 })
+watch(filtros.pagina, cargar)        // Mal: "Invalid watch source"
+watch(() => filtros.pagina, cargar)  // Bien: un getter
+
+// Un computed calcula, no pide cosas
+const total = computed(async () => await pedirTotal()) // Mal: es una promesa
+
+// Mutar una prop por dentro: Vue no avisa, pero el dato es del padre
+const { usuario } = defineProps(['usuario'])
+usuario.nombre = 'Ana'        // Mal
+emit('renombrar', 'Ana')      // Bien: que lo cambie su dueño
+`

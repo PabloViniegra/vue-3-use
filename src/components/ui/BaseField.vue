@@ -1,13 +1,18 @@
 <script setup lang="ts">
-const { multiline = false } = defineProps<{ multiline?: boolean }>()
+const { multiline = false, invalid = false } = defineProps<{ multiline?: boolean; invalid?: boolean }>()
 
 // Sin v-model funciona como campo libre: lo usan las demos que escuchan @input
 const model = defineModel<string>()
 </script>
 
 <template>
-  <textarea v-if="multiline" v-model="model" :class="[$style.root, $style.multiline]" />
-  <input v-else v-model="model" :class="$style.root" />
+  <textarea
+    v-if="multiline"
+    v-model="model"
+    :class="[$style.root, $style.multiline, invalid && $style.invalid]"
+    :aria-invalid="invalid || undefined"
+  />
+  <input v-else v-model="model" :class="[$style.root, invalid && $style.invalid]" :aria-invalid="invalid || undefined" />
 </template>
 
 <style module>
@@ -30,6 +35,10 @@ const model = defineModel<string>()
 .root:focus-visible {
   outline-offset: 0;
   border-color: var(--c-focus);
+}
+
+.invalid {
+  border-color: var(--c-warning-text);
 }
 
 .multiline {

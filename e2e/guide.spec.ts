@@ -5,6 +5,8 @@ import { createRetryablePromise } from '../src/lib/createRetryablePromise.ts'
 const topicIds = levels.flatMap((level) => level.topics.map((topic) => topic.id))
 
 test('carga sin errores en consola ni excepciones', async ({ page }) => {
+  // Recorre todos los bloques de código de la guía: crece con cada tema nuevo
+  test.setTimeout(60_000)
   const errors: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
   page.on('console', (message) => {
@@ -115,7 +117,7 @@ test('el filtro ignora tildes, busca por keywords y Esc lo vacía', async ({ pag
   await expect(topicLinks).toHaveText(['Props y eventos coincide con «pasar datos al hijo»'])
 
   await filter.fill('pedir datos a una API')
-  await expect(topicLinks).toHaveText(['TanStack Query coincide con «pedir datos a una API»'])
+  await expect(topicLinks).toHaveText(['Pedir datos a una API', 'TanStack Query coincide con «pedir datos a una API»'])
 
   await filter.fill('zzz')
   await expect(sidebar.getByText('Ningún tema habla de «zzz».')).toBeVisible()

@@ -51,7 +51,7 @@ const {
     transform var(--duration-fast) var(--ease-out);
 }
 
-.root:not(:disabled):active {
+.root:not(:disabled, [aria-disabled='true']):active {
   transform: scale(var(--press-scale));
 }
 
@@ -59,7 +59,8 @@ const {
   text-decoration: none;
 }
 
-.root:disabled {
+.root:disabled,
+.root[aria-disabled='true'] {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -70,7 +71,7 @@ const {
   border-color: var(--c-brand-control-border);
 }
 
-.brand:not(:disabled):hover {
+.brand:not(:disabled, [aria-disabled='true']):hover {
   background: var(--c-brand-light);
 }
 
@@ -79,7 +80,7 @@ const {
   color: var(--c-text-1);
 }
 
-.alt:not(:disabled):hover {
+.alt:not(:disabled, [aria-disabled='true']):hover {
   border-color: var(--c-brand-text);
 }
 
