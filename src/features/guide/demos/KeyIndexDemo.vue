@@ -44,7 +44,7 @@ function reiniciar() {
     <label><input v-model="clave" type="radio" value="indice" @change="reiniciar" /> El índice</label>
     <label><input v-model="clave" type="radio" value="id" @change="reiniciar" /> El id</label>
   </fieldset>
-  <p :class="$style.hint">Escribe algo en la nota de Lucía y bórrala.</p>
+  <p :class="$style.hint">Escribe una nota para Lucía y después pulsa «Borrar» en su fila.</p>
 
   <ul v-if="personas.length" ref="lista" :key="version" :class="$style.list">
     <li v-for="(persona, i) in personas" :key="clave === 'indice' ? i : persona.id" :class="$style.item">

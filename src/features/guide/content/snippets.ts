@@ -1405,7 +1405,7 @@ import { useFetch } from './useFetch'
 
 const { estado } = defineProps(['estado'])
 
-// Un getter: cuando cambia estado, se piden los pedidos nuevos
+// Con un getter, cada vez que cambia estado se vuelven a pedir los pedidos
 const { data: pedidos, error, cargando, recargar } = useFetch(
   () => \`/api/pedidos?estado=\${estado}\`
 )
@@ -1481,10 +1481,10 @@ const filtros = reactive({ pagina: 1 })
 watch(filtros.pagina, cargar)        // Mal: "Invalid watch source"
 watch(() => filtros.pagina, cargar)  // Bien: un getter
 
-// Un computed calcula, no pide cosas
+// Un computed calcula un valor; no sirve para pedir datos
 const total = computed(async () => await pedirTotal()) // Mal: es una promesa
 
-// Mutar una prop por dentro: Vue no avisa, pero el dato es del padre
+// Cambiar un objeto que llega por props: Vue no avisa, pero el dato es del padre
 const { usuario } = defineProps(['usuario'])
 usuario.nombre = 'Ana'        // Mal
 emit('renombrar', 'Ana')      // Bien: que lo cambie su dueño
