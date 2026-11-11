@@ -24,6 +24,7 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 .eyebrow {
   margin: 0 0 var(--space-xs);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   color: var(--c-brand-text);
@@ -33,6 +34,7 @@ defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
   text-wrap: balance;
   margin: 0 0 var(--space-sm);
   font-family: var(--font-display);
+  font-size-adjust: var(--font-adjust-display);
   font-size: var(--font-size-headline-lg);
   font-weight: var(--font-weight-heavy);
   line-height: var(--line-height-heading);

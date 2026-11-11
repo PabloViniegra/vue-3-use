@@ -25,6 +25,7 @@ defineProps<{ phrase: string }>()
 .title {
   margin: 0;
   font-family: var(--font-display);
+  font-size-adjust: var(--font-adjust-display);
   font-size: var(--font-size-display);
   font-weight: var(--font-weight-heavy);
   line-height: var(--line-height-display);

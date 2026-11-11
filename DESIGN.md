@@ -49,76 +49,90 @@ typography:
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
+    fontSizeAdjust: none
   display-md:
     fontFamily: Bricolage Grotesque
     fontSize: 60px
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
+    fontSizeAdjust: none
   display-sm:
     fontFamily: Bricolage Grotesque
     fontSize: 42px
     fontWeight: 800
     lineHeight: 1.02
     letterSpacing: -0.035em
+    fontSizeAdjust: none
   headline-lg:
     fontFamily: Bricolage Grotesque
     fontSize: 40px
     fontWeight: 800
     lineHeight: 1.1
     letterSpacing: -0.025em
+    fontSizeAdjust: none
   headline-md:
     fontFamily: Bricolage Grotesque
     fontSize: 24px
     fontWeight: 700
     lineHeight: 1.3
     letterSpacing: -0.015em
+    fontSizeAdjust: none
   title:
     fontFamily: Inter
     fontSize: 20px
     fontWeight: 600
     lineHeight: 1.3
+    fontSizeAdjust: 0.5459
   headline-lg-sm:
     fontFamily: Bricolage Grotesque
     fontSize: 30px
     fontWeight: 800
     lineHeight: 1.1
     letterSpacing: -0.025em
+    fontSizeAdjust: none
   lead:
     fontFamily: Inter
     fontSize: 22px
     fontWeight: 400
     lineHeight: 1.5
+    fontSizeAdjust: 0.5459
   lead-sm:
     fontFamily: Inter
     fontSize: 18px
     fontWeight: 400
     lineHeight: 1.5
+    fontSizeAdjust: 0.5459
   body:
     fontFamily: Inter
     fontSize: 16px
     fontWeight: 400
     lineHeight: 1.7
+    fontSizeAdjust: 0.5459
   body-sm:
     fontFamily: Inter
     fontSize: 15px
     fontWeight: 400
     lineHeight: 1.6
+    fontSizeAdjust: 0.5459
   label:
     fontFamily: Inter
     fontSize: 14px
     fontWeight: 500
     lineHeight: 1.5
+    fontSizeAdjust: 0.5459
   caption:
     fontFamily: Inter
     fontSize: 13px
     fontWeight: 500
     lineHeight: 1.5
+    fontSizeAdjust: 0.5459
   code:
     fontFamily: JetBrains Mono
     fontSize: 13.5px
     fontWeight: 400
     lineHeight: 1.7
+    fontSizeAdjust: 0.55
 rounded:
   sm: 4px
   md: 6px
@@ -260,8 +274,11 @@ estructura de documentación) y pone el resto con voz propia para no ser un clon
 
 ## Colors
 
-Los tokens sin sufijo son el modo claro; los `-dark` los sustituyen cuando `<html>` tiene la
-clase `dark`. Si un token no tiene variante `-dark`, vale para los dos modos.
+Los tokens sin sufijo son el modo claro y los `-dark`, el oscuro. En `tokens.css` cada pareja
+es un solo token con `light-dark(claro, oscuro)`, que sigue al `color-scheme` de `:root`: por
+defecto `light dark` (el del sistema) y `light` o `dark` cuando
+`<meta name="color-scheme">` lleva una elección manual. Así, sin JavaScript se sigue al
+sistema. Si un token no tiene variante `-dark`, vale para los dos modos.
 
 - **`brand` (#42b883)** es el verde de Vue. Se usa como **superficie** (botón principal, barra
   de los callouts, punto de las demos). Sobre blanco da 2.5:1, así que **nunca** se usa
@@ -301,7 +318,11 @@ Tres familias, cada una con un papel fijo (`--font-display`, `--font-sans`, `--f
   eyebrows de nivel (`// …`, con el `//` oculto al lector de pantalla), títulos de nota, números de
   nivel, etiqueta de demo y de lenguaje y el panel del hero.
 
-Los woff2 `latin` de Inter y Bricolage se precargan en `index.html`.
+Los woff2 `latin` de Inter y Bricolage se precargan en `index.html`. Cada `font-family` con
+Inter o JetBrains Mono va acompañado de `font-size-adjust` (`--font-adjust-sans` 0.5459 y
+`--font-adjust-mono` 0.55, la altura de la x de su tabla OS/2), para que la fuente de respaldo
+ocupe lo mismo mientras carga. Bricolage lleva `--font-adjust-display: none` para no heredar
+el de Inter: su eje `opsz` cambia la altura de la x con el tamaño y un valor fijo la reescalaría.
 
 - `display` solo existe una vez: el h1 del hero. Baja a 60px por debajo de 960px y a 42px por
   debajo de 480px. La palabra de acento lleva un cursor de editor parpadeante (desactivado con movimiento reducido).
@@ -407,7 +428,9 @@ no con clases que pasa el padre.
   derecha dónde estás ("Nivel › tema", recortado con elipsis, o "Introducción" mientras se ve
   el hero: hasta la primera sección no hay ninguna activa). La sidebar desplaza su propio scroll
   para mantener visible el tema activo. "Y ahora, ¿qué?" también cuenta como sección activa. El footer lleva "Volver arriba". Con el índice
-  abierto en móvil, el resto de la página queda `inert` y Esc devuelve el foco a "Índice".
+  abierto en móvil, el panel es un diálogo modal (`role="dialog"`, `aria-modal`), el resto de
+  la página queda `inert`, el fondo no deja desplazar la página de detrás y Esc devuelve el
+  foco a "Índice".
 - **Hero reactivo**: el hero hace lo que enseña la guía. Es partido: a la izquierda `h1`,
   subtítulo y botón; a la derecha `HeroLevelPicker`, un panel de editor (`TheHero.vue`) con
   `const nivel = ref('cero' | 'algo' | 'bastante')` como grupo de radios y, debajo, los
@@ -418,6 +441,8 @@ no con clases que pasa el padre.
   Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
 - **Switch de tema**: `role="switch"` con `aria-checked`. La elección manual se guarda en
   `localStorage` y, si no hay ninguna, se sigue `prefers-color-scheme`, también cuando cambia.
+  Si al pulsarlo el tema resultante coincide con el del sistema, se borra la elección y se
+  vuelve a seguir al sistema. El cambio se aplica también en las demás pestañas abiertas.
   Al accionarlo, el nuevo
   tema se revela con un círculo desde el centro del interruptor, sin blur ni desplazamientos,
   usando View Transitions, `--duration-base` (250 ms) y `--ease-out`. Con movimiento reducido
@@ -450,7 +475,7 @@ no con clases que pasa el padre.
 
 | Capa | Dónde | Qué contiene |
 | --- | --- | --- |
-| Tokens | `src/styles/tokens.css` | Custom properties de este archivo (`--c-*`, `--font-*`, `--line-height-*`, `--space-*`, `--radius-*`, medidas de componente, `--shadow-*`, `--duration-*` y `--z-*`) en `:root` y su versión `-dark` en `:root.dark`. |
+| Tokens | `src/styles/tokens.css` | Custom properties de este archivo (`--c-*`, `--font-*`, `--line-height-*`, `--space-*`, `--radius-*`, medidas de componente, `--shadow-*`, `--duration-*` y `--z-*`) en `:root`; los colores con `light-dark()` y `color-scheme` según `<meta name="color-scheme">`. |
 | Base | `src/styles/base.css` | Reset mínimo, `body`, `a`, `:focus-visible`, `code` inline, `.visually-hidden`, los colores de `.shiki` y la transición de tema del documento. |
 | Componente | `<style module>` en cada `.vue` | Todo lo demás. |
 

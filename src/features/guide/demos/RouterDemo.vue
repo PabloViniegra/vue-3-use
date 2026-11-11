@@ -119,6 +119,7 @@ function navegar(destino: string) {
   padding: var(--space-xs) var(--space-sm);
   background: var(--c-bg-mute);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   overflow-wrap: anywhere;
 }

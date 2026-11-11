@@ -258,7 +258,7 @@ test('theme-color sigue el tema inicial, el cambio y la recarga', async ({ page 
 test('el tema sigue al sistema hasta que se guarda una elección manual', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
   await page.goto('/')
-  const html = page.locator('html')
+  const body = page.locator('body')
   const toggle = page.getByRole('switch', { name: 'Modo oscuro' })
   const meta = page.locator('meta[name="theme-color"]')
 
@@ -266,7 +266,7 @@ test('el tema sigue al sistema hasta que se guarda una elección manual', async 
   await expect(meta).toHaveAttribute('content', '#ffffff')
   await page.emulateMedia({ colorScheme: 'dark' })
   await expect(toggle).toHaveAttribute('aria-checked', 'true')
-  await expect(html).toHaveClass(/dark/)
+  await expect(body).toHaveCSS('background-color', 'rgb(26, 26, 26)')
   await expect(meta).toHaveAttribute('content', '#1a1a1a')
   expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBeNull()
 
@@ -275,10 +275,13 @@ test('el tema sigue al sistema hasta que se guarda una elección manual', async 
   await expect(meta).toHaveAttribute('content', /^#(?:fff|ffffff)$/)
   expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBe('light')
 
+  // La elección se conserva aunque el sistema pase a coincidir con ella y luego vuelva a cambiar
+  await page.emulateMedia({ colorScheme: 'light' })
   await page.emulateMedia({ colorScheme: 'dark' })
   await expect(toggle).toHaveAttribute('aria-checked', 'false')
-  await expect(html).not.toHaveClass(/dark/)
+  await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)')
   await expect(meta).toHaveAttribute('content', /^#(?:fff|ffffff)$/)
+  expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBe('light')
 })
 
 test('Query conserva el último dato bueno y permite reintentar errores', async ({ page }) => {
@@ -339,4 +342,50 @@ test('la demo de errores recupera el foco y permite volver a intentarlo', async 
   await broken.click()
   await expect(topic.getByRole('alert')).toBeVisible()
   expect(errors).toEqual([])
+})
+
+test('el tema elegido en una pestaña se aplica en las demás', async ({ context, page }) => {
+  await page.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
+  await page.goto('/')
+  const other = await context.newPage()
+  await other.emulateMedia({ colorScheme: 'light', reducedMotion: 'reduce' })
+  await other.goto('/')
+
+  await page.getByRole('switch', { name: 'Modo oscuro' }).click()
+  await expect(other.getByRole('switch', { name: 'Modo oscuro' })).toHaveAttribute('aria-checked', 'true')
+  await expect(other.locator('body')).toHaveCSS('background-color', 'rgb(26, 26, 26)')
+
+  await page.getByRole('switch', { name: 'Modo oscuro' }).click()
+  await expect(other.locator('body')).toHaveCSS('background-color', 'rgb(255, 255, 255)')
+  expect(await other.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBeNull()
+})
+
+test('sin JavaScript se sigue el tema del sistema', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, colorScheme: 'dark' })
+  const page = await context.newPage()
+
+  await page.goto('/')
+  await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(26, 26, 26)')
+  await context.close()
+})
+
+test('en escritorio el índice es navegación y no un diálogo', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto('/')
+
+  await expect(page.getByRole('navigation', { name: 'Índice' })).toBeVisible()
+  await expect(page.getByRole('dialog')).toHaveCount(0)
+})
+
+test('con el índice abierto en móvil, la rueda sobre el fondo no desplaza la página', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Índice', exact: true }).click()
+  await expect(page.getByRole('dialog', { name: 'Índice' })).toBeVisible()
+  const before = await page.evaluate(() => scrollY)
+
+  await page.mouse.move(370, 600)
+  await page.mouse.wheel(0, 600)
+  await page.waitForTimeout(300)
+  expect(await page.evaluate(() => scrollY)).toBe(before)
 })

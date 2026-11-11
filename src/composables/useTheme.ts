@@ -1,14 +1,17 @@
-import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+
+type Scheme = 'light' | 'dark'
 
 const STORAGE_KEY = 'vue3-guia-theme'
 
-function readSavedPreference() {
+// Igual que --c-bg y que el script de index.html: theme-color no acepta light-dark()
+const THEME_COLOR: Record<Scheme, string> = { light: '#ffffff', dark: '#1a1a1a' }
+
+function readSavedPreference(): Scheme | undefined {
   try {
     const saved = localStorage.getItem(STORAGE_KEY)
 
-    if (saved === 'dark') return true
-
-    if (saved === 'light') return false
+    if (saved === 'dark' || saved === 'light') return saved
   } catch {
     // Si el almacenamiento está bloqueado, se usa la preferencia del sistema.
   }
@@ -16,41 +19,55 @@ function readSavedPreference() {
   return undefined
 }
 
-const savedPreference = readSavedPreference()
 const systemPreference = window.matchMedia('(prefers-color-scheme: dark)')
-let hasManualPreference = savedPreference !== undefined
+let savedPreference = readSavedPreference()
+const resolveDark = () => (savedPreference ? savedPreference === 'dark' : systemPreference.matches)
 
 // Estado a nivel de módulo: todos los componentes comparten el mismo tema.
-const isDark = ref(savedPreference ?? systemPreference.matches)
-let requestedDark = isDark.value
+const isDark = ref(resolveDark())
 let activeTransition: ViewTransition | undefined
 
-watch(isDark, (dark) => {
-  document.documentElement.classList.toggle('dark', dark)
+function applyScheme() {
+  isDark.value = resolveDark()
+  document.querySelector('meta[name="color-scheme"]')?.setAttribute('content', savedPreference ?? 'light dark')
   document.querySelector('meta[name="theme-color"]')?.setAttribute(
-    'content', getComputedStyle(document.documentElement).getPropertyValue('--c-bg').trim(),
+    'content', THEME_COLOR[isDark.value ? 'dark' : 'light'],
   )
-})
+}
 
 export function useTheme() {
-  function followSystemPreference(event: MediaQueryListEvent) {
-    if (!hasManualPreference) {
-      requestedDark = event.matches
-      isDark.value = event.matches
-    }
+  function followSystemPreference() {
+    if (!savedPreference) applyScheme()
+  }
+
+  function syncOtherTabs(event: StorageEvent) {
+    if (event.key !== STORAGE_KEY && event.key !== null) return
+    savedPreference = readSavedPreference()
+    applyScheme()
   }
 
   onMounted(() => {
     systemPreference.addEventListener('change', followSystemPreference)
-
-    if (!hasManualPreference) {
-      requestedDark = systemPreference.matches
-      isDark.value = systemPreference.matches
-    }
+    window.addEventListener('storage', syncOtherTabs)
   })
-  onUnmounted(() => systemPreference.removeEventListener('change', followSystemPreference))
+  onUnmounted(() => {
+    systemPreference.removeEventListener('change', followSystemPreference)
+    window.removeEventListener('storage', syncOtherTabs)
+  })
 
   return { isDark, toggle }
+}
+
+// Volver al tema del sistema borra la elección: guardarla fijaría el tema aunque el sistema cambie
+function savePreference(dark: boolean) {
+  savedPreference = dark === systemPreference.matches ? undefined : dark ? 'dark' : 'light'
+
+  try {
+    if (savedPreference) localStorage.setItem(STORAGE_KEY, savedPreference)
+    else localStorage.removeItem(STORAGE_KEY)
+  } catch {
+    // El cambio visual funciona aunque el navegador bloquee el almacenamiento.
+  }
 }
 
 async function toggle(event: MouseEvent) {
@@ -58,14 +75,8 @@ async function toggle(event: MouseEvent) {
 
   const bounds = event.currentTarget.getBoundingClientRect()
   const root = document.documentElement
-  const dark = (requestedDark = !requestedDark)
-  hasManualPreference = true
 
-  try {
-    localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light')
-  } catch {
-    // El cambio visual funciona aunque el navegador bloquee el almacenamiento.
-  }
+  savePreference(!resolveDark())
 
   if (activeTransition) {
     activeTransition.skipTransition()
@@ -73,7 +84,7 @@ async function toggle(event: MouseEvent) {
   }
 
   if (!document.startViewTransition || matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    isDark.value = dark
+    applyScheme()
 
     return
   }
@@ -88,9 +99,9 @@ async function toggle(event: MouseEvent) {
   root.dataset.themeTransition = ''
 
   const transition = document.startViewTransition(async () => {
-    isDark.value = dark
+    applyScheme()
 
-    // La captura debe incluir la clase dark y el estado accesible del interruptor.
+    // La captura debe incluir el nuevo esquema de color y el estado accesible del interruptor.
     await nextTick()
   })
 

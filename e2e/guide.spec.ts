@@ -177,15 +177,15 @@ test('si el portapapeles falla se informa del error', async ({ page }) => {
 test('el modo oscuro se mantiene al recargar', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' })
   await page.goto('/')
-  const html = page.locator('html')
+  const body = page.locator('body')
   const toggle = page.getByRole('switch', { name: 'Modo oscuro' })
 
-  await expect(html).not.toHaveClass(/dark/)
+  await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)')
   await toggle.click()
-  await expect(html).toHaveClass(/dark/)
+  await expect(body).toHaveCSS('background-color', 'rgb(26, 26, 26)')
 
   await page.reload()
-  await expect(html).toHaveClass(/dark/)
+  await expect(body).toHaveCSS('background-color', 'rgb(26, 26, 26)')
   await expect(toggle).toHaveAttribute('aria-checked', 'true')
 })
 
@@ -208,6 +208,7 @@ test.describe('en móvil', () => {
     const menuButton = page.getByRole('button', { name: 'Índice', exact: true })
 
     await menuButton.click()
+    await expect(page.getByRole('dialog', { name: 'Índice' })).toHaveAttribute('aria-modal', 'true')
     await page.getByRole('button', { name: 'Cerrar índice' }).click()
 
     await expect(menuButton).toHaveAttribute('aria-expanded', 'false')

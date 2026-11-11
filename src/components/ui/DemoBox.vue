@@ -28,6 +28,7 @@ defineProps<{ label: string }>()
   margin: 0;
   padding: var(--space-xs) var(--bleed);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   color: var(--c-brand-text);

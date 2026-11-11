@@ -75,6 +75,7 @@ const groupNumber = (id: string) =>
   align-items: baseline;
   gap: var(--space-xs);
   font-family: var(--font-display);
+  font-size-adjust: var(--font-adjust-display);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
   color: var(--c-text-1);
@@ -82,6 +83,7 @@ const groupNumber = (id: string) =>
 
 .number {
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   color: var(--c-text-2);

@@ -73,6 +73,7 @@ const { x, y, dentro } = usePuntero(area)
   inset: auto var(--space-sm) var(--space-xs) auto;
   margin: 0;
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   color: var(--c-text-1);
   font-variant-numeric: tabular-nums;

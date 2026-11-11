@@ -186,6 +186,7 @@ const target = computed(() => current.value?.target ?? '#contenido')
 .madeWith {
   margin: var(--space-lg) 0 0;
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   color: var(--c-text-2);
 }

@@ -119,6 +119,7 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
   border-right: 1px solid var(--c-divider);
   color: var(--c-text-2);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-code);
   line-height: var(--line-height-code);
   text-align: right;
@@ -167,6 +168,7 @@ const languageLabel = computed(() => ({ vue: 'Vue', js: 'JavaScript', javascript
   align-items: center;
   gap: var(--space-xs);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-label);

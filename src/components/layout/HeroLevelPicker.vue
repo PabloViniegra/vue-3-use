@@ -50,6 +50,7 @@ const level = defineModel<string>({ required: true })
   border-radius: var(--radius-xl);
   background: var(--c-code-bg);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-variant-ligatures: none;
   font-size: var(--font-size-code);
   line-height: var(--line-height-code);

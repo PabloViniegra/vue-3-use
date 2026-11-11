@@ -36,7 +36,7 @@ for (const width of [390, 1440]) {
           originY: root.style.getPropertyValue('--theme-reveal-y'),
           expectedX: `${bounds.left + bounds.width / 2}px`,
           expectedY: `${bounds.top + bounds.height / 2}px`,
-          dark: root.classList.contains('dark'),
+          dark: getComputedStyle(document.body).backgroundColor === 'rgb(26, 26, 26)',
           checked: button.getAttribute('aria-checked'),
           overflow: root.scrollWidth > innerWidth,
         }
@@ -76,11 +76,11 @@ for (const fallback of ['reduced-motion', 'unsupported'] as const) {
     await toggle.press('Space')
     await expect(toggle).toHaveAttribute('aria-checked', 'true')
     await expect(toggle).toBeFocused()
-    await expect(page.locator('html')).toHaveClass(/dark/)
+    await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(26, 26, 26)')
     await expect(page.locator('html')).not.toHaveAttribute('data-theme-transition')
     await toggle.press('Enter')
     await expect(toggle).toHaveAttribute('aria-checked', 'false')
-    expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBe('light')
+    expect(await page.evaluate(() => localStorage.getItem('vue3-guia-theme'))).toBeNull()
   })
 }
 

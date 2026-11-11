@@ -103,6 +103,7 @@ useKeyShortcut('/', openFilter)
       :groups="sidebarGroups"
       :active-id="activeId"
       :open="menu.open.value"
+      :modal="isModal"
       @close="closeSidebar"
     />
 

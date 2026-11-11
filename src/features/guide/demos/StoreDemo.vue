@@ -82,6 +82,7 @@ function vaciar() {
 
 .title {
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   color: var(--c-text-2);
 }

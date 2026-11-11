@@ -13,7 +13,7 @@ interface SidebarGroup {
   topics?: { id: string; title: string; keywords?: string[] }[]
 }
 
-const props = defineProps<{ groups: SidebarGroup[]; activeId: string; open: boolean }>()
+const props = defineProps<{ groups: SidebarGroup[]; activeId: string; open: boolean; modal: boolean }>()
 const emit = defineEmits<{ close: [restoreFocus?: boolean] }>()
 
 const query = useQueryParam('tema')
@@ -68,7 +68,16 @@ defineExpose({ focusFilter, focusPanel: () => nextTick(() => root.value?.focus()
 
 <template>
   <div v-if="open" :class="$style.scrim" @click="emit('close', true)" />
-  <nav id="sidebar" ref="root" :tabindex="open ? -1 : undefined" :class="[$style.root, open && $style.open]" aria-label="Índice">
+  <!-- <nav> no admite role="dialog": como cajón en móvil es un diálogo modal, si no, navegación -->
+  <div
+    id="sidebar"
+    ref="root"
+    :role="modal ? 'dialog' : 'navigation'"
+    :aria-modal="modal || undefined"
+    :tabindex="open ? -1 : undefined"
+    :class="[$style.root, open && $style.open]"
+    aria-label="Índice"
+  >
     <SidebarPanelHeader v-if="open" @close="emit('close', true)" />
     <SidebarFilter ref="filter" v-model="query" />
     <p class="visually-hidden" aria-live="polite">
@@ -83,7 +92,7 @@ defineExpose({ focusFilter, focusPanel: () => nextTick(() => root.value?.focus()
       :query="query"
       @select="emit('close')"
     />
-  </nav>
+  </div>
 </template>
 
 <style module>
@@ -159,6 +168,9 @@ defineExpose({ focusFilter, focusPanel: () => nextTick(() => root.value?.focus()
     position: fixed;
     inset: 0;
     z-index: var(--z-scrim);
+    /* Contenedor de scroll que no se desplaza: así el gesto no pasa a la página de detrás */
+    overflow: hidden;
+    overscroll-behavior: contain;
     background: var(--c-scrim);
   }
 }

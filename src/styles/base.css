@@ -24,6 +24,7 @@ html {
 body {
   margin: 0;
   font-family: var(--font-sans);
+  font-size-adjust: var(--font-adjust-sans);
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
   color: var(--c-text-1);
@@ -86,6 +87,7 @@ a:hover {
 
 code {
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-variant-ligatures: none;
   font-size: 0.85em;
   color: var(--c-text-code);
@@ -111,12 +113,7 @@ button {
 /* Shiki emite los dos temas como variables; aquí se elige cuál se ve */
 .shiki,
 .shiki span {
-  color: var(--shiki-light);
-}
-
-.dark .shiki,
-.dark .shiki span {
-  color: var(--shiki-dark);
+  color: light-dark(var(--shiki-light), var(--shiki-dark));
 }
 
 @media (prefers-reduced-motion: reduce) {

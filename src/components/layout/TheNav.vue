@@ -102,6 +102,7 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
 
 .wordmark {
   font-family: var(--font-display);
+  font-size-adjust: var(--font-adjust-display);
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-heavy);
   line-height: 1;
@@ -162,6 +163,7 @@ const emit = defineEmits<{ toggleTheme: [event: MouseEvent]; search: [] }>()
   border: 1px solid var(--c-divider-strong);
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
+  font-size-adjust: var(--font-adjust-mono);
   font-size: var(--font-size-caption);
   color: var(--c-text-2);
 }
