@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+
 defineProps<{ options: readonly string[]; hint: string; title: string; target: string }>()
 
 const level = defineModel<string>({ required: true })
+
+defineExpose({
+  titleRow: useTemplateRef<HTMLElement>('titleRow'),
+  targetRow: useTemplateRef<HTMLElement>('targetRow'),
+})
 </script>
 
 <template>
@@ -32,11 +39,11 @@ const level = defineModel<string>({ required: true })
     </fieldset>
     <div :class="$style.code">
       <p :class="$style.comment">// El resto es computed y se recalcula solo</p>
-      <p>
+      <p ref="titleRow">
         titulo.value =
         <span :key="title" :class="$style.value">'{{ title }}'</span>
       </p>
-      <p>
+      <p ref="targetRow">
         destino.value =
         <span :key="target" :class="$style.value">'{{ target }}'</span>
       </p>

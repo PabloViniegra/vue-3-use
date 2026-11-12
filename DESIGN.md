@@ -158,6 +158,7 @@ spacing:
   local-nav-height: 45px
   hero-max: 1152px
   hero-min-height: 560px
+  wire-width: 1.5px
   measure: 580px
   bleed: 24px
   box-max: 628px
@@ -266,7 +267,7 @@ estructura de documentación) y pone el resto con voz propia para no ser un clon
   el código (JetBrains Mono) como lenguaje de la interfaz: eyebrows `// …`, números de nivel y
   el panel del hero hablan como un editor.
 - **El contenido manda.** Texto, código y demos son la interfaz. La decoración se limita al
-  verde de marca y al halo del hero.
+  verde de marca, al halo del hero y a sus cables.
 - **Claro y oscuro de primera clase.** Cada token de color tiene su pareja `-dark`; ninguna
   pieza se diseña solo para un modo.
 - **Accesible por defecto.** AA como mínimo, foco visible, teclado completo y respeto a
@@ -439,6 +440,17 @@ no con clases que pasa el padre.
   (`aria-live="polite"`) y el texto y el destino del botón, que lleva al primer tema del nivel
   en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra. Al cargar, los tres bloques entran en cascada (`--stagger` 60 ms, 250 ms, `--ease-out`, solo opacidad con movimiento reducido) y las opciones del panel se encogen al pulsarlas (`--press-scale`).
   Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
+- **Cables del hero** (`HeroWires`): la dependencia reactiva, dibujada. Dos trazos de
+  `wire-width` en `brand-text`, ortogonales y con esquinas de radio `lg`, salen de las líneas
+  `titulo.value` y `destino.value` del panel y llegan a la palabra de acento y al botón, con un
+  puerto (círculo con relleno `bg`) en cada extremo. Al cargar se trazan cuando el hero ya ha
+  entrado (250 ms cada uno, separados `--stagger`); al cambiar el nivel, un punto recorre cada
+  cable del panel al destino (250 ms). Con movimiento reducido solo aparecen, sin trazo ni
+  pulso, y al hacer scroll son lo primero que se desvanece. En móvil el del título sube por el
+  margen izquierdo (y entra por la izquierda de la palabra si esta empieza la línea) y el del botón baja recto desde el panel. Es un SVG decorativo
+  (`aria-hidden`, sin eventos de puntero) cuya geometría se mide en píxeles con
+  `offsetLeft`/`offsetTop` y se recalcula con `ResizeObserver`: no son tokens de diseño.
+  `HeroTitle` y `HeroLevelPicker` exponen esos elementos con `defineExpose`.
 - **Switch de tema**: `role="switch"` con `aria-checked`. La elección manual se guarda en
   `localStorage` y, si no hay ninguna, se sigue `prefers-color-scheme`, también cuando cambia.
   Si al pulsarlo el tema resultante coincide con el del sistema, se borra la elección y se
@@ -554,7 +566,7 @@ src/
 │   ├── ui/              # primitivas sin dominio: BaseButton, BaseField, BaseLinkGrid,
 │   │                    # CodeBlock, CallOut, DemoBox, DocTopic, DocLevel
 │   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroTitle,
-│                        # HeroLevelPicker, HeroBackdrop), TheSidebar (+ SidebarFilter,
+│                        # HeroLevelPicker, HeroBackdrop, HeroWires), TheSidebar (+ SidebarFilter,
 │                        # SidebarEmpty, SidebarGroupList, SidebarPanelHeader), TheFooter
 ├── features/
 │   └── guide/

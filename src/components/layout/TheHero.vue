@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, version } from 'vue'
+import { computed, ref, useTemplateRef, version } from 'vue'
 import BaseButton from '../ui/BaseButton.vue'
 import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
 import HeroTitle from './HeroTitle.vue'
+import HeroWires from './HeroWires.vue'
 
 const { copy } = defineProps<{
   copy: Record<string, { label: string; phrase: string; target: string; tagline: string; cta: string }>
@@ -14,6 +15,10 @@ const options = Object.keys(copy)
 const level = ref(options[0] ?? '')
 const current = computed(() => copy[level.value])
 const target = computed(() => current.value?.target ?? '#contenido')
+
+const title = useTemplateRef('title')
+const picker = useTemplateRef('picker')
+const button = useTemplateRef('button')
 </script>
 
 <template>
@@ -21,11 +26,12 @@ const target = computed(() => current.value?.target ?? '#contenido')
     <HeroBackdrop :step="options.indexOf(level)" />
     <div :class="$style.content">
       <div :class="$style.intro">
-        <HeroTitle id="hero-title" :class="$style.title" :phrase="current?.phrase ?? ''" />
+        <HeroTitle id="hero-title" ref="title" :class="$style.title" :phrase="current?.phrase ?? ''" />
         <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
       <div :class="$style.pickerSlot">
         <HeroLevelPicker
+          ref="picker"
           v-model="level"
           :hint="current?.label ?? ''"
           :class="$style.picker"
@@ -36,11 +42,20 @@ const target = computed(() => current.value?.target ?? '#contenido')
       </div>
       <div :class="$style.cta">
         <div :class="$style.actions">
-          <BaseButton size="lg" :href="target">{{ current?.cta }}</BaseButton>
+          <BaseButton ref="button" size="lg" :href="target">{{ current?.cta }}</BaseButton>
         </div>
         <p :class="$style.madeWith">Proyecto no oficial, hecho con Vue {{ version }}.</p>
       </div>
     </div>
+    <!-- Después del contenido para que los puertos se pinten encima del panel y del botón -->
+    <HeroWires
+      :panel="picker?.$el ?? null"
+      :title-row="picker?.titleRow ?? null"
+      :target-row="picker?.targetRow ?? null"
+      :accent="title?.accent ?? null"
+      :button="button?.$el ?? null"
+      :signal="level"
+    />
   </section>
 </template>
 

@@ -1,7 +1,11 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+
 // El aria-label del h1 existe porque el inline-block del acento hace que el lector de pantalla
 // meta un espacio antes de la coma
 defineProps<{ phrase: string }>()
+
+defineExpose({ accent: useTemplateRef<HTMLElement>('accent') })
 </script>
 
 <template>
@@ -14,7 +18,7 @@ defineProps<{ phrase: string }>()
       :enter-active-class="$style.wordActive"
       :leave-active-class="$style.wordActive"
     >
-      <span :key="phrase" :class="$style.accent">{{ phrase }}</span>
+      <span ref="accent" :key="phrase" :class="$style.accent">{{ phrase }}</span>
     </Transition
     >,<br />
     hasta que te pregunten&nbsp;a&nbsp;ti
