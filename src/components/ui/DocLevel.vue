@@ -1,11 +1,18 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
+
+const heading = useTemplateRef('heading')
+
+useScrollReveal(heading)
+
 defineProps<{ id: string; title: string; eyebrow?: string; summary?: string }>()
 </script>
 
 <template>
   <section :id="id" :class="$style.root">
     <p v-if="eyebrow" :class="$style.eyebrow"><span aria-hidden="true">// </span>{{ eyebrow }}</p>
-    <h2 :class="$style.heading">{{ title }}</h2>
+    <h2 ref="heading" :class="$style.heading">{{ title }}</h2>
     <p v-if="summary" :class="$style.summary">{{ summary }}</p>
     <slot />
   </section>

@@ -4,6 +4,7 @@ import TheFooter from './components/layout/TheFooter.vue'
 import TheHero from './components/layout/TheHero.vue'
 import TheLocalNav from './components/layout/TheLocalNav.vue'
 import TheNav from './components/layout/TheNav.vue'
+import TheReadingProgress from './components/layout/TheReadingProgress.vue'
 import TheSidebar from './components/layout/TheSidebar.vue'
 import { useActiveSection } from './composables/useActiveSection'
 import { useDisclosure } from './composables/useDisclosure'
@@ -84,6 +85,8 @@ useKeyShortcut('/', openFilter)
     @toggle-theme="toggleTheme"
     @search="openFilter"
   />
+
+  <TheReadingProgress content-id="contenido" />
 
   <TheLocalNav
     ref="localNav"

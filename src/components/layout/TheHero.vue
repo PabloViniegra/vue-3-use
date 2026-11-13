@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useTemplateRef, version } from 'vue'
+import { useHeroMotion } from '../../composables/useHeroMotion'
 import BaseButton from '../ui/BaseButton.vue'
 import HeroBackdrop from './HeroBackdrop.vue'
 import HeroLevelPicker from './HeroLevelPicker.vue'
@@ -16,22 +17,27 @@ const level = ref(options[0] ?? '')
 const current = computed(() => copy[level.value])
 const target = computed(() => current.value?.target ?? '#contenido')
 
+const root = useTemplateRef('root')
+
+useHeroMotion(root)
+
 const title = useTemplateRef('title')
 const picker = useTemplateRef('picker')
 const button = useTemplateRef('button')
 </script>
 
 <template>
-  <section id="top" :class="$style.root" aria-labelledby="hero-title">
+  <section id="top" ref="root" :class="$style.root" aria-labelledby="hero-title">
     <HeroBackdrop :step="options.indexOf(level)" />
     <div :class="$style.content">
-      <div :class="$style.intro">
-        <HeroTitle id="hero-title" ref="title" :class="$style.title" :phrase="current?.phrase ?? ''" />
-        <p :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
+      <div :class="$style.intro" data-hero-entry>
+        <HeroTitle id="hero-title" ref="title" data-hero-part="title" :class="$style.title" :phrase="current?.phrase ?? ''" />
+        <p data-hero-part="detail" :class="$style.tagline" aria-live="polite">{{ current?.tagline }}</p>
       </div>
-      <div :class="$style.pickerSlot">
+      <div :class="$style.pickerSlot" data-hero-entry>
         <HeroLevelPicker
           ref="picker"
+          data-hero-part="detail"
           v-model="level"
           :hint="current?.label ?? ''"
           :class="$style.picker"
@@ -40,15 +46,16 @@ const button = useTemplateRef('button')
           :target="target"
         />
       </div>
-      <div :class="$style.cta">
-        <div :class="$style.actions">
+      <div :class="$style.cta" data-hero-entry>
+        <div data-hero-part="action" :class="$style.actions">
           <BaseButton ref="button" size="lg" :href="target">{{ current?.cta }}</BaseButton>
         </div>
-        <p :class="$style.madeWith">Proyecto no oficial, hecho con Vue {{ version }}.</p>
+        <p data-hero-part="action" :class="$style.madeWith">Proyecto no oficial, hecho con Vue {{ version }}.</p>
       </div>
     </div>
     <!-- Después del contenido para que los puertos se pinten encima del panel y del botón -->
     <HeroWires
+      data-hero-part="wires"
       :panel="picker?.$el ?? null"
       :title-row="picker?.titleRow ?? null"
       :target-row="picker?.targetRow ?? null"
@@ -69,9 +76,6 @@ const button = useTemplateRef('button')
   min-height: min(calc(100svh - var(--hero-top)), var(--hero-min-height));
   padding: var(--space-3xl) var(--space-xl);
   overflow: clip;
-  view-timeline: --hero block;
-  /* Con auto, el scroll-padding de la nav hace que el hero ya esté "saliendo" en reposo */
-  view-timeline-inset: 0;
 }
 
 .content {
@@ -83,83 +87,6 @@ const button = useTemplateRef('button')
   column-gap: var(--space-3xl);
   width: 100%;
   max-width: var(--hero-max);
-}
-
-/* Entrada al cargar: texto, panel y botón llegan en cascada. Van en los contenedores porque
-   los hijos ya llevan la animación de salida por scroll. */
-.intro,
-.pickerSlot,
-.cta {
-  animation: heroIn var(--duration-base) var(--ease-out) both;
-}
-
-.pickerSlot {
-  animation-delay: var(--stagger);
-}
-
-.cta {
-  animation-delay: calc(var(--stagger) * 2);
-}
-
-@keyframes heroIn {
-  from {
-    opacity: 0;
-    transform: translateY(var(--space-sm));
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  @keyframes heroIn {
-    from {
-      opacity: 0;
-    }
-  }
-}
-
-/* El resto se desvanece antes para dejar el título como último en irse. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .title,
-    .tagline,
-    .actions,
-    .madeWith,
-    .picker {
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: --hero;
-    }
-
-    .title {
-      animation-name: titleAway;
-      animation-range: exit 0% exit 85%;
-    }
-
-    .tagline,
-    .picker {
-      animation-name: fadeDown;
-      animation-range: exit 0% exit 60%;
-    }
-
-    .actions,
-    .madeWith {
-      animation-name: fadeDown;
-      animation-range: exit 0% exit 40%;
-    }
-  }
-}
-
-@keyframes titleAway {
-  to {
-    opacity: 0;
-    transform: translateY(var(--space-3xl)) scale(0.88);
-  }
-}
-
-@keyframes fadeDown {
-  to {
-    opacity: 0;
-    transform: translateY(var(--space-2xl));
-  }
 }
 
 /* En móvil el panel va entre el texto y el botón: primero eliges, luego entras */

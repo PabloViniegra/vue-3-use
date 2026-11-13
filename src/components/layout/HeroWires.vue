@@ -181,14 +181,7 @@ watch(
     animation: wirePulse var(--duration-base) linear;
   }
 
-  /* Se van los primeros al hacer scroll: el título se mueve y dejarían de tocarlo */
-  @supports (animation-timeline: view()) {
-    .root {
-      animation: wiresAway linear both;
-      animation-timeline: --hero;
-      animation-range: exit 0% exit 12%;
-    }
-  }
+
 }
 
 @keyframes wireDraw {
@@ -208,9 +201,4 @@ watch(
   }
 }
 
-@keyframes wiresAway {
-  to {
-    opacity: 0;
-  }
-}
 </style>

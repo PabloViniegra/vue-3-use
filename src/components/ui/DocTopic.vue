@@ -1,4 +1,11 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue'
+import { useScrollReveal } from '../../composables/useScrollReveal'
+
+const heading = useTemplateRef('heading')
+
+useScrollReveal(heading)
+
 defineProps<{ id: string; title: string }>()
 </script>
 
@@ -6,7 +13,7 @@ defineProps<{ id: string; title: string }>()
   <section :id="id" :class="$style.root">
     <div :class="$style.main">
       <!-- Sin aria-label el nombre del encabezado incluiría también el del enlace ancla -->
-      <h3 :class="$style.heading" :aria-label="title">
+      <h3 ref="heading" :class="$style.heading" :aria-label="title">
         {{ title }}
         <a :class="$style.anchor" :href="`#${id}`" :aria-label="`Enlace a ${title}`">#</a>
       </h3>

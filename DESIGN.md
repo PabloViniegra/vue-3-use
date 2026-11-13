@@ -158,6 +158,7 @@ spacing:
   local-nav-height: 45px
   hero-max: 1152px
   hero-min-height: 560px
+  reading-progress-height: 3px
   wire-width: 1.5px
   measure: 580px
   bleed: 24px
@@ -452,7 +453,7 @@ no con clases que pasa el padre.
   `computed` que dependen de él (`titulo.value`, `destino.value`) con su valor en vivo. El
   valor cambia la palabra de acento del `h1` (transición ≤ 250 ms), el subtítulo
   (`aria-live="polite"`) y el texto y el destino del botón, que lleva al primer tema del nivel
-  en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra. Al cargar, los tres bloques entran en cascada (`--stagger` 60 ms, 250 ms, `--ease-out`, solo opacidad con movimiento reducido) y las opciones del panel se encogen al pulsarlas (`--press-scale`).
+  en `toc.ts`. En móvil el orden es texto → panel → botón: primero se elige, luego se entra. Al cargar, los tres bloques entran a la vez con GSAP (250 ms, `power2.out`, sin animación con movimiento reducido) y las opciones del panel se encogen al pulsarlas (`--press-scale`).
   Los textos de cada nivel viven en `content/hero.ts` y llegan por props desde `App`.
 - **Cables del hero** (`HeroWires`): la dependencia reactiva, dibujada. Dos trazos de
   `wire-width` en `brand-text`, ortogonales y con esquinas de radio `lg`, salen de las líneas
@@ -478,6 +479,20 @@ no con clases que pasa el padre.
   transición de documento se definen en `base.css`; se suspenden las transiciones locales
   durante la captura para mostrar los colores finales, sin fundidos superpuestos.
   El `theme-color` del navegador sigue el fondo del tema, también antes del primer pintado.
+
+## Animación de lectura
+
+GSAP y ScrollTrigger controlan la salida del hero y las entradas de los encabezados de nivel
+y tema. Los encabezados se desplazan `sm` una sola vez durante 250 ms, sin ocultar texto ni
+controles. El hero se desvanece por partes al salir: primero los cables, después las acciones,
+el panel y el subtítulo, y por último el título. El desplazamiento sigue siendo nativo.
+`gsap.matchMedia()` desactiva estas animaciones con movimiento reducido y revierte los efectos
+al desmontar. Las interacciones locales existentes siguen usando CSS.
+
+Una barra decorativa de `reading-progress-height` bajo la nav, en `brand-text`, indica el
+avance desde el comienzo del contenido hasta el final de la página. Sigue directamente al
+scroll, también con movimiento reducido, sin interpolación temporal. Un `ResizeObserver`
+recalcula los puntos de ScrollTrigger cuando cambia la altura del contenido (demos o playground).
 
 ## Do's and Don'ts
 
