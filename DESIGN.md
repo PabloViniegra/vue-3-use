@@ -162,8 +162,11 @@ spacing:
   measure: 580px
   bleed: 24px
   box-max: 628px
+  box-max-wide: 916px
   note-width: 240px
   demo-area-height: 160px
+  editor-max-height: 420px
+  preview-height: 320px
   card-min: 220px
 components:
   button-brand:
@@ -403,6 +406,17 @@ no con clases que pasa el padre.
   no seleccionable y oculta a lectores de pantalla; el scroll horizontal queda dentro del código.
   Muestra el texto plano con la misma estructura mientras Shiki carga o si falla. El código
   lleva `translate="no"`. Si falla la copia, se mantiene una indicación para copiar manualmente.
+- **CodeEditor**: el mismo cuerpo que `CodeBlock`, pero editable. Un `<textarea>` transparente
+  sobre el código pintado por Shiki, con numeración de líneas y altura máxima
+  `editor-max-height`. `Tab` sangra y `Esc` seguido de `Tab` saca el foco; la pista va escrita
+  debajo. Siempre con `label`. El anillo de foco rodea todo el bloque.
+- **Reto de nivel** (`features/guide/challenge/`): último tema de cada nivel. Enunciado con
+  requisitos y botón «Abrir el playground», que carga en diferido el editor y el compilador
+  de Vue. El playground mide `box-max` (`box-max-wide` desde 1280px): pestañas de archivo con
+  `aria-pressed`, `CodeEditor`, y dos vistas de `preview-height` en `<iframe>` con título,
+  «Tu resultado» y «Resultado esperado», en dos columnas (una por debajo de 640px). Los
+  errores de compilación y de ejecución salen bajo la vista en `warning-text` sobre
+  `warning-soft`. La solución solo se muestra al pedirla. No hay corrector: se compara a ojo.
 - **CallOut** (`real` | `warning` | `info`): "En la vida real" es la variante por defecto y la
   firma de la guía: nota al margen con título mono «En la vida real» e icono de libro decorativo
   en una superficie de 32px con radio `md`. Cabecera y prosa separadas por `sm`, texto con
@@ -564,7 +578,7 @@ src/
 ├── styles/              # tokens.css y base.css (lo único global)
 ├── components/
 │   ├── ui/              # primitivas sin dominio: BaseButton, BaseField, BaseLinkGrid,
-│   │                    # CodeBlock, CallOut, DemoBox, DocTopic, DocLevel
+│   │                    # CodeBlock, CodeEditor, CallOut, DemoBox, DocTopic, DocLevel
 │   └── layout/          # piezas únicas: TheNav, TheLocalNav, TheHero (+ HeroTitle,
 │                        # HeroLevelPicker, HeroBackdrop, HeroWires), TheSidebar (+ SidebarFilter,
 │                        # SidebarEmpty, SidebarGroupList, SidebarPanelHeader), TheFooter
@@ -576,7 +590,10 @@ src/
 │       │                # AdvancedTooling + AdvancedPractice),
 │       │                # EcosystemLevel (= EcosystemRouting + EcosystemData)
 │       ├── demos/       # una demo por archivo, autocontenida
-│       └── content/     # toc.ts, snippets.ts, ecosystem.ts y hero.ts: datos puros, sin Vue
+│       ├── challenge/   # reto de cada nivel: LevelChallenge (enunciado), ChallengePlayground
+│       │                # (editor + vistas, chunk diferido), ChallengePreview (sandbox de
+│       │                # @vue/repl) y useChallengeFiles (borrador en localStorage)
+│       └── content/     # toc.ts, snippets.ts, challenges.ts, ecosystem.ts y hero.ts: datos puros, sin Vue
 ├── composables/         # useTheme, useActiveSection, useDisclosure, useKeyShortcut, useMediaQuery, useNearViewport, useKeepActiveInView: estado y efectos
 └── lib/                 # highlight.ts, highlight.worker.ts y createRetryablePromise.ts
 ```
@@ -612,7 +629,9 @@ lib, content → (nada del proyecto)
 - **Efectos**: los que usan recursos externos tienen limpieza (`onUnmounted`,
   `onWatcherCleanup`). Se extraen a composables si se reutilizan o forman una responsabilidad
   aparte; una reacción local y acotada puede permanecer en su SFC.
-- **Carga pesada**: diferida con `import()` (como se hace con Shiki en `CodeBlock`).
+- **Carga pesada**: diferida con `import()` (como se hace con Shiki en `CodeBlock`). El
+  playground de los retos (compilador de Vue incluido) solo se descarga al pulsar «Abrir el
+  playground», y sirve Vue y Pinia desde el propio sitio, sin CDN.
 - **Tamaño**: si un `.vue` pasa de unas 200 líneas o mezcla dos responsabilidades, se divide.
 
 ### Checklist antes de dar por buena una pieza

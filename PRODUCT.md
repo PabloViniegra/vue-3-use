@@ -39,6 +39,8 @@ y para un equipo concreto, no un sustituto de la documentación oficial.
 - Cuatro niveles (Básico, Intermedio, Avanzado y Ecosistema) definidos en `src/features/guide/content/toc.ts`, que alimenta
   sidebar, hero y sección activa.
 - Demos interactivas reales en `src/features/guide/demos/`.
+- Un reto por nivel con playground real (editor, compilación y ejecución en el navegador) en
+  `src/features/guide/challenge/`. Autoevaluación contra un resultado esperado, sin corrector.
 - Stack fijado: Vue 3.5, Vite, TypeScript, pnpm. No se añaden dependencias sin preguntar.
 
 ## Brand Commitments

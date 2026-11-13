@@ -175,7 +175,7 @@ test('el filtro sobrevive a recargar y respeta los otros parámetros y el fragme
   await expect(page).toHaveURL(/origen=prueba&tema=Pinia#reactividad$/)
   await page.reload()
   await expect(filter).toHaveValue('Pinia')
-  await expect(page.locator('#sidebar li a')).toHaveText(['Pinia'])
+  await expect(page.locator('#sidebar li a')).toHaveText(['Pinia', 'Reto: favoritos con Pinia'])
   await page.evaluate(() => history.pushState(null, '', '?origen=prueba&tema=watch#reactividad'))
   await filter.fill('watch')
   await page.goBack()

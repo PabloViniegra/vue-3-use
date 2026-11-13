@@ -1,6 +1,6 @@
 // Los snippets viven aquí y no en los .vue: un "</script>" dentro de un
 // <script> de SFC cerraría el bloque antes de tiempo.
-const code = (s: TemplateStringsArray, ...values: unknown[]) =>
+export const code = (s: TemplateStringsArray, ...values: unknown[]) =>
   String.raw({ raw: s }, ...values).replace(/^\n/, '').trimEnd()
 
 export const createProject = code`

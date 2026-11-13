@@ -1,3 +1,5 @@
+import { challenges } from './challenges.ts'
+
 export interface Topic {
   id: string
   title: string
@@ -13,6 +15,12 @@ export interface Level {
   summary: string
   topics: Topic[]
 }
+
+const challengeTopic = (level: LevelId): Topic => ({
+  id: challenges[level].id,
+  title: challenges[level].title,
+  keywords: ['ejercicio', 'práctica', 'playground', 'editor', 'practicar lo aprendido'],
+})
 
 export const levels: Level[] = [
   {
@@ -71,6 +79,7 @@ export const levels: Level[] = [
         title: 'Eventos y v-model',
         keywords: ['v-model', '@submit', 'modificadores', 'eventos', 'input', 'enviar un formulario'],
       },
+      challengeTopic('basico'),
     ],
   },
   {
@@ -154,6 +163,7 @@ export const levels: Level[] = [
           'cargar datos sin librerías',
         ],
       },
+      challengeTopic('intermedio'),
     ],
   },
   {
@@ -253,6 +263,7 @@ export const levels: Level[] = [
           'no se actualiza la vista',
         ],
       },
+      challengeTopic('avanzado'),
     ],
   },
   {
@@ -317,6 +328,7 @@ export const levels: Level[] = [
         title: 'Testing',
         keywords: ['Vitest', 'Vue Test Utils', 'mount', 'wrapper', 'emitted', 'flushPromises', 'tests de componentes', 'probar un componente'],
       },
+      challengeTopic('ecosistema'),
     ],
   },
 ]

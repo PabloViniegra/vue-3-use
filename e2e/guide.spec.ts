@@ -68,11 +68,11 @@ test('al pulsar un tema del índice se navega a él y queda marcado como activo'
   await page.goto('/')
   const sidebar = page.getByRole('navigation', { name: 'Índice' })
 
-  await sidebar.getByRole('link', { name: 'Pinia' }).click()
+  await sidebar.getByRole('link', { name: 'Pinia', exact: true }).click()
 
   await expect(page).toHaveURL(/#pinia$/)
-  await expect(page.getByRole('heading', { level: 3, name: /Pinia/ })).toBeInViewport()
-  await expect(sidebar.getByRole('link', { name: 'Pinia' })).toHaveAttribute('aria-current', 'location')
+  await expect(page.getByRole('heading', { level: 3, name: 'Pinia', exact: true })).toBeInViewport()
+  await expect(sidebar.getByRole('link', { name: 'Pinia', exact: true })).toHaveAttribute('aria-current', 'location')
 })
 
 test('el hero actualiza contenido y destino al elegir nivel con el teclado', async ({ page }) => {

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
 import DocLevel from '../../components/ui/DocLevel.vue'
+import LevelChallenge from './challenge/LevelChallenge.vue'
+import { challenges } from './content/challenges'
 import { closing, levels, type LevelId } from './content/toc'
 import AdvancedLevel from './levels/AdvancedLevel.vue'
 import BasicLevel from './levels/BasicLevel.vue'
@@ -25,6 +27,7 @@ const levelComponents = {
     :summary="level.summary"
   >
     <component :is="levelComponents[level.id]" />
+    <LevelChallenge :challenge="challenges[level.id]" />
   </DocLevel>
 
   <DocLevel :id="closing.id" :title="closing.title">
